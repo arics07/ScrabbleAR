@@ -10,8 +10,10 @@ def main(args):
   layout=[[sg.Text('Jugador')],[sg.InputText(key='nom')],[sg.Button("Facil",size=(10,2))],[sg.Button("Medio",size=(10,2))],[sg.Button("Dificil",size=(10,2))]]
   window = sg.Window('Jugadas').Layout(layout)
   event, values=window.Read()
+  window.finalize()
   jugadorJ = jugador(values["nom"])
   jugadorC = jugador('Computadora')
+  window.close()
 
   #Cantidad de letras
   letras=["A","A","A","A","A","A","A","A","A","A","A","B","B","B","C","C","C","C",

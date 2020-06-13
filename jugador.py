@@ -44,18 +44,19 @@ class jugador:
 			ll.append(letra)
 			#se borra la letra de esa lista 
 			letras.remove(letra)
-			self.set_atril(ll) 
+		return self.set_atril(ll) 
            
 	#Cuando elige cambiar las letras
 	def cambioL(self, letras, jugadaJ, window):
-		nuevo_atril=[]
+		for i in range(len(jugadaJ)):
+			letras.append(jugadaJ[i])
+			jugadaJ[i] = 0
 		for indice in range(7):
-			letra=random.choice(letras)		
+			letra=random.choice(letras)
+			jugadaJ[indice]= letra
 			letras.remove(letra)
-			nuevo_atril.append(letra)
 			window.FindElement("Letra" + str(indice)).Update(letra)
-			for i in jugadaJ: 
-				letras.append(i)
-		self.set_atril(nuevo_atril)
- 
+		
+		self.set_atril(jugadaJ)
+		return self._atril
   

@@ -1,27 +1,27 @@
 import PySimpleGUI as sg
-import lexicon_pattern as ppattern
+import validar_palabra_lexicon as ppattern
 import random
 import pickle
 from datetime import date
 #import build_words_pattern_nom as juegaCompu
   
-def muestroL(window,atril): 
+def muestro_l(window,atril): 
     for indice in range(len(atril)):
         letra = atril[indice] 
         window.FindElement("Letra" + str(indice)).Update(letra)
 
-def muestroLC(window,atril): 
+def muestro_lc(window,atril): 
     for indice in range(len(atril)):
         letra = atril[indice] 
         window.FindElement("LetraC" + str(indice)).Update("*")
    
-def accionAtril (window,atrilJ,pos,textBoton):
+def accion_atril (window,atrilJ,pos,textBoton):
 	letraElegida = atrilJ[pos]  
 	window.FindElement(textBoton).Update("")
 	atrilJ[pos] = 0
 	return letraElegida
 	
-def accionTablero(window,event,listaCoordenadas,letraElegida,matriz):
+def accion_tablero(window,event,listaCoordenadas,letraElegida,matriz):
 	posicionCasilleroTablero = event  #me da que boton del tablero toque
 	listaCoordenadas.append(posicionCasilleroTablero)
 	
@@ -32,17 +32,17 @@ def accionTablero(window,event,listaCoordenadas,letraElegida,matriz):
 	matriz[x][y] = letraElegida
 	return listaCoordenadas
 	
-def armarPalabra(listaCoordenadas,matriz):
+def armar_palabra(listaCoordenadas,matriz):
 	unionLetras = []
 	listaCoordenadas.sort()
 	for lcoord in listaCoordenadas:
 		x= lcoord[0]
 		y= lcoord[1]
 		unionLetras.append(matriz[x][y])
-	     
-	return ''.join(unionLetras)
+	pal=(''.join(unionLetras)).lower()
+	return pal
 	
-def rellenarAtril(window,atrilJ,letras):
+def rellenar_atril(window,atrilJ,letras):
 	for indice in range(len(atrilJ)):
 		if atrilJ[indice] == 0:
 			letra=random.choice(letras)
@@ -52,7 +52,7 @@ def rellenarAtril(window,atrilJ,letras):
 		#print(atrilJ)
 	return atrilJ
 	
-def devolverLetrasAtril(window,listaCoordenadas,matriz,atrilJ):
+def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ):
 	guardoLetrasTemporal = []
 	for lcoord in listaCoordenadas:
 		x=lcoord[0]
@@ -67,10 +67,10 @@ def devolverLetrasAtril(window,listaCoordenadas,matriz,atrilJ):
 			atrilJ[indice]= valor
 			guardoLetrasTemporal.remove(valor)
 			window.FindElement("Letra" + str(indice)).Update(valor)
-	listaCoordenadas = []
 	unionLetras = []
-	print(listaCoordenadas)
-	return atrilJ	
+	listaCoordenadas = []
+	#print(listaCoordenadas)
+	return listaCoordenadas#atrilJ	
 
 def colores_tablero(window, casillas_azules, casillas_rojas, casillas_naranja):
     window[(7, 7)].update(button_color=("white", "gray"))
@@ -152,34 +152,34 @@ def main(args):
 		event, values = window.Read(timeout=10)
   
 		if event == 'Letra0':
-			letraElegida = accionAtril(window,atrilJ,0,event)
+			letraElegida = accion_atril(window,atrilJ,0,event)
   
 		if event == 'Letra1':
-			letraElegida = accionAtril(window,atrilJ,1,event)
+			letraElegida = accion_atril(window,atrilJ,1,event)
   
 		if event == 'Letra2':
-			letraElegida = accionAtril(window,atrilJ,2,event)
+			letraElegida = accion_atril(window,atrilJ,2,event)
 	  
 		if event == 'Letra3':
-			letraElegida = accionAtril(window,atrilJ,3,event)
+			letraElegida = accion_atril(window,atrilJ,3,event)
 	  
 		if event == 'Letra4':
-			letraElegida = accionAtril(window,atrilJ,4,event)
+			letraElegida = accion_atril(window,atrilJ,4,event)
 	  
 		if event == 'Letra5':
-			letraElegida = accionAtril(window,atrilJ,5,event)
+			letraElegida = accion_atril(window,atrilJ,5,event)
 	  
 		if event == 'Letra6':
-			letraElegida = accionAtril(window,atrilJ,6,event)
+			letraElegida = accion_atril(window,atrilJ,6,event)
 	  
 		if type(event) is tuple:
 			print('tamaño lista coordenadas ', len(listaCoordenadas))
 			if len(listaCoordenadas) == 0:
-				listaCoordenadas = accionTablero(window,event,listaCoordenadas,letraElegida,matriz)
+				listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 			else:
 				coordx=listaCoordenadas[0][0]
 				coordy=listaCoordenadas[0][1]
-				listaCoordenadas = accionTablero(window,event,listaCoordenadas,letraElegida,matriz)
+				listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 				for i in listaCoordenadas:
 					if i[1] == coordy+1:
 						print('va por horizontal', listaCoordenadas)
@@ -187,25 +187,29 @@ def main(args):
 						print('va por vertcal',listaCoordenadas)	
 		  
 		if event == 'insertar':
-			palabra = armarPalabra(listaCoordenadas,matriz)
+			palabra = armar_palabra(listaCoordenadas,matriz)
 			print('palabra ',palabra)
 			print('voy a analizar la palabra')
-			esValida = ppattern.analizarPalabra(palabra, esValida)
-			print('volvi de analizar la palabra')
+			esValida = ppattern.analizar_palabra_pat(palabra, esValida)
+			palabra = palabra.upper()
+			print('volvi de analizar la palabra',palabra)
 			print('palabra analizada es: ', esValida)
 			
 			if esValida:
-				rellenarAtril(window,atrilJ,letras)
+				rellenar_atril(window,atrilJ,letras)
 				listaCoordenadas = []
 				print(listaCoordenadas)
+				
 				
 				ptos=int(values["puntosJug"])
 				for j in palabra:
 					ptos=ptos+puntos.get(j)
 				window["puntosJug"].update(ptos)
 				jugadorJ.set_puntaje(ptos)
+				
 			else:
-				devolverLetrasAtril(window,listaCoordenadas,matriz,atrilJ)
+				listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ)
+				print('lista coord ', listaCoordenadas)
 											
 		if event == "finalizo":
 			tiempoCorriendo = False
@@ -224,8 +228,8 @@ def main(args):
 			colores_tablero(window, casillas_azules,
 				casillas_rojas, casillas_naranja)
   
-			muestroL(window,jugadorJ.get_atril())
-			muestroLC(window,jugadorC.get_atril())
+			muestro_l(window,jugadorJ.get_atril())
+			muestro_lc(window,jugadorC.get_atril())
 			jugadorJ.set_turno = True
 			tiempoCorriendo = True
 	  
@@ -245,8 +249,8 @@ def main(args):
 			window["nombre"].update(jugadorJ.get_nombre())
 			window["puntosJug"].update(jugadorJ.get_puntaje())
 		  
-			muestroL(window,jugadorJ.get_atril())
-			muestroLC(window,jugadorC.get_atril())
+			muestro_l(window,jugadorJ.get_atril())
+			muestro_lc(window,jugadorC.get_atril())
               
 		if tiempoCorriendo: 
 			window["tiempo"].update("{:02d}:{:02d}".format((contador // 100) // 60, (contador // 100) % 60))
