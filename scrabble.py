@@ -101,8 +101,7 @@ def main(args):
 	letrasEnTablero = [] 
 	columna_1 = [
         [sg.Text("Jugador")], [sg.Input(size=(15, 1), key="nombre")],
-        [sg.Button("Comenzar", key="comenzar"), sg.Button(
-            "Posponer", key="posponer"), sg.Button("Reanudar", key="reanudar")],
+        [sg.Button("Posponer", key="posponer"), sg.Button("Reanudar", key="reanudar")],
         [sg.Button("Finalizar", button_color=(
             "white", "red"), key="finalizo")],
         [sg.Text("Puntos Jugador")], [
@@ -146,8 +145,18 @@ def main(args):
 	atrilJ = jugadorJ._atril
   
 	for i in range (15):
-		matriz.append([0]*15)
+		matriz.append([0]*15)  
+		
+	window["nombre"].update(jugadorJ.get_nombre())
+	window["puntosJug"].update(jugadorJ.get_puntaje())
+	# colores
+	colores_tablero(window, casillas_azules,
+	casillas_rojas, casillas_naranja)
   
+	muestro_l(window,jugadorJ.get_atril())
+	muestro_lc(window,jugadorC.get_atril())
+	jugadorJ.set_turno = True
+	tiempoCorriendo = True 
 	while True:
 		event, values = window.Read(timeout=10)
   
@@ -221,19 +230,6 @@ def main(args):
 			print(jugada.get_topTen())
 			break
 	  
-		if event == "comenzar":
-			window["nombre"].update(jugadorJ.get_nombre())
-			window["puntosJug"].update(jugadorJ.get_puntaje())
-			# colores
-			colores_tablero(window, casillas_azules,
-				casillas_rojas, casillas_naranja)
-  
-			muestro_l(window,jugadorJ.get_atril())
-			muestro_lc(window,jugadorC.get_atril())
-			jugadorJ.set_turno = True
-			tiempoCorriendo = True
-	  
-  
 		if event ==  "posponer":
 			tiempoCorriendo = False
 			with open('scrabble.pkl', 'wb') as output:
