@@ -209,7 +209,6 @@ def main(args):
 				listaCoordenadas = []
 				print(listaCoordenadas)
 				
-				
 				ptos=int(values["puntosJug"])
 				for j in palabra:
 					ptos=ptos+puntos.get(j)
@@ -253,9 +252,14 @@ def main(args):
 			contador += 1
 	  
 		if event == "cambio":
-			if jugada.get_cantCambios()<3:
-				jugadorJ.cambioL(letras,jugadorJ.get_atril(),window)
-				print(jugadorJ.get_atril())
-				jugada.sumarCambio()	
+			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
+				if jugada.get_cantCambios()<3:
+					jugadorJ.cambioL(letras,jugadorJ.get_atril(),window)
+					print(jugadorJ.get_atril())
+					jugada.sumarCambio()
+				else:
+					sg.Popup("ya hizo los 3 cambios permitidos")				 
+			else:
+				sg.Popup("el atril no esta completo")				 	
 	window.close() 	 
  

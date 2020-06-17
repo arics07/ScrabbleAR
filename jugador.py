@@ -22,7 +22,16 @@ class jugador:
   
 	def set_atril(self, nuevo_atril):
 		self._atril = nuevo_atril
-  
+    
+	def verificoatrilcompleto(self,atril):
+		completo=True
+		print(atril)			
+		for i in atril:
+			print(i)
+			if i == 0:
+				completo=False
+		return completo
+        			     						
 	def sacarAtril(self, pos):
 		self._atril[pos] = " "  
              
