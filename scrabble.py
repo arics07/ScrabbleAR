@@ -157,7 +157,7 @@ def main(args):
 	muestro_lc(window,jugadorC.get_atril())
 	jugadorJ.set_turno = True
 	tiempoCorriendo = True 
-	while True:
+	while tiempoCorriendo == True:
 		event, values = window.Read(timeout=10)
   
 		if event == 'Letra0':
@@ -221,19 +221,30 @@ def main(args):
 											
 		if event == "finalizo":
 			tiempoCorriendo = False
-			topTen=jugada.get_topTen()
-			topTen.setdefault(jugadorJ.get_nombre(),{'nivel': jugada.get_nivel() , 'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()})
-			print(topTen)
-			jugada.set_topTen(topTen)
-			#jugada.set_topTen(dict(sorted(topTen.items(), key = lambda x:x[1])[:10]))
-			print(jugada.get_topTen())
+			topten=jugada.get_topten()
+			topten.setdefault(jugadorJ.get_nombre(),{'nivel': jugada.get_nivel() , 'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()})
+			print("top ten",topten)
+			#print('topten items',topten.items())
+			
+			#topten=dict(sorted(topten.items(), key = lambda x:x[1].values()))
+			
+			with open('topten.pkl', 'wb') as f:
+				
+				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
+				f.close()
+		    
 			break
 	  
 		if event ==  "posponer":
 			tiempoCorriendo = False
 			with open('scrabble.pkl', 'wb') as output:
 				pickle.dump(jugada, output, pickle.HIGHEST_PROTOCOL)
-			break 
+				output.close()
+			topten=jugada.get_topten()	
+			with open('topten.pkl', 'wb') as f:
+				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
+			f.close()	
+			break
 			
 		if event == "reanudar":
 			tiempoCorriendo = True
@@ -246,7 +257,8 @@ def main(args):
 		  
 			muestro_l(window,jugadorJ.get_atril())
 			muestro_lc(window,jugadorC.get_atril())
-              
+			topten=jugada.get_topten()
+			
 		if tiempoCorriendo: 
 			window["tiempo"].update("{:02d}:{:02d}".format((contador // 100) // 60, (contador // 100) % 60))
 			contador += 1

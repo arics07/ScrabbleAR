@@ -25,9 +25,7 @@ class jugador:
     
 	def verificoatrilcompleto(self,atril):
 		completo=True
-		print(atril)			
 		for i in atril:
-			print(i)
 			if i == 0:
 				completo=False
 		return completo

@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
 import scrabble
+import datetime
+import pickle
 
 from jugador import jugador
 from jugadas import jugadas
@@ -8,7 +10,7 @@ nom=""
 layout=[[sg.Text('Jugador')],[sg.InputText(key='nom')],[sg.Button("Comenzar",size=(10,2))]]
 window = sg.Window('Ingreso Juego').Layout(layout)
 
-#Cantidad de letras
+#Cantidad de letras 
 letras=["A","A","A","A","A","A","A","A","A","A","A","B","B","B","C","C","C","C",
   "D","D","D","D","E","E","E","E","E","E","E","E","E","E","E","F","F","G","G","H","H",
   "I","I","J","J","K","L","L","L","L","LL","M","M","M","N","N","N","N","N",
@@ -28,10 +30,20 @@ while True:
       window.Finalize()
       window.close()  
       jugadorJ = jugador(values["nom"])
-      jugadorC = jugador('Computadora')		 
-      jugada=jugadas("20-06-07","F",120,jugadorJ,jugadorC,"J",letras,puntos)  
+      jugadorC = jugador('Computadora')	
+      print(datetime.datetime.now())	 
+      jugada=jugadas(datetime.datetime.now(),"F",120,jugadorJ,jugadorC,"J",letras,puntos)  
       jugadorJ.elijoL(letras)
       jugadorC.elijoL(letras)
+      try: 
+        with open('topten.pkl', 'rb') as f:
+          topten=dict(pickle.load(f))
+      except:
+        topten={}   
+      jugada.set_topten(topten)
+      print(topten)	
       scrabble.main(jugada)
+      break
+         
         
 

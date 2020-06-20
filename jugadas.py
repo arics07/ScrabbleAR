@@ -42,10 +42,10 @@ class jugadas:
 	def get_letras(self):
 		return self._letras
   
-	def set_topTen(dic):
+	def set_topten(self, dic):
 		self._topTen = dic
 	
-	def get_topTen(self):
+	def get_topten(self):
 		return self._topTen
  
 	def get_puntos(self):
