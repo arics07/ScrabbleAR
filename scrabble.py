@@ -88,7 +88,7 @@ def main(args):
 	letras = jugada.get_letras()
 	jugada.get_nivel()
 	jugada.set_fecha(date.today())
-
+	
 	sg.theme("GreenTan")
 
 	max_col = max_rows = 15
@@ -242,7 +242,8 @@ def main(args):
 			with open('scrabble.pkl', 'wb') as output:
 				pickle.dump(jugada, output, pickle.HIGHEST_PROTOCOL)
 				output.close()
-			topten=jugada.get_topten()	
+			topten=jugada.get_topten()
+			print(topten)	
 			with open('topten.pkl', 'wb') as f:
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 			f.close()	
