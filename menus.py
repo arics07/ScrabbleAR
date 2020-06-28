@@ -43,7 +43,8 @@ while True:
           with open('topten.pkl', 'rb') as f:
             topten=dict(pickle.load(f))
         except:
-          topten={}   
+          topten={}  
+          print(topten) 
         jugada.set_topten(topten)
         scrabble.main(jugada)
         break
