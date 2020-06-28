@@ -86,7 +86,7 @@ def main(args):
 	jugada=args
 	puntos=jugada.get_puntos()
 	letras = jugada.get_letras()
-	jugada.set_nivel="F"
+	jugada.get_nivel()
 	jugada.set_fecha(date.today())
 
 	sg.theme("GreenTan")
@@ -100,7 +100,8 @@ def main(args):
   
 	letrasEnTablero = [] 
 	columna_1 = [
-        [sg.Text("Jugador")], [sg.Input(size=(15, 1), key="nombre")],
+        [sg.Text("Jugador"),sg.Input(size=(15, 1), key="nombre")],
+        [sg.Text("Nivel"),sg.Input(size=(2,3), key="nivel")],
         [sg.Button("Posponer", key="posponer"), sg.Button("Reanudar", key="reanudar")],
         [sg.Button("Finalizar", button_color=(
             "white", "red"), key="finalizo")],
@@ -147,6 +148,7 @@ def main(args):
 	for i in range (15):
 		matriz.append([0]*15)  
 		
+	window["nivel"].update(jugada.get_nivel())	
 	window["nombre"].update(jugadorJ.get_nombre())
 	window["puntosJug"].update(jugadorJ.get_puntaje())
 	# colores
@@ -203,7 +205,7 @@ def main(args):
 			palabra = palabra.upper()
 			print('volvi de analizar la palabra',palabra)
 			print('palabra analizada es: ', esValida)
-			
+			esValida=True
 			if esValida:
 				rellenar_atril(window,atrilJ,letras)
 				listaCoordenadas = []
@@ -251,13 +253,17 @@ def main(args):
 			with open('scrabble.pkl', 'rb') as input:
 				jugada = pickle.load(input)
 			jugadorJ=jugada.get_jugadorJ()
-			jugadorC=jugada.get_jugadorC()
-			window["nombre"].update(jugadorJ.get_nombre())
-			window["puntosJug"].update(jugadorJ.get_puntaje())
+			
+			if not values["nombre"] == jugadorJ.get_nombre():
+				sg.Popup("No puede reanudar ..es otro jugador")
+			else:				
+				jugadorC=jugada.get_jugadorC()
+				window["nombre"].update(jugadorJ.get_nombre())
+				window["puntosJug"].update(jugadorJ.get_puntaje())
 		  
-			muestro_l(window,jugadorJ.get_atril())
-			muestro_lc(window,jugadorC.get_atril())
-			topten=jugada.get_topten()
+				muestro_l(window,jugadorJ.get_atril())
+				muestro_lc(window,jugadorC.get_atril())
+				topten=jugada.get_topten()
 			
 		if tiempoCorriendo: 
 			window["tiempo"].update("{:02d}:{:02d}".format((contador // 100) // 60, (contador // 100) % 60))
