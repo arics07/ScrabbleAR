@@ -17,18 +17,15 @@ def clasificar(palabra):
 	
 	
 def analizar_palabra_pat(palabra, esValida):
-	if not palabra in spelling:
-		if not palabra in lexicon:
-			print('No se encuentra en pattern.es')
-			esValida=False
-			return esValida  #0
+	pal = palabra.lower()
+	if not pal in verbs:
+		if pal in lexicon:
+			if pal in spelling:
+			#print('Esta en spelling y lexicon')
+				return clasificar(pal)
 		else:
-			print('La encontró en lexicon')
-			esValida = clasificar(palabra)
-			print(esValida)
-			return esValida #1
+			#print('No está ni en verbs ni en lexicon')
+			return False
 	else:
-		print('La encontró en spelling')
-		esValida= clasificar(palabra)
-		print(esValida)
-		return esValida #1
+		#print('La encontró en verbs')
+		return clasificar(pal)
