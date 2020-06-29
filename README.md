@@ -3,7 +3,8 @@
 ## Indicaciones  :video_game:
 Se ejecuta el archivo menus.py
 
-## Integrantes:
+
+## Integrantes
 
 ### Grupo 15
 
