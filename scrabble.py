@@ -83,7 +83,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion):
 	#print(listaCoordenadas)
 	return listaCoordenadas
 
-def colores_tablero(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_rosa):
+def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
     window[(7, 7)].update(button_color=("black", "gray"))
     for cas in casillas_azules:
         window[cas].update("TL", button_color=("black", "#1A4C86"))
@@ -91,9 +91,20 @@ def colores_tablero(window, casillas_azules, casillas_rojas, casillas_naranja, c
         window[cas].update("TP", button_color=("black", "#C91A4F"))
     for cas in casillas_naranja:
         window[cas].update("DL", button_color=("black", "#F4963E"))
-    for cas in casillas_rosa:
-        window[cas].update("TL", button_color=("black", "#4893E9"))
 
+        
+def tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste):
+    window[(7, 7)].update(button_color=("black", "gray"))
+    tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
+    for cas in casillas_celeste:
+        window[cas].update("TL", button_color=("black", "#4893E9"))
+        
+def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento):
+	window[(7, 7)].update(button_color=("black", "gray"))
+	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
+	for cas in casillas_descuento:
+		window[cas].update("x", button_color=("black", "#F00F0F"))
+	
 def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida):
 	print('entre a event es distinto de coordx')
 	sg.Popup('debes seguir horizontal!')
@@ -115,13 +126,14 @@ def main(args):
 	sg.theme("GreenTan")
 
 	max_col = max_rows = 15
-
+    
+    
 	casillas_azules = [(1,5), (1,9), (5,1), (5,5), (5,9),(5,13), (9,1), (9,5), (9,9), (9,13), (13,5), (13,9)]
 	casillas_rojas = [(0,0), (0,7), (0,14), (7,0),(7,14), (14,0), (14,7), (14,14)]
 	casillas_celeste = [(0,3), (0,11), (2,6), (2,8), (3,0), (3,7), (3,14), (6,2), (6,6), (6,8), (6,12), (7,3), (7,11), (8,2), (8,6), (8,8), (8,12), (11,0), (11,7), (11,14), (12,6), (12,8), (14,3), (14,11)]
-	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (
-        13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
-    
+	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
+	casillas_descuento = [(2,4), (2,10), (4,6), (10,6), (10,8), (12,4), (12,10), (7,1), (7,13), (1,7), (13,7), (4,2), (10,2), (4,12), (10,12), (6,4), (8,4), (6,10), (8,10), (4,8)]
+
   
 	letrasEnTablero = [] 
 	columna_1 = [
@@ -167,6 +179,7 @@ def main(args):
 	esValida = False
 	esHorizontal = False
 	esVertical = False
+#	niv = jugada.get_nivel()
 	
 	#unionLetras = []
 	atrilJ = jugadorJ._atril
@@ -179,8 +192,14 @@ def main(args):
 	window["nombre"].update(jugadorJ.get_nombre())
 	window["puntosJug"].update(jugadorJ.get_puntaje())
 	# colores
-	colores_tablero(window, casillas_azules,
-	casillas_rojas, casillas_naranja, casillas_celeste)
+	if jugada.get_nivel() == "F" or jugada.get_nivel() == "f":
+		tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste)
+	elif jugada.get_nivel() == "M" or jugada.get_nivel() == "m":
+		tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
+	else:
+		tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento)
+		
+#	colores_tablero(window, casillas_azules,casillas_rojas, casillas_naranja, casillas_celeste)
   
 	muestro_l(window,jugadorJ.get_atril())
 	muestro_lc(window,jugadorC.get_atril())
