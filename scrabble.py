@@ -105,10 +105,11 @@ def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, c
 	for cas in casillas_descuento:
 		window[cas].update("x", button_color=("black", "#F00F0F"))
 	
-def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida):
+def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas):
 	print('entre a event es distinto de coordx')
 	sg.Popup('debes seguir horizontal!')
 	window.FindElement(event).Update("")
+	listaCoordenadas.remove(event)
 	atrilJ[datosEleccion[letraElegida]]= letraElegida
 	window.FindElement("Letra" + str(datosEleccion[letraElegida])).Update(letraElegida)
 	datosEleccion.pop(letraElegida)
@@ -146,18 +147,18 @@ def main(args):
         [sg.Text("Tiempo", justification="center")], [sg.Text(
             size=(10, 2), font=('Helvetica', 20), justification='center', key='tiempo')],
         [sg.Text("Computadora")],
-        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False, key="LetraC0"), sg.Button("", size=(2, 1),disabled = False, key="LetraC1"), sg.Button("", size=(2, 1),disabled = False, key="LetraC2"), sg.Button(
-            "", size=(2, 1),disabled = False, key="LetraC3"), sg.Button("", size=(2, 1),disabled = False, key="LetraC4"), sg.Button("", size=(2, 1),disabled = False, key="LetraC5"), sg.Button("", size=(2, 1),disabled = False, key="LetraC6")],
+        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC2"), sg.Button(
+            "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC6")],
         [sg.Text(" ", size=(1, 1))],
         [sg.Text("Jugador")],
-        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False, key="Letra0"), sg.Button("", size=(2, 1),disabled = False, key="Letra1"), sg.Button("", size=(2, 1),disabled = False, key="Letra2"), sg.Button(
-            "", size=(2, 1),disabled = False, key="Letra3"), sg.Button("", size=(2, 1),disabled = False, key="Letra4"), sg.Button("", size=(2, 1),disabled = False, key="Letra5"), sg.Button("", size=(2, 1),disabled = False, key="Letra6")],
+        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button(
+            "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6")],
         [sg.Text("", size=(1,1))],
         [sg.Button('Insertar Palabra', size=(12, 1), key="insertar"), sg.Button("Cambio letras", size=(12, 1), key="cambio"), sg.Button('Pasar', size=(9, 1), key="pasar")],
         [sg.Text("", size=(1,1))]
     ]
 
-	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), button_color=(
+	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), button_color=(
         "black", "tan")) for j in range(max_col)] for i in range(max_rows)]
 
 	layout = [
@@ -192,6 +193,8 @@ def main(args):
 	window["nivel"].update(jugada.get_nivel())	
 	window["nombre"].update(jugadorJ.get_nombre())
 	window["puntosJug"].update(jugadorJ.get_puntaje())
+	window["puntosPc"].update(jugadorC.get_puntaje())
+	
 	# colores
 	if jugada.get_nivel() == "F" or jugada.get_nivel() == "f":
 		tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste)
@@ -306,12 +309,14 @@ def main(args):
 				if esHorizontal:
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 					if event[0] != coordx:
-						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida)
+						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
+						print('listacoord ',listaCoordenadas)
 				
 				if esVertical:
-					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
+					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz,listaCoordenadas)
 					if event[1] != coordy:
 						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida)
+						print('listacoord ',listaCoordenadas)
 			
 			#print('tamaño lista coordenadas ', len(listaCoordenadas))
 			#if len(listaCoordenadas) == 0:
@@ -367,9 +372,9 @@ def main(args):
 						print('lista coord ', listaCoordenadas)
 						print('datos eleccion ', datosEleccion)
 						print(atrilJ)
-						esPrimerJugada =True
+						esPrimerJugada =False
 						
-						sg.Popup('Turno de la computadora')
+						sg.Popup('La palabra no es válida, turno de la computadora')
 						jugadorJ.set_dejarJugar()
 						print(jugadorJ.get_turno())
 						jugadorC.set_jugar()
@@ -428,7 +433,7 @@ def main(args):
 					print('datos eleccion ', datosEleccion)
 					print(atrilJ)
 					
-					sg.Popup('Turno de la computadora')
+					sg.Popup('La palabra no es válida, turno de la computadora')
 					jugadorJ.set_dejarJugar()
 					print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
