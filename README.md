@@ -1,7 +1,7 @@
 # ScrabbleAR
 
 ## Indicaciones  :video_game:
-Se ejecuta el archivo menus.py
+Se ejecuta el archivo ScrabbleAR.py
 
 
 ## Integrantes
