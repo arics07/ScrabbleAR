@@ -40,11 +40,11 @@ while True:
         jugadorC = jugador('Computadora')	
         
         if values["nivel"].upper() == "F":
-          jugada=jugadas(datetime.datetime.now(),values["nivel"],120,jugadorJ,jugadorC,"J",letras,puntos)  
+          jugada=jugadas(datetime.datetime.now(),"F",120,jugadorJ,jugadorC,"J",letras,puntos)  
         if values["nivel"].upper() == "M":
-          jugada=jugadas(datetime.datetime.now(),values["nivel"],60,jugadorJ,jugadorC,"J",letras,puntos)  
+          jugada=jugadas(datetime.datetime.now(),"M",60,jugadorJ,jugadorC,"J",letras,puntos)  
         if values["nivel"].upper() == "D":
-          jugada=jugadas(datetime.datetime.now(),values["nivel"],30,jugadorJ,jugadorC,"J",letras,puntos)  
+          jugada=jugadas(datetime.datetime.now(),"D",30,jugadorJ,jugadorC,"J",letras,puntos)  
   
         
         jugadorJ.elijoL(letras)
