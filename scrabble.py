@@ -83,14 +83,16 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion):
 	#print(listaCoordenadas)
 	return listaCoordenadas
 
-def colores_tablero(window, casillas_azules, casillas_rojas, casillas_naranja):
-    window[(7, 7)].update(button_color=("white", "gray"))
+def colores_tablero(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_rosa):
+    window[(7, 7)].update(button_color=("black", "gray"))
     for cas in casillas_azules:
-        window[cas].update("TL", button_color=("white", "blue"))
+        window[cas].update("TL", button_color=("black", "#1A4C86"))
     for cas in casillas_rojas:
-        window[cas].update("TP", button_color=("white", "red"))
+        window[cas].update("TP", button_color=("black", "#C91A4F"))
     for cas in casillas_naranja:
-        window[cas].update("DL", button_color=("white", "orange"))
+        window[cas].update("DL", button_color=("black", "#F4963E"))
+    for cas in casillas_rosa:
+        window[cas].update("TL", button_color=("black", "#4893E9"))
 
 def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida):
 	print('entre a event es distinto de coordx')
@@ -114,42 +116,39 @@ def main(args):
 
 	max_col = max_rows = 15
 
-	casillas_azules = [(1, 5), (1, 9), (5, 1), (5, 5), (5, 9),(5, 13), (9, 1), (9, 5), (9, 9), (9, 13), (13, 5), (13, 9)]
-	casillas_rojas = [(0, 0), (0, 7), (0, 14), (7, 0),(7, 14), (14, 0), (14, 7), (14, 14)]
-	casillas_naranja = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (8, 8), (9, 9), (10, 10), (11, 11), (12, 12), (
-        13, 13), (13, 1), (12, 2), (11, 3), (10, 4), (9, 5), (8, 6), (6, 8), (5, 9), (4, 10), (3, 11), (2, 12), (1, 13)]
+	casillas_azules = [(1,5), (1,9), (5,1), (5,5), (5,9),(5,13), (9,1), (9,5), (9,9), (9,13), (13,5), (13,9)]
+	casillas_rojas = [(0,0), (0,7), (0,14), (7,0),(7,14), (14,0), (14,7), (14,14)]
+	casillas_celeste = [(0,3), (0,11), (2,6), (2,8), (3,0), (3,7), (3,14), (6,2), (6,6), (6,8), (6,12), (7,3), (7,11), (8,2), (8,6), (8,8), (8,12), (11,0), (11,7), (11,14), (12,6), (12,8), (14,3), (14,11)]
+	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (
+        13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
+    
   
 	letrasEnTablero = [] 
 	columna_1 = [
         [sg.Text("Jugador"),sg.Input(size=(15, 1), key="nombre")],
         [sg.Text("Nivel"),sg.Input(size=(2,3), key="nivel")],
-        [sg.Button("Posponer", key="posponer"), sg.Button("Reanudar", key="reanudar")],
-        [sg.Button("Finalizar", button_color=(
-            "white", "red"), key="finalizo")],
-        [sg.Text("Puntos Jugador")], [
-            sg.Input(size=(15, 1), key="puntosJug")],
-        [sg.Text("Puntos Compu")], [
-            sg.Input(size=(15, 1), key="puntosPc")],
+        [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Reanudar", size=(10,1), key="reanudar"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
+        [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
+        [sg.Input(size=(15, 1), key="puntosJug"), sg.Text("", size=(1,1)), sg.Input(size=(15, 1), key="puntosPc")],
         [sg.Text("Tiempo", justification="center")], [sg.Text(
             size=(10, 2), font=('Helvetica', 20), justification='center', key='tiempo')],
         [sg.Text("Computadora")],
-        [sg.Text(" ", size=(1, 1)), sg.Button("", size=(2, 1),disabled = False, key="LetraC0"), sg.Button("", size=(2, 1),disabled = False, key="LetraC1"), sg.Button("", size=(2, 1),disabled = False, key="LetraC2"), sg.Button(
+        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False, key="LetraC0"), sg.Button("", size=(2, 1),disabled = False, key="LetraC1"), sg.Button("", size=(2, 1),disabled = False, key="LetraC2"), sg.Button(
             "", size=(2, 1),disabled = False, key="LetraC3"), sg.Button("", size=(2, 1),disabled = False, key="LetraC4"), sg.Button("", size=(2, 1),disabled = False, key="LetraC5"), sg.Button("", size=(2, 1),disabled = False, key="LetraC6")],
         [sg.Text(" ", size=(1, 1))],
         [sg.Text("Jugador")],
-        [sg.Text(" ", size=(1, 1)), sg.Button("", size=(2, 1),disabled = False, key="Letra0"), sg.Button("", size=(2, 1),disabled = False, key="Letra1"), sg.Button("", size=(2, 1),disabled = False, key="Letra2"), sg.Button(
+        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False, key="Letra0"), sg.Button("", size=(2, 1),disabled = False, key="Letra1"), sg.Button("", size=(2, 1),disabled = False, key="Letra2"), sg.Button(
             "", size=(2, 1),disabled = False, key="Letra3"), sg.Button("", size=(2, 1),disabled = False, key="Letra4"), sg.Button("", size=(2, 1),disabled = False, key="Letra5"), sg.Button("", size=(2, 1),disabled = False, key="Letra6")],
-        [sg.Text(" ", size=(4, 1)), sg.Button(
-            "Cambio letras", size=(12, 2), key="cambio")]
+        [sg.Text("", size=(1,1))],
+        [sg.Button('Insertar Palabra', size=(12, 1), key="insertar"), sg.Button("Cambio letras", size=(12, 1), key="cambio"), sg.Button('Pasar', size=(9, 1), key="pasar")],
+        [sg.Text("", size=(1,1))]
     ]
 
 	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), button_color=(
-        "white", "tan")) for j in range(max_col)] for i in range(max_rows)]
+        "black", "tan")) for j in range(max_col)] for i in range(max_rows)]
 
 	layout = [
         [sg.Column(columna_tablero), sg.Column(columna_1)],
-        [sg.Button('Insertar Palabra', size=(9, 2), key="insertar"),
-         sg.Button('Pasar', size=(9, 2), key="pasar")]
     ]
 
 	window = sg.Window("::::::::: SCRABBLE AR :::::::::", layout)
@@ -181,7 +180,7 @@ def main(args):
 	window["puntosJug"].update(jugadorJ.get_puntaje())
 	# colores
 	colores_tablero(window, casillas_azules,
-	casillas_rojas, casillas_naranja)
+	casillas_rojas, casillas_naranja, casillas_celeste)
   
 	muestro_l(window,jugadorJ.get_atril())
 	muestro_lc(window,jugadorC.get_atril())
