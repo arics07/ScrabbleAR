@@ -140,6 +140,7 @@ def main(args):
         [sg.Text("Jugador"),sg.Input(size=(15, 1), key="nombre")],
         [sg.Text("Nivel"),sg.Input(size=(2,3), key="nivel")],
         [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Reanudar", size=(10,1), key="reanudar"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
+        [sg.Button("Ver TopTen", size=(10,1))],
         [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
         [sg.Input(size=(15, 1), key="puntosJug"), sg.Text("", size=(1,1)), sg.Input(size=(15, 1), key="puntosPc")],
         [sg.Text("Tiempo", justification="center")], [sg.Text(
