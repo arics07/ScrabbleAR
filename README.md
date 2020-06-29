@@ -1,7 +1,7 @@
 # ScrabbleAR
 
 ## Indicaciones  :video_game:
-Se ejecuta el archivo ScrabbleAR.py
+Se ejecuta el archivo **ScrabbleAR.py**
 
 ## Requerimientos
 - Python 3.6.8 - [Link](https://www.python.org/downloads/release/python-368/)
