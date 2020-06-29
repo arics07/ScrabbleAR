@@ -24,19 +24,29 @@ puntos={"A":1,"B":3,"C":2,"D":2,"E":1,"F": 4,"G":2,"H":4,"I":1,"J":6,"K":8,"L":1
   "N":1,"Ñ":8,"O":1,"P":3,"Q":8,"R":1,"RR":8,"S":1,"T":1,"U":1,"V":4,"W":8,"X":8,"Y":4,"Z":10}
   
 while True: 
-  event, values=window.Read()  
+  event, values=window.Read() 
+  
+  if event == None:
+	  break 
   if event == "Comenzar":  
     if values["nom"] == "":
       sg.Popup("Debe ingresar un nombre")
     else:
-      if not (values["nivel"] == "F" or values["nivel"] == "M" or values["nivel"] == "D"):
+      if not (values["nivel"].upper() == "F" or values["nivel"].upper() == "M" or values["nivel"].upper() == "D"):
         sg.Popup("Nivel F=Facil M=Medio D=Dificil")
       else:  
         window.close()   
         jugadorJ = jugador(values["nom"])
         jugadorC = jugador('Computadora')	
-      
-        jugada=jugadas(datetime.datetime.now(),values["nivel"],120,jugadorJ,jugadorC,"J",letras,puntos)  
+        
+        if values["nivel"].upper() == "F":
+          jugada=jugadas(datetime.datetime.now(),values["nivel"],120,jugadorJ,jugadorC,"J",letras,puntos)  
+        if values["nivel"].upper() == "M":
+          jugada=jugadas(datetime.datetime.now(),values["nivel"],60,jugadorJ,jugadorC,"J",letras,puntos)  
+        if values["nivel"].upper() == "D":
+          jugada=jugadas(datetime.datetime.now(),values["nivel"],30,jugadorJ,jugadorC,"J",letras,puntos)  
+  
+        
         jugadorJ.elijoL(letras)
         jugadorC.elijoL(letras)
         try: 
