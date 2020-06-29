@@ -1,8 +1,15 @@
 # ScrabbleAR
 
+## Indicaciones  :video_game:
+Se ejecuta el archivo menus.py
 
-### Grupo 15:
+## Integrantes:
 
-#### Casanovas, Roxana  
-#### Perotti, Carolina Pilar  
-#### Salomone, Ariadna Celeste
+### Grupo 15
+
+- Casanovas, Roxana  
+
+- Perotti, Carolina Pilar  
+
+- Salomone, Ariadna Celeste
+
