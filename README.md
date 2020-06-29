@@ -9,7 +9,9 @@ Se ejecuta el archivo **ScrabbleAR.py**
 - Pattern 3.1 - [Link](https://github.com/clips/pattern) 
 - Pickle 
 
-### Grupo 15
+## Integrantes
+
+### Grupo 15:
 
 - Casanovas, Roxana  
 
