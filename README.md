@@ -3,6 +3,11 @@
 ## Indicaciones  :video_game:
 Se ejecuta el archivo ScrabbleAR.py
 
+## Requerimientos
+- Python 3.6.8
+- PySimpleGUI
+- Pattern
+- Pickle
 
 ## Integrantes
 
