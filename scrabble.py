@@ -193,6 +193,10 @@ def main(args):
 	
 	while tiempoCorriendo == True:
 		event, values = window.Read(timeout=10)
+		
+		if event == None:
+			break
+			
 		tiempoEleccionPalabra = True
 		#print(atrilC)
 		
