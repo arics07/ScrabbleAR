@@ -11,7 +11,7 @@ Se ejecuta el archivo **ScrabbleAR.py**
 
 ## Integrantes
 
-### Grupo 15:
+### Grupo 22:
 
 - Casanovas, Roxana  
 
