@@ -125,8 +125,12 @@ def programaPrincipal(turno_computadora,atrilC,validez,window):
 	
 	while turno_computadora == True:
 		#va a buscar una posicion en el tablero al azar
-		x=random.randint(0,14)
-		y=random.randint(0,14)
+		if (7,7) in desocupadas:
+			x=7
+			y=7
+		else:
+			x=random.randint(0,14)
+			y=random.randint(0,14)
 		print('x= ', x, 'y=', y)  #control
 		#va a elegir horizontal o vertical al azar (1:horiz
 		hv = random.randint(0,1)

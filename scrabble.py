@@ -361,6 +361,9 @@ def main(args):
 						jugadorC.set_jugar()
 						turno_computadora = jugadorC.get_turno()
 						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window)
+			#-----------------------------------------------
+						esPrimeraJugada = False
+			#-----------------------------------------------
 						print('turno despues de que volvi de jugada pc ', turno_computadora)
 						sg.Popup('Turno de ', jugadorJ.get_nombre())
 						jugadorJ.set_jugar()
