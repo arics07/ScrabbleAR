@@ -94,13 +94,11 @@ def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
 
         
 def tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste):
-    window[(7, 7)].update(button_color=("black", "gray"))
     tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
     for cas in casillas_celeste:
         window[cas].update("TL", button_color=("black", "#4893E9"))
         
 def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento):
-	window[(7, 7)].update(button_color=("black", "gray"))
 	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
 	for cas in casillas_descuento:
 		window[cas].update("x", button_color=("black", "#F00F0F"))
