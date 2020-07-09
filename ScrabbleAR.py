@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import scrabble
 import datetime
 import pickle
+from jugada_computadora import cargar_tuplas_desocupadas, desocupadas
 
 from jugador import jugador
 from jugadas import jugadas
@@ -23,6 +24,8 @@ letras=["A","A","A","A","A","A","A","A","A","A","A","B","B","B","C","C","C","C",
 puntos={"A":1,"B":3,"C":2,"D":2,"E":1,"F": 4,"G":2,"H":4,"I":1,"J":6,"K":8,"L":1,"LL":8,"M":3,
   "N":1,"Ñ":8,"O":1,"P":3,"Q":8,"R":1,"RR":8,"S":1,"T":1,"U":1,"V":4,"W":8,"X":8,"Y":4,"Z":10}
   
+
+  
 while True: 
   event, values=window.Read() 
   
@@ -37,7 +40,8 @@ while True:
       else:  
         window.close()   
         jugadorJ = jugador(values["nom"])
-        jugadorC = jugador('Computadora')	
+        jugadorC = jugador('Computadora')
+        cargar_tuplas_desocupadas(desocupadas)	
         
         if values["nivel"].upper() == "F":
           jugada=jugadas(datetime.datetime.now(),"F",120,jugadorJ,jugadorC,"J",letras,puntos)  
