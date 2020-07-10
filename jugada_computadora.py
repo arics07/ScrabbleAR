@@ -6,40 +6,45 @@ lista_atril = []
 
 
 def list_to_dict(lista_atril):
-    hand_as_dict = {}
-    for letra in lista_atril:
-        hand_as_dict[letra] = hand_as_dict.get(letra, 0) + 1
-    return hand_as_dict
+	"""Esta función crea un diccionario con las letras que la computadora 
+	tiene en su atril. El diccionario tiene la forma letra:ocurrencias"""
+	hand_as_dict = {}
+	for letra in lista_atril:
+		hand_as_dict[letra] = hand_as_dict.get(letra, 0) + 1
+	return hand_as_dict
 
 
 #lista_atril es una lista con las letras
 def build_words(lista_atril):
-    atril = list_to_dict(lista_atril)
-    todas_las_palabras = [""]
-    i = 0
-    ew = ""
-    while len(ew) < len(lista_atril):
-        ew = todas_las_palabras[i]
-        tempEW = []
-        for w in range(len(ew)):
-            tempEW.append(ew[w])
-        temp_hand_dict = dict(atril)
-        j = 0
-        while j < len(lista_atril):
-            if lista_atril[j] not in tempEW:
-                nueva_palabra = ew + (lista_atril[j])
-                todas_las_palabras.append(nueva_palabra)
-                j = j + temp_hand_dict[lista_atril[j]]
-            else:
-                tempEW.remove(lista_atril[j])
-                num = temp_hand_dict[lista_atril[j]] - 1
-                temp_hand_dict[lista_atril[j]] = num
-                j = j + 1
-        i = i + 1
-    return todas_las_palabras
+	"""Esta función crea todas las combinaciones posibles con las letras que la computadora
+	tiene en su atril"""
+	atril = list_to_dict(lista_atril)
+	todas_las_palabras = [""]
+	i = 0
+	ew = ""
+	while len(ew) < len(lista_atril):
+		ew = todas_las_palabras[i]
+		tempEW = []
+		for w in range(len(ew)):
+			tempEW.append(ew[w])
+		temp_hand_dict = dict(atril)
+		j = 0
+		while j < len(lista_atril):
+			if lista_atril[j] not in tempEW:
+				nueva_palabra = ew + (lista_atril[j])
+				todas_las_palabras.append(nueva_palabra)
+				j = j + temp_hand_dict[lista_atril[j]]
+			else:
+				tempEW.remove(lista_atril[j])
+				num = temp_hand_dict[lista_atril[j]] - 1
+				temp_hand_dict[lista_atril[j]] = num
+				j = j + 1
+		i = i + 1
+	return todas_las_palabras
     
 def lista_a_diccionario(todas_las_palabras,validez):
-	''' Devuelve un diccionario cuya clave es el tamaño de la palabra y el valor es una palabra válida'''
+	''' Esta finció devuelve un diccionario cuya clave es el tamaño 
+	de la palabra y el valor es una palabra válida'''
 	set_palabras = {}
 	for palabra in todas_las_palabras:
 		validez = ppattern.analizar_palabra_pat(palabra,validez)
@@ -53,6 +58,7 @@ def lista_a_diccionario(todas_las_palabras,validez):
 
 
 def palabra_compu(longitud, set_palabras):	
+	"""Esta función elige la palabra que la computadora va a poner en el tablero"""
 	palabra_encontrada = ''
 	if longitud in set_palabras:
 		#elegida = random.randint(0, len(set_palabras[longitud])-1)
@@ -77,12 +83,13 @@ direccion_palabra = {0:'horizontal', 1:'vertical'}
 desocupadas = []
 
 def cargar_tuplas_desocupadas(desocupadas):
+	"""Esta funcion inicializa la lista 'desocupadas', que almacena las tuplas correspondientes a las keys de los casilleros del tablero que están desocupados."""
 	for i in range(15):
 		for j in range(15):
 			desocupadas.append((i,j))
 
 def eliminar_coord_en_pc(listaCoordenadas):
-	
+	"""Esta función elimina de la lista 'desocupadas' las tuplas correspondientes a lask keys de los casilleros que se van ocupando en el tablero."""
 	print('listacoord ', listaCoordenadas)
 	for coord in listaCoordenadas:
 		desocupadas.remove(coord)
@@ -91,6 +98,7 @@ def eliminar_coord_en_pc(listaCoordenadas):
 
 
 def programaPrincipal(turno_computadora,atrilC,validez,window):
+	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
 	print(turno_computadora)
 	print(atrilC)
 	
