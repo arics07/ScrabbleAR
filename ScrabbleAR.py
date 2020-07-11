@@ -126,6 +126,9 @@ while True:
 	  while config:
 		  event2, values2 = window2.Read()
 		  
+		  if event2 is None:
+			  break
+			  
 		  if event2=="Guardar":
 			  sin_errores = True
 			  for let in letrasD:
@@ -147,10 +150,10 @@ while True:
 			  for lett in letrasD:
 				  for cant in range(letrasD[lett]["cant"]):
 					  letras.append(lett)
-			  print(letras)
+			  #print(letras)
 			  for i in puntos:
 				  puntos[i]=letrasD[i]["puntos"]
-			  print(puntos)
+			  #print(puntos)
 			  #--------------------------------------------------------------------------------------------------
 			  config=False
 			  window2.close()
