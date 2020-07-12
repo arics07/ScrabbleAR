@@ -5,7 +5,18 @@ import random
 import pickle
 from datetime import date
 #import build_words_pattern_nom as juegaCompu
-  
+ 
+def verTopTen(topt):
+	lista=[]
+	for key,value in topt.items():
+		lista.append((key,value["nivel"],value["puntaje"],value["fecha"]))
+	orden=[]
+	norden=1
+	for i in lista:
+		orden.append("{:^2}{:^30}{:^10}{:^20}{:^20}".format(str(norden),i[0],i[1],str(i[2]),str(i[3])))
+		norden = norden + 1
+	return orden
+
 def muestro_l(window,atril): 
     for indice in range(len(atril)):
         letra = atril[indice] 
@@ -94,13 +105,11 @@ def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
 
         
 def tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste):
-    window[(7, 7)].update(button_color=("black", "gray"))
     tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
     for cas in casillas_celeste:
         window[cas].update("TL", button_color=("black", "#4893E9"))
         
 def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento):
-	window[(7, 7)].update(button_color=("black", "gray"))
 	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
 	for cas in casillas_descuento:
 		window[cas].update("x", button_color=("black", "#F00F0F"))
@@ -363,6 +372,9 @@ def main(args):
 						jugadorC.set_jugar()
 						turno_computadora = jugadorC.get_turno()
 						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window)
+			#-----------------------------------------------
+						esPrimeraJugada = False
+			#-----------------------------------------------
 						print('turno despues de que volvi de jugada pc ', turno_computadora)
 						sg.Popup('Turno de ', jugadorJ.get_nombre())
 						jugadorJ.set_jugar()
@@ -484,18 +496,25 @@ def main(args):
 			tiempoCorriendo = False
 			topten=jugada.get_topten()
 			topten.setdefault(jugadorJ.get_nombre(),{'nivel': jugada.get_nivel() , 'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()})
-			print("top ten",topten)
-			#print('topten items',topten.items())
-			
-			#topten=dict(sorted(topten.items(), key = lambda x:x[1].values()))
-			
+			topten=dict(sorted(topten.items(), key=lambda uno:uno[1]['puntaje'],reverse=True)[:10])
 			with open('topten.pkl', 'wb') as f:
-				
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 				f.close()
-		    
 			break
-	  
+	    
+		if event == "Ver TopTen":
+			topten=jugada.get_topten()
+			layout2=[[sg.Text('ORDEN'),sg.Text('JUGADOR'),sg.Text('NIVEL'),sg.Text('PUNTAJE'),sg.Text('FECHA')],
+			[sg.Listbox(values=verTopTen(topten),key='topten',size=(50,10))],
+			[sg.Button("Cerrar",size=(10,2))]]
+			window2 = sg.Window('TOP TEN').Layout(layout2)
+			window2.finalize()
+			while True: 
+				event2, values2=window2.Read() 
+				if event2 == None or event2 == "Cerrar":
+					break 
+			window2.close()
+			
 		if event ==  "posponer":
 			tiempoCorriendo = False
 			with open('scrabble.pkl', 'wb') as output:
