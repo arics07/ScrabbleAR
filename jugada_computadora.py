@@ -97,11 +97,11 @@ def eliminar_coord_en_pc(listaCoordenadas):
 	return desocupadas
 
 
-def programaPrincipal(turno_computadora,atrilC,validez,window):
+def programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC):
 	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
 	print(turno_computadora)
 	print(atrilC)
-	
+	jugadorC.set_jugar()
 	while turno_computadora == True:
 		#va a buscar una posicion en el tablero al azar
 		if (7,7) in desocupadas:
@@ -133,6 +133,7 @@ def programaPrincipal(turno_computadora,atrilC,validez,window):
 				palabra_encontrada = palabra_compu(espacios_libres, dicc)
 				print(palabra_encontrada) #control
 				#la pasa al tablero
+				ptos=jugadorC.get_puntaje()
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					window.FindElement((coord_x,coord_y)).Update(disabled = True)
@@ -140,7 +141,9 @@ def programaPrincipal(turno_computadora,atrilC,validez,window):
 					#window[datos_atril[letra]].Update('')
 					#elimino de la lista
 					atrilC.remove(letra)
+					ptos=ptos+puntos.get(letra)
 					coord_x = coord_x + 1
+				jugadorC.set_puntaje(ptos)
 				turno_computadora = False
 				return turno_computadora 
 					##-------------------------------------------------#
@@ -157,6 +160,7 @@ def programaPrincipal(turno_computadora,atrilC,validez,window):
 				palabra_encontrada = palabra_compu(espacios_libres, dicc)
 				print(palabra_encontrada)
 				#la pasa al tablero
+				ptos=jugadorC.get_puntaje()
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					print('voy a deshabilitar')
@@ -165,6 +169,8 @@ def programaPrincipal(turno_computadora,atrilC,validez,window):
 					#window[datos_atril[letra]].Update('')
 					#elimino de la lista
 					atrilC.remove(letra)
+					ptos=ptos+puntos.get(letra)
 					coord_y = coord_y + 1
 				turno_computadora = False
+				jugadorC.set_puntaje(ptos)
 				return turno_computadora
