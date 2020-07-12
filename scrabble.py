@@ -509,7 +509,6 @@ def main(args):
 			[sg.Button("Cerrar",size=(10,2))]]
 			window2 = sg.Window('TOP TEN').Layout(layout2)
 			window2.finalize()
-			
 			while True: 
 				event2, values2=window2.Read() 
 				if event2 == None or event2 == "Cerrar":
