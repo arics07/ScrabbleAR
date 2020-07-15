@@ -101,7 +101,6 @@ def programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC):
 	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
 	print(turno_computadora)
 	print(atrilC)
-	jugadorC.set_jugar()
 	while turno_computadora == True:
 		#va a buscar una posicion en el tablero al azar
 		if (7,7) in desocupadas:
