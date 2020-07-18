@@ -167,12 +167,15 @@ def main(args):
         [sg.Text("", size=(1,1))]
     ]
 
-	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), button_color=(
-        "black", "tan")) for j in range(max_col)] for i in range(max_rows)]
-
+	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), 
+		button_color=("black", "tan")) for j in range(max_col)] for i in range(max_rows)]
+		
+	columna_2 = [[sg.Text("TURNO"),sg.Input(size=(15, 1), key="turno")]]
+		
+				   
 	layout = [
-        [sg.Column(columna_tablero), sg.Column(columna_1)],
-    ]
+        [sg.Column(columna_tablero), sg.Column(columna_2), sg.Column(columna_1)]
+		]
 
 	window = sg.Window("::::::::: SCRABBLE AR :::::::::", layout)
 	window.Finalize()
@@ -233,21 +236,22 @@ def main(args):
 		
 		if jugadorC.get_turno() == False:
 			#print(atrilC)
+			window["turno"].update(jugadorJ.get_nombre())
 			for i in range(len(atrilC)):
 				window.FindElement("LetraC" + str(i)).Update(disabled = True)
 				
 		if contadorEleccionPalabra == 18000: #equivale a 3 min
 			tiempoEleccionPalabra = False
 			contadorEleccionPalabra = 0
-			sg.Popup('Turno de la computadora')
+			window["turno"].update("COMPUTADORA")
 			jugadorJ.set_dejarJugar()
 			print(jugadorJ.get_turno())
 			jugadorC.set_jugar()
 			turno_computadora = jugadorC.get_turno()
-			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
 			print('turno despues de que volvi de jugada pc ', turno_computadora)
 			window["puntosPc"].update(jugadorC.get_puntaje())
-			sg.Popup('Turno de ', jugadorJ.get_nombre())
+			window["turno"].update(jugadorJ.get_nombre())
 			jugadorJ.set_jugar()
   
 		if event == 'Letra0':
@@ -342,6 +346,7 @@ def main(args):
 			#			print('va por vertcal',listaCoordenadas)	
 		  
 		if event == 'insertar':
+			print(esPrimerJugada)
 			if esPrimerJugada:
 				if (7,7) in listaCoordenadas:
 					esHorizontal = False
@@ -366,19 +371,17 @@ def main(args):
 						jugadorJ.set_puntaje(ptos)
 						jugadorJ.set_dejarJugar()
 						esPrimerJugada = False
-						
-						sg.Popup('Turno de la computadora')
-						jugadorJ.set_dejarJugar()
-						print(jugadorJ.get_turno())
+						window["turno"].update("COMPUTADORA")
 						jugadorC.set_jugar()
+						print(jugadorC.get_turno())
 						turno_computadora = jugadorC.get_turno()
-						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
 			#-----------------------------------------------
 						esPrimeraJugada = False
 			#-----------------------------------------------
 						window["puntosPc"].update(jugadorC.get_puntaje())
 						print('turno despues de que volvi de jugada pc ', turno_computadora)
-						sg.Popup('Turno de ', jugadorJ.get_nombre())
+						window["turno"].update(jugadorJ.get_nombre())
 						jugadorJ.set_jugar()
 					else:
 						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion)
@@ -392,11 +395,12 @@ def main(args):
 						jugadorJ.set_dejarJugar()
 						print(jugadorJ.get_turno())
 						jugadorC.set_jugar()
+						window["turno"].update("COMPUTADORA")
 						turno_computadora = jugadorC.get_turno()
-						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
 						window["puntosPc"].update(jugadorC.get_puntaje())
 						print('turno despues de que volvi de jugada pc ', turno_computadora)
-						sg.Popup('Turno de ', jugadorJ.get_nombre())
+						window["turno"].update(jugadorJ.get_nombre())
 						jugadorJ.set_jugar()
 				else:
 					sg.Popup('La palabra debe pasar por el botón del centro!')
@@ -406,7 +410,7 @@ def main(args):
 					datosEleccion = {}
 					print('lista coord ', listaCoordenadas)
 					print('datos eleccion ', datosEleccion)
-					print(atrilJ)
+					print("atrilJ",atrilJ)
 					esPrimerJugada =True
 			else:
 				esHorizontal = False
@@ -431,16 +435,16 @@ def main(args):
 					window["puntosJug"].update(ptos)
 					jugadorJ.set_puntaje(ptos)
 					jugadorJ.set_dejarJugar()
-					
-					sg.Popup('Turno de la computadora')
+					window["turno"].update('COMPUTADORA')
+					jugadorJ.get_nombre()
 					jugadorJ.set_dejarJugar()
 					print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
-					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
 					window["puntosPc"].update(jugadorC.get_puntaje())
 					print('turno despues de que volvi de jugada pc ', turno_computadora)
-					sg.Popup('Turno de ', jugadorJ.get_nombre())
+					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()
 				else:
 					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion)
@@ -453,11 +457,13 @@ def main(args):
 					jugadorJ.set_dejarJugar()
 					print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
+					window["turno"].update("COMPUTADORA")
+			
 					turno_computadora = jugadorC.get_turno()
-					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
 					window["puntosPc"].update(jugadorC.get_puntaje())
 					print('turno despues de que volvi de jugada pc ', turno_computadora)
-					sg.Popup('Turno de ', jugadorJ.get_nombre())
+					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()
 			print(esPrimerJugada)
 			
@@ -485,17 +491,21 @@ def main(args):
 			#	print('lista coord ', listaCoordenadas)
 			
 		if event == 'pasar':
-			sg.Popup('Turno de la computadora')
 			jugadorJ.set_dejarJugar()
 			print(jugadorJ.get_turno())
 			#abiri modulo compu
+			jugadorC.set_jugar()
 			turno_computadora = jugadorC.get_turno()
 			print('turno pc ', turno_computadora)
-			jugadorC.set_jugar()
-			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+			window["turno"].update(jugadorC.get_nombre())
+			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+			print("esprimer",esPrimerJugada)
+			print("puntaje",jugadorC.get_puntaje())
+			esPrimerJugada=False
+			print("esprimer",esPrimerJugada)	
 			window["puntosPc"].update(jugadorC.get_puntaje())
 			print('turno despues de que volvi de jugada pc ', turno_computadora)
-			sg.Popup('Turno de ', jugadorJ.get_nombre())
+			window["turno"].update(jugadorJ.get_nombre())
 			jugadorJ.set_jugar()
 											
 		if event == "finalizo" or contador == 720000: #equivale a 2 hs 
@@ -569,14 +579,14 @@ def main(args):
 					jugadorJ.set_dejarJugar()	
 					print(jugadorJ.get_turno())	
 					
-					sg.Popup('Turno de la computadora')
+					window["turno"].update("COMPUTADORA")
 					jugadorJ.set_dejarJugar()
 					print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
-					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC)
+					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
 					print('turno despues de que volvi de jugada pc ', turno_computadora)
-					sg.Popup('Turno de ', jugadorJ.get_nombre())
+					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()					 
 			else:
 				sg.Popup("el atril no esta completo")				 	

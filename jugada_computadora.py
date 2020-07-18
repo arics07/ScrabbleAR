@@ -77,6 +77,7 @@ def palabra_compu(longitud, set_palabras):
 				longitud = longitud - 1
 	return palabra_encontrada
 
+
 #porque elige al azar si va a jugar la palabra en forma horizontal o vertical
 direccion_palabra = {0:'horizontal', 1:'vertical'}
 
@@ -90,17 +91,27 @@ def cargar_tuplas_desocupadas(desocupadas):
 
 def eliminar_coord_en_pc(listaCoordenadas):
 	"""Esta función elimina de la lista 'desocupadas' las tuplas correspondientes a lask keys de los casilleros que se van ocupando en el tablero."""
-	print('listacoord ', listaCoordenadas)
+	#print('listacoord ', listaCoordenadas)
 	for coord in listaCoordenadas:
 		desocupadas.remove(coord)
-	print('desocupadas ',desocupadas)
+	#print('desocupadas ',desocupadas)
 	return desocupadas
+	
+def rellenar_atrilC(window,atrilC,letras):
+	for indice in range(len(atrilC)):
+		if atrilC[indice] == 0:
+			letra=random.choice(letras)
+			atrilC[indice] = letra
+			#window.FindElement("LetraC" + str(indice)).Update(letra)
+			letras.remove(letra)
+	print("relleno atrilc",atrilC)
+	return 
 
-
-def programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC):
+def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras):
 	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
-	print(turno_computadora)
-	print(atrilC)
+	atrilC=jugadorC.get_atril()
+	#print(turno_computadora)
+	#print(atrilC)
 	while turno_computadora == True:
 		#va a buscar una posicion en el tablero al azar
 		if (7,7) in desocupadas:
@@ -109,28 +120,28 @@ def programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC):
 		else:
 			x=random.randint(0,14)
 			y=random.randint(0,14)
-		print('x= ', x, 'y=', y)  #control
+		#print('x= ', x, 'y=', y)  #control
 		#va a elegir horizontal o vertical al azar (1:horiz
 		hv = random.randint(0,1)
-		print(direccion_palabra[hv])  #control
+		#print(direccion_palabra[hv])  #control
 		coord_x, coord_y = x, y  #guardo los valores x e y de la key del casillero inicial
 		#dependiendo de lo que haya salido va a contar los casilleron libres desde la posicion elegida
 		espacios_libres = 0
 		#creo diccionario con las palabras validas
 		dicc = lista_a_diccionario(build_words(atrilC),validez)
-		print(dicc) #control
+		#print(dicc) #control
 		if direccion_palabra[hv]=='horizontal':
-			print('entre a horizontal')  #control
+			#print('entre a horizontal')  #control
 			while (x,y) in desocupadas and x<=14 and espacios_libres<7:
 				espacios_libres = espacios_libres + 1
 				x = x + 1
-			print('ESPACIOS LIBRES: ', espacios_libres)   #control
+			#print('ESPACIOS LIBRES: ', espacios_libres)   #control
 			if espacios_libres > 1:
 				#busco una palabra que tenga una longitud igual o menor
 				#print('entre!!')
 				#print(pal(espacios_libres, dicc))
 				palabra_encontrada = palabra_compu(espacios_libres, dicc)
-				print(palabra_encontrada) #control
+				#print(palabra_encontrada) #control
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
 				for letra in palabra_encontrada:
@@ -139,37 +150,53 @@ def programaPrincipal(turno_computadora,atrilC,validez,window,puntos,jugadorC):
 					#elimino del atril
 					#window[datos_atril[letra]].Update('')
 					#elimino de la lista
-					atrilC.remove(letra)
+					pos=atrilC.index(letra)
+					#print("pos",pos)
+					#print("letra",letra)
+					atrilC[pos]=0
 					ptos=ptos+puntos.get(letra)
 					coord_x = coord_x + 1
 				jugadorC.set_puntaje(ptos)
+				rellenar_atrilC(window,atrilC,letras)
+				jugadorC.set_atril(atrilC)
+				print("atrilC",atrilC)
 				turno_computadora = False
+				jugadorC.set_dejarJugar()
 				return turno_computadora 
 					##-------------------------------------------------#
 		else:
-			print('entre a vertical')  #control
+			#print('entre a vertical')  #control
 			while (x,y) in desocupadas and y<=14 and espacios_libres<7:
 				espacios_libres = espacios_libres + 1
 				y = y + 1
-			print('ESPACIOS LIBRES: ', espacios_libres)   #control
+			#print('ESPACIOS LIBRES: ', espacios_libres)   #control
 			if espacios_libres > 1:
 				#print('entreee')
 				#print(pal(espacios_libres, dicc))  #control
 				#busco una palabra que tenga una longitud igual o menor	
 				palabra_encontrada = palabra_compu(espacios_libres, dicc)
-				print(palabra_encontrada)
+				#print(palabra_encontrada)
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
-					print('voy a deshabilitar')
+					#print('voy a deshabilitar')
 					window.FindElement((coord_x,coord_y)).Update(disabled = True)
 					#elimino del atril
 					#window[datos_atril[letra]].Update('')
 					#elimino de la lista
-					atrilC.remove(letra)
+					pos=atrilC.index(letra)
+					#print("pos",pos)
+					#print("letra",letra)
+                     
+					atrilC[pos]=0
+					#atrilC.remove(letra)
 					ptos=ptos+puntos.get(letra)
 					coord_y = coord_y + 1
 				turno_computadora = False
 				jugadorC.set_puntaje(ptos)
+				rellenar_atrilC(window,atrilC,letras)
+				print("atrilC",atrilC) 
+				jugadorC.set_atril(atrilC)
+				jugadorC.set_dejarJugar()
 				return turno_computadora
