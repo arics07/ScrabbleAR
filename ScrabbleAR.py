@@ -30,7 +30,23 @@ letrasD = { "A": {"cant":11,"puntos":1},"B":{"cant":3,"puntos":3},"C":{"cant":4,
   "O":{"cant":4,"puntos":1},"P":{"cant":2,"puntos":3},"Q":{"cant":1,"puntos":8},"R":{"cant":4,"puntos":1},"RR":{"cant":1,"puntos":8},"S":{"cant":7,"puntos":1},"T":{"cant":4,"puntos":1},"U":{"cant":6,"puntos":4},"V":{"cant":2,"puntos":4},
   "W":{"cant":1,"puntos":8},"X":{"cant":1,"puntos":8},"Y":{"cant":1,"puntos":4},"Z":{"cant":1,"puntos":10}}
 
+duracionJugada = {"F": {"horas":1,"minutos":0,"segundos":0}, "M": {"horas":0,"minutos":45,"segundos":0},"D":{"horas":0,"minutos":30,"segundos":0}}
+
+duracionEleccionPalabra = {"F": {"horas":0,"minutos":3,"segundos":0}, "M": {"horas":0,"minutos":2,"segundos":0},"D":{"horas":0,"minutos":1,"segundos":0}}
+
 letras_backup = copy.deepcopy(letrasD)
+duracionJugada_backup = copy.deepcopy(duracionJugada)
+duracionEleccionPalabra_backup = copy.deepcopy(duracionEleccionPalabra)
+
+def seteo_tiempo(duracionJugada,nivel):
+	minu = hor =seg = 0
+	if duracionJugada[nivel]["horas"] != 0:
+		hor =duracionJugada[nivel]["horas"]*360000
+	if duracionJugada[nivel]["minutos"] != 0:
+		minu = duracionJugada[nivel]["minutos"]*6000
+	if duracionJugada[nivel]["segundos"] != 0:
+		seg = duracionJugada[nivel]["segundos"]*100
+	return (hor + minu + seg)
   
 while True: 
   event, values=window.Read() 
@@ -50,11 +66,17 @@ while True:
         cargar_tuplas_desocupadas(desocupadas)	
         
         if values["nivel"].upper() == "F":
-          jugada=jugadas(datetime.datetime.now(),"F",120,jugadorJ,jugadorC,"J",letras,puntos)  
+          tiempoJugada = seteo_tiempo(duracionJugada,"F")
+          tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"F")
+          jugada=jugadas(datetime.datetime.now(),"F",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
         if values["nivel"].upper() == "M":
-          jugada=jugadas(datetime.datetime.now(),"M",60,jugadorJ,jugadorC,"J",letras,puntos)  
+          tiempoJugada = seteo_tiempo(duracionJugada,"M")
+          tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"M") 
+          jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos) 
         if values["nivel"].upper() == "D":
-          jugada=jugadas(datetime.datetime.now(),"D",30,jugadorJ,jugadorC,"J",letras,puntos)  
+          tiempoJugada = seteo_tiempo(duracionJugada,"D")
+          tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"D")
+          jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
   
         
         jugadorJ.elijoL(letras)
@@ -79,7 +101,11 @@ while True:
 				[sg.Text("E", size=(4,1)), sg.Input(letrasD["E"]["puntos"], size=(6,1), key=("E","p")), sg.Input(letrasD["E"]["cant"], size=(6,1), key=("E","c"))],
 				[sg.Text("F", size=(4,1)), sg.Input(letrasD["F"]["puntos"], size=(6,1), key=("F","p")), sg.Input(letrasD["F"]["cant"], size=(6,1), key=("F","c"))],
 				[sg.Text("G", size=(4,1)), sg.Input(letrasD["G"]["puntos"], size=(6,1), key=("G","p")), sg.Input(letrasD["G"]["cant"], size=(6,1), key=("G","c"))],
-				[sg.Text("H", size=(4,1)), sg.Input(letrasD["H"]["puntos"], size=(6,1), key=("H","p")), sg.Input(letrasD["H"]["cant"], size=(6,1), key=("H","c"))]
+				[sg.Text("H", size=(4,1)), sg.Input(letrasD["H"]["puntos"], size=(6,1), key=("H","p")), sg.Input(letrasD["H"]["cant"], size=(6,1), key=("H","c"))],
+				[sg.Text("")],
+				[sg.Text("Duración jugada")],
+				[sg.Text("Hs",size=(4,1)), sg.Text("Min",size=(3,1)),sg.Text("Seg",size=(4,1))],
+				[sg.Input(duracionJugada[values["nivel"]]["horas"],key="hor",size=(4,5)),sg.Input(duracionJugada[values["nivel"]]["minutos"],key="min",size=(4,5)), sg.Input(duracionJugada[values["nivel"]]["segundos"],key="seg",size=(4,5))]
 	               ]
 	               
 	  columna2 = [
@@ -91,7 +117,11 @@ while True:
 				[sg.Text("LL", size=(4,1)), sg.Input(letrasD["LL"]["puntos"], size=(6,1), key=("LL","p")), sg.Input(letrasD["LL"]["cant"], size=(6,1), key=("LL","c"))],
 				[sg.Text("M", size=(4,1)), sg.Input(letrasD["M"]["puntos"], size=(6,1), key=("M","p")), sg.Input(letrasD["M"]["cant"], size=(6,1), key=("M","c"))],
 				[sg.Text("N", size=(4,1)), sg.Input(letrasD["N"]["puntos"], size=(6,1), key=("N","p")), sg.Input(letrasD["N"]["cant"], size=(6,1), key=("N","c"))],
-				[sg.Text("Ñ", size=(4,1)), sg.Input(letrasD["Ñ"]["puntos"], size=(6,1), key=("Ñ","p")), sg.Input(letrasD["Ñ"]["cant"], size=(6,1), key=("Ñ","c"))]
+				[sg.Text("Ñ", size=(4,1)), sg.Input(letrasD["Ñ"]["puntos"], size=(6,1), key=("Ñ","p")), sg.Input(letrasD["Ñ"]["cant"], size=(6,1), key=("Ñ","c"))],
+				[sg.Text("")],
+				[sg.Text("Duración elección palabra")],
+				[sg.Text("Hs",size=(4,1)), sg.Text("Min",size=(3,1)),sg.Text("Seg",size=(4,1))],
+				[sg.Input(duracionEleccionPalabra[values["nivel"]]["horas"],key="ho",size=(4,5)),sg.Input(duracionEleccionPalabra[values["nivel"]]["minutos"],key="mi",size=(4,5)), sg.Input(duracionEleccionPalabra[values["nivel"]]["segundos"],key="se",size=(4,5))]
 	               ]
 	               
 	  columna3 = [
@@ -131,6 +161,22 @@ while True:
 			  
 		  if event2=="Guardar":
 			  sin_errores = True
+			  try:
+				  duracionJugada["F"]["horas"] = int(values2["hor"])
+				  duracionJugada["F"]["minutos"] = int(values2["min"])
+				  duracionJugada["F"]["segundos"] = int(values2["seg"])
+			  except:
+				  duracionJugada["F"]["horas"] = duracionJugada_backup["F"]["horas"]
+				  duracionJugada["F"]["minutos"] = duracionJugada_backup["F"]["minutos"]
+				  duracionJugada["F"]["segundos"] = duracionJugada_backup["F"]["segundos"]
+			  try:
+				  duracionEleccionPalabra["F"]["horas"] = int(values2["ho"])
+				  duracionEleccionPalabra["F"]["minutos"] = int(values2["mi"])
+				  duracionEleccionPalabra["F"]["segundos"] = int(values2["se"])
+			  except:
+				  duracionEleccionPalabra["F"]["horas"] = duracionEleccionPalabra_backup["F"]["horas"]
+				  duracionEleccionPalabra["F"]["minutos"] = duracionEleccionPalabra_backup["F"]["minutos"]
+				  duracionEleccionPalabra["F"]["segundos"] = duracionEleccionPalabra_backup["F"]["segundos"]
 			  for let in letrasD:
 				  try:
 					  letrasD[let]["cant"] = int(values2[(let,"c")])

@@ -28,7 +28,7 @@ def muestro_lc(window,atril):
         window.FindElement("LetraC" + str(indice)).Update("*")
    
 def accion_atril (window,atrilJ,pos,textBoton,datosEleccion):
-	datosEleccion[atrilJ[pos]] = pos
+	datosEleccion[pos] = atrilJ[pos]
 	letraElegida = atrilJ[pos]  
 	window.FindElement(textBoton).Update("")
 	atrilJ[pos] = 0
@@ -66,21 +66,29 @@ def rellenar_atril(window,atrilJ,letras):
 		#print(atrilJ)
 	return atrilJ
 	
-def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion):
-	guardoLetrasTemporal = []
+def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada):
 	for lcoord in listaCoordenadas:
 		x=lcoord[0]
 		y=lcoord[1]
 		
 		letra = matriz[x][y]
-		guardoLetrasTemporal.append(letra)
 		window.FindElement(lcoord).Update("")
+		if (x,y) in casillas_naranja:
+			window.FindElement(lcoord).Update("DL", button_color=("black", "#F4963E"))
+		if (x,y) in casillas_azules:
+			window.FindElement(lcoord).Update("TL", button_color=("black", "#1A4C86"))
+		if (x,y) in casillas_rojas:
+			window.FindElement(lcoord).Update("TP", button_color=("black", "#C91A4F"))
+		if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
+			window.FindElement(lcoord).Update("x", button_color=("black", "#F00F0F"))
+			
 		matriz[x][y] = 0
 		window.FindElement((x,y)).Update(disabled = False)
 		
-	for i in guardoLetrasTemporal:
-		atrilJ[datosEleccion[i]] = i
-		window.FindElement("Letra" + str(datosEleccion[i])).Update(i)
+	for pos,val in datosEleccion.items() :
+		atrilJ[pos] = val
+		window.FindElement("Letra" + str(pos)).Update(val)
+	
 	listaCoordenadas = []
 		
 	#for indice in range(len(atrilJ)):
@@ -186,6 +194,8 @@ def main(args):
 	contadorEleccionPalabra =0
 	jugadorJ=jugada.get_jugadorJ()
 	jugadorC=jugada.get_jugadorC()
+	duracion_jugada=jugada.get_tiempo()
+	duracion_elecc_palabra = jugada.get_tiempoEleccionP()
 	listaCoordenadas = []
 	matriz=[]
 	datosEleccion = {}
@@ -193,6 +203,7 @@ def main(args):
 	esValida = False
 	esHorizontal = False
 	esVertical = False
+	triplica = False
 #	niv = jugada.get_nivel()
 	
 	#unionLetras = []
@@ -232,7 +243,7 @@ def main(args):
 			break
 			
 		tiempoEleccionPalabra = True
-		#print(atrilC)
+		#print(duracion_jugada, duracion_elecc_palabra)
 		
 		if jugadorC.get_turno() == False:
 			#print(atrilC)
@@ -240,7 +251,7 @@ def main(args):
 			for i in range(len(atrilC)):
 				window.FindElement("LetraC" + str(i)).Update(disabled = True)
 				
-		if contadorEleccionPalabra == 18000: #equivale a 3 min
+		if contadorEleccionPalabra == duracion_elecc_palabra: #equivale a 3 min
 			tiempoEleccionPalabra = False
 			contadorEleccionPalabra = 0
 			window["turno"].update("COMPUTADORA")
@@ -326,9 +337,9 @@ def main(args):
 						#print('listacoord ',listaCoordenadas)
 				
 				if esVertical:
-					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz,listaCoordenadas)
+					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 					if event[1] != coordy:
-						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida)
+						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
 						#print('listacoord ',listaCoordenadas)
 			
 		if event == 'insertar':
@@ -369,7 +380,13 @@ def main(args):
 							if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 								p=(-1)*p
 								print("letra",letra,"x",x,"y",y,"descuenta")
-							ptos=ptos+p						    
+							if (x,y) in casillas_rojas:
+								triplica = True
+								
+							ptos=ptos+p	
+							
+						if triplica:
+							ptos = ptos*3					    
 							
 						listaCoordenadas = []
 
@@ -394,7 +411,7 @@ def main(args):
 						window["turno"].update(jugadorJ.get_nombre())
 						jugadorJ.set_jugar()
 					else:
-						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion)
+						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada)
 						datosEleccion = {}
 						#print('lista coord ', listaCoordenadas)
 						#print('datos eleccion ', datosEleccion)
@@ -416,7 +433,7 @@ def main(args):
 					sg.Popup('La palabra debe pasar por el botón del centro!')
 					#print('estoy en el else de no esta en el centro')
 					#print('datos eleccion ', datosEleccion)
-					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion)
+					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada)
 					datosEleccion = {}
 					#print('lista coord ', listaCoordenadas)
 					#print('datos eleccion ', datosEleccion)
@@ -435,7 +452,7 @@ def main(args):
 				if esValida:
 					rellenar_atril(window,atrilJ,letras)
 					jugadaPC.eliminar_coord_en_pc(listaCoordenadas)
-					listaCoordenadas = []
+					
 					print(listaCoordenadas)
 					
 					ptos=int(values["puntosJug"])
@@ -458,7 +475,14 @@ def main(args):
 						if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 							p=(-1)*p
 							print("letra",letra,"x",x,"y",y,"descuenta")
-						ptos=ptos+p						    
+						if (x,y) in casillas_rojas:
+								triplica = True
+						ptos=ptos+p	
+					
+					if triplica:
+							ptos = ptos*3
+							
+					listaCoordenadas = []					    
 						
 					window["puntosJug"].update(ptos)
 					jugadorJ.set_puntaje(ptos)
@@ -475,7 +499,7 @@ def main(args):
 					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()
 				else:
-					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion)
+					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada)
 					datosEleccion = {}
 					#print('lista coord ', listaCoordenadas)
 					#print('datos eleccion ', datosEleccion)
@@ -513,7 +537,7 @@ def main(args):
 			window["turno"].update(jugadorJ.get_nombre())
 			jugadorJ.set_jugar()
 											
-		if event == "finalizo" or contador == 720000: #equivale a 2 hs 
+		if event == "finalizo" or contador == duracion_jugada: #equivale a 2 hs 
 			tiempoCorriendo = False
 			topten=jugada.get_topten()
 			topten.setdefault(jugadorJ.get_nombre(),{'nivel': jugada.get_nivel() , 'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()})
