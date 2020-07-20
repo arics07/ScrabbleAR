@@ -1,5 +1,6 @@
 import validar_palabra_lexicon as ppattern
 import random
+import itertools as it
 
 
 lista_atril = []
@@ -18,29 +19,40 @@ def list_to_dict(lista_atril):
 def build_words(lista_atril):
 	"""Esta función crea todas las combinaciones posibles con las letras que la computadora
 	tiene en su atril"""
-	atril = list_to_dict(lista_atril)
-	todas_las_palabras = [""]
-	i = 0
-	ew = ""
-	while len(ew) < len(lista_atril):
-		ew = todas_las_palabras[i]
-		tempEW = []
-		for w in range(len(ew)):
-			tempEW.append(ew[w])
-		temp_hand_dict = dict(atril)
-		j = 0
-		while j < len(lista_atril):
-			if lista_atril[j] not in tempEW:
-				nueva_palabra = ew + (lista_atril[j])
-				todas_las_palabras.append(nueva_palabra)
-				j = j + temp_hand_dict[lista_atril[j]]
-			else:
-				tempEW.remove(lista_atril[j])
-				num = temp_hand_dict[lista_atril[j]] - 1
-				temp_hand_dict[lista_atril[j]] = num
-				j = j + 1
-		i = i + 1
+	word = "".join(lista_atril)
+	#control
+	#print(word)
+	combinaciones = set()
+	for i in range(2, len(word)+1):
+		combinaciones.update((map("".join, it.permutations(word, i))))
+	todas_las_palabras = list(combinaciones)
+	#control
+	#print(todas_las_palabras)
 	return todas_las_palabras
+	
+	#atril = list_to_dict(lista_atril)
+	#todas_las_palabras = [""]
+	#i = 0
+	#ew = ""
+	#while len(ew) < len(lista_atril):
+	#	ew = todas_las_palabras[i]
+	#	tempEW = []
+	#	for w in range(len(ew)):
+	#		tempEW.append(ew[w])
+	#	temp_hand_dict = dict(atril)
+	#	j = 0
+	#	while j < len(lista_atril):
+	#		if lista_atril[j] not in tempEW:
+	#			nueva_palabra = ew + (lista_atril[j])
+	#			todas_las_palabras.append(nueva_palabra)
+	#			j = j + temp_hand_dict[lista_atril[j]]
+	#		else:
+	#			tempEW.remove(lista_atril[j])
+	#			num = temp_hand_dict[lista_atril[j]] - 1
+	#			temp_hand_dict[lista_atril[j]] = num
+	#			j = j + 1
+	#	i = i + 1
+	#return todas_las_palabras
     
 def lista_a_diccionario(todas_las_palabras,validez):
 	''' Esta finció devuelve un diccionario cuya clave es el tamaño 
@@ -75,6 +87,7 @@ def palabra_compu(longitud, set_palabras):
 				encontre=True
 			else:
 				longitud = longitud - 1
+	print(palabra_encontrada)
 	return palabra_encontrada
 
 
@@ -155,6 +168,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras):
 					#print("letra",letra)
 					atrilC[pos]=0
 					ptos=ptos+puntos.get(letra)
+					desocupadas.remove((coord_x, coord_y))
 					coord_x = coord_x + 1
 				jugadorC.set_puntaje(ptos)
 				rellenar_atrilC(window,atrilC,letras)
@@ -192,6 +206,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras):
 					atrilC[pos]=0
 					#atrilC.remove(letra)
 					ptos=ptos+puntos.get(letra)
+					desocupadas.remove((coord_x, coord_y))
 					coord_y = coord_y + 1
 				turno_computadora = False
 				jugadorC.set_puntaje(ptos)
