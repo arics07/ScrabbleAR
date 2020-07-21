@@ -156,8 +156,8 @@ def main(args):
 
 	letrasEnTablero = [] 
 	columna_1 = [
-        [sg.Text("Jugador"),sg.Input(size=(15, 1), key="nombre")],
-        [sg.Text("Nivel"),sg.Input(size=(2,3), key="nivel")],
+        [sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre")],
+        [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel")],
         [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Reanudar", size=(10,1), key="reanudar"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
         [sg.Button("Ver TopTen", size=(10,1))],
         [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
@@ -180,7 +180,7 @@ def main(args):
 		button_color=("black", "tan")) for j in range(max_col)] for i in range(max_rows)]
 		
 	columna_2 = [[sg.Text("TURNO"),sg.Input(size=(15, 1), key="turno")],
-				[sg.Text("Letras restantes:"), sg.Input(len(letras), size=(7,1), key="tot_letras")]
+				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras")]
 				]
 		
 				   
@@ -415,7 +415,7 @@ def main(args):
 			#-----------------------------------------------
 						window["puntosPc"].update(jugadorC.get_puntaje())
 						#print('turno despues de que volvi de jugada pc ', turno_computadora)
-						window["turno"].update(jugadorJ.get_nombre())
+						window["turno"].update("computadora")
 						jugadorJ.set_jugar()
 					else:
 						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)

@@ -54,8 +54,8 @@ def build_words(lista_atril):
 	#return todas_las_palabras
     
 def lista_a_diccionario(todas_las_palabras,validez):
-	''' Esta función devuelve un diccionario cuya clave es el tamaño 
-	de la palabra y el valor es una palabra válida'''
+	""" Esta función devuelve un diccionario cuya clave es el tamaño 
+	de la palabra y el valor es una palabra válida"""
 	set_palabras = {}
 	for palabra in todas_las_palabras:
 		validez = ppattern.analizar_palabra_pat(palabra,validez)

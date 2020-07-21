@@ -8,6 +8,9 @@ from jugada_computadora import cargar_tuplas_desocupadas, desocupadas
 from jugador import jugador
 from jugadas import jugadas
 
+
+sg.theme("GreenTan")
+
 nom=""
 layout=[[sg.Text('Jugador')],[sg.InputText(key='nom',size=(29,3))],
   [sg.Text('Nivel')],[sg.InputText(key='nivel',size=(3,2)),sg.Text('F=Facil M=Medio D=Dificil')],
@@ -15,20 +18,37 @@ layout=[[sg.Text('Jugador')],[sg.InputText(key='nom',size=(29,3))],
 window = sg.Window('Ingreso Juego').Layout(layout)
 
 #Cantidad de letras 
-letras=["A","A","A","A","A","A","A","A","A","A","A","B","B","B","C","C","C","C",
-  "D","D","D","D","E","E","E","E","E","E","E","E","E","E","E","F","F","G","G","H","H",
-  "I","I","J","J","K","L","L","L","L","LL","M","M","M","N","N","N","N","N",
-  "O","O","O","O","O","O","O","O","P","P","Q","R","R","R","R","RR","S","S","S","S","S","S","S",
-  "T","T","T","T","U","U","U","U","U","U","V","V","W","X","Y","Z"]
+#letras=["A","A","A","A","A","A","A","A","A","A","A","B","B","B","C","C","C","C",
+#  "D","D","D","D","E","E","E","E","E","E","E","E","E","E","E","F","F","G","G","H","H",
+#  "I","I","J","J","K","L","L","L","L","LL","M","M","M","N","N","N","N","N",
+#  "O","O","O","O","O","O","O","O","P","P","Q","R","R","R","R","RR","S","S","S","S","S","S","S",
+#  "T","T","T","T","U","U","U","U","U","U","V","V","W","X","Y","Z"]
 
 #DICCIONARIO QUE RELACIONA LETRA CON SU VALOR 
-puntos={"A":1,"B":3,"C":2,"D":2,"E":1,"F": 4,"G":2,"H":4,"I":1,"J":6,"K":8,"L":1,"LL":8,"M":3,
-  "N":1,"Ñ":8,"O":1,"P":3,"Q":8,"R":1,"RR":8,"S":1,"T":1,"U":1,"V":4,"W":8,"X":8,"Y":4,"Z":10}
+#puntos={"A":1,"B":3,"C":2,"D":2,"E":1,"F": 4,"G":2,"H":4,"I":1,"J":6,"K":8,"L":1,"LL":8,"M":3,
+#  "N":1,"Ñ":8,"O":1,"P":3,"Q":8,"R":1,"RR":8,"S":1,"T":1,"U":1,"V":4,"W":8,"X":8,"Y":4,"Z":10}
+  
+
   
 letrasD = { "A": {"cant":11,"puntos":1},"B":{"cant":3,"puntos":3},"C":{"cant":4,"puntos":2},"D":{"cant":4,"puntos":2},"E":{"cant":11,"puntos":1},"F":{"cant":2,"puntos":4},"G":{"cant":2,"puntos":2},
   "H":{"cant":2,"puntos":4},"I":{"cant":2,"puntos":1},"J":{"cant":2,"puntos":6},"K":{"cant":1,"puntos":8},"L":{"cant":4,"puntos":1},"LL":{"cant":1,"puntos":8},"M":{"cant":3,"puntos":3},"N":{"cant":5,"puntos":1},"Ñ":{"cant":1,"puntos":8},
   "O":{"cant":4,"puntos":1},"P":{"cant":2,"puntos":3},"Q":{"cant":1,"puntos":8},"R":{"cant":4,"puntos":1},"RR":{"cant":1,"puntos":8},"S":{"cant":7,"puntos":1},"T":{"cant":4,"puntos":1},"U":{"cant":6,"puntos":4},"V":{"cant":2,"puntos":4},
   "W":{"cant":1,"puntos":8},"X":{"cant":1,"puntos":8},"Y":{"cant":1,"puntos":4},"Z":{"cant":1,"puntos":10}}
+
+def inicializar_letras(letrasD):
+	letras = []
+	for lett in letrasD:
+		for cant in range(letrasD[lett]["cant"]):
+			letras.append(lett)
+	#print(letras)
+	return letras
+
+def inicializar_puntos(letrasD):
+	puntos = {}
+	for lett in letrasD:
+		puntos[lett]=letrasD[lett]["puntos"]
+	#print(puntos)
+	return puntos
 
 duracionJugada = {"F": {"horas":1,"minutos":0,"segundos":0}, "M": {"horas":0,"minutos":45,"segundos":0},"D":{"horas":0,"minutos":30,"segundos":0}}
 
@@ -63,6 +83,9 @@ while True:
         window.close()   
         jugadorJ = jugador(values["nom"])
         jugadorC = jugador('Computadora')
+        letras = inicializar_letras(letrasD)
+        puntos = inicializar_puntos(letrasD)
+        
         cargar_tuplas_desocupadas(desocupadas)	
         
         if values["nivel"].upper() == "F":
@@ -190,15 +213,12 @@ while True:
 					  sin_errores=False
 			  if sin_errores==False:
 				  sg.popup("Algunos de los valores no se modificaron porque no se ingresaron números enteros")
-			  #la parte encerrada en las lineas se va a sacar después--------------------------------------------
+			  #-------------------------------------------------------------------------------
 			  #Actualizo la lista letras y el diccionario puntos
-			  letras = []
-			  for lett in letrasD:
-				  for cant in range(letrasD[lett]["cant"]):
-					  letras.append(lett)
-			  #print(letras)
-			  for i in puntos:
-				  puntos[i]=letrasD[i]["puntos"]
+			  #letras = inicializar_letras(letrasD)
+			  #puntos = inicializar_puntos(letrasD)
+			  #for i in puntos:
+			  #	  puntos[i]=letrasD[i]["puntos"]
 			  #print(puntos)
 			  #--------------------------------------------------------------------------------------------------
 			  config=False
