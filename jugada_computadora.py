@@ -2,17 +2,16 @@ import validar_palabra_lexicon as ppattern
 import random
 import itertools as it
 
-
 lista_atril = []
 
 
-def list_to_dict(lista_atril):
-	"""Esta función crea un diccionario con las letras que la computadora 
-	tiene en su atril. El diccionario tiene la forma letra:ocurrencias"""
-	hand_as_dict = {}
-	for letra in lista_atril:
-		hand_as_dict[letra] = hand_as_dict.get(letra, 0) + 1
-	return hand_as_dict
+#def list_to_dict(lista_atril):
+#	"""Esta función crea un diccionario con las letras que la computadora 
+#	tiene en su atril. El diccionario tiene la forma letra:ocurrencias"""
+#	hand_as_dict = {}
+#	for letra in lista_atril:
+#		hand_as_dict[letra] = hand_as_dict.get(letra, 0) + 1
+#	return hand_as_dict
 
 
 #lista_atril es una lista con las letras
@@ -55,7 +54,7 @@ def build_words(lista_atril):
 	#return todas_las_palabras
     
 def lista_a_diccionario(todas_las_palabras,validez):
-	''' Esta finció devuelve un diccionario cuya clave es el tamaño 
+	''' Esta función devuelve un diccionario cuya clave es el tamaño 
 	de la palabra y el valor es una palabra válida'''
 	set_palabras = {}
 	for palabra in todas_las_palabras:
@@ -101,6 +100,7 @@ def cargar_tuplas_desocupadas(desocupadas):
 	for i in range(15):
 		for j in range(15):
 			desocupadas.append((i,j))
+	#print(desocupadas)
 
 def eliminar_coord_en_pc(listaCoordenadas):
 	"""Esta función elimina de la lista 'desocupadas' las tuplas correspondientes a lask keys de los casilleros que se van ocupando en el tablero."""
@@ -196,13 +196,13 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					#ptos=ptos+puntos.get(letra)
 					
 					#coord_x = coord_x + 1
-				jugadorC.set_puntaje(ptos)
-				rellenar_atrilC(window,atrilC,letras)
-				jugadorC.set_atril(atrilC)
-				print("atrilC",atrilC)
-				turno_computadora = False
-				jugadorC.set_dejarJugar()
-				return turno_computadora 
+				#jugadorC.set_puntaje(ptos)
+				#rellenar_atrilC(window,atrilC,letras)
+				#jugadorC.set_atril(atrilC)
+				#print("atrilC",atrilC)
+				#turno_computadora = False
+				#jugadorC.set_dejarJugar()
+				#return turno_computadora 
 					##-------------------------------------------------#
 		else:
 			#print('entre a vertical')  #control
@@ -220,6 +220,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				ptos=jugadorC.get_puntaje()
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
+					
 					#print('voy a deshabilitar')
 					window.FindElement((coord_x,coord_y)).Update(disabled = True)
 					#elimino del atril
@@ -259,10 +260,12 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					#ptos=ptos+puntos.get(letra)
 					
 					#coord_y = coord_y + 1
-				turno_computadora = False
-				jugadorC.set_puntaje(ptos)
-				rellenar_atrilC(window,atrilC,letras)
-				print("atrilC",atrilC) 
-				jugadorC.set_atril(atrilC)
-				jugadorC.set_dejarJugar()
-				return turno_computadora
+
+		turno_computadora = False
+		jugadorC.set_puntaje(ptos)
+		rellenar_atrilC(window,atrilC,letras)
+		print("atrilC",atrilC) 
+		window["tot_letras"].Update(len(letras))
+		jugadorC.set_atril(atrilC)
+		jugadorC.set_dejarJugar()
+		return turno_computadora

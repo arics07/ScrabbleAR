@@ -154,7 +154,6 @@ def main(args):
 	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
 	casillas_descuento = [(2,4), (2,10), (4,6), (10,6), (10,8), (12,4), (12,10), (7,1), (7,13), (1,7), (13,7), (4,2), (10,2), (4,12), (10,12), (6,4), (8,4), (6,10), (8,10), (4,8)]
 
-  
 	letrasEnTablero = [] 
 	columna_1 = [
         [sg.Text("Jugador"),sg.Input(size=(15, 1), key="nombre")],
@@ -180,7 +179,9 @@ def main(args):
 	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), 
 		button_color=("black", "tan")) for j in range(max_col)] for i in range(max_rows)]
 		
-	columna_2 = [[sg.Text("TURNO"),sg.Input(size=(15, 1), key="turno")]]
+	columna_2 = [[sg.Text("TURNO"),sg.Input(size=(15, 1), key="turno")],
+				[sg.Text("Letras restantes:"), sg.Input(len(letras), size=(7,1), key="tot_letras")]
+				]
 		
 				   
 	layout = [
@@ -315,10 +316,13 @@ def main(args):
 				window.FindElement("Letra" + str(i)).Update(disabled = False)
 			
 			if len(listaCoordenadas) == 0:
-				listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
-				
-				coordx = listaCoordenadas[0][0]
-				coordy = listaCoordenadas[0][1]
+				try:
+					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
+					coordx = listaCoordenadas[0][0]
+					coordy = listaCoordenadas[0][1]
+				except:
+					pass
+					
 			elif len(listaCoordenadas) == 1:
 				
 				if event[0] == coordx:
@@ -391,6 +395,7 @@ def main(args):
 							ptos = ptos*3					    
 							
 						listaCoordenadas = []
+						window["tot_letras"].Update(len(letras))
 
 						#for j in palabra:
 						#	ptos=ptos+puntos.get(j)
@@ -484,7 +489,8 @@ def main(args):
 					if triplica:
 							ptos = ptos*3
 							
-					listaCoordenadas = []					    
+					listaCoordenadas = []	
+					window["tot_letras"].Update(len(letras))				    
 						
 					window["puntosJug"].update(ptos)
 					jugadorJ.set_puntaje(ptos)
