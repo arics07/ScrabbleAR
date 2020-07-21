@@ -12,9 +12,18 @@ from jugadas import jugadas
 sg.theme("GreenTan")
 
 nom=""
+nivel=""
 layout=[[sg.Text('Jugador')],[sg.InputText(key='nom',size=(29,3))],
-  [sg.Text('Nivel')],[sg.InputText(key='nivel',size=(3,2)),sg.Text('F=Facil M=Medio D=Dificil')],
-  [sg.Button("Comenzar",size=(10,2)), sg.Button("Configurar", size=(10,2))]]
+  [sg.Text("Elegir nivel:")],
+  [sg.Text("",size=(1,1)), sg.Button("Fácil",size=(20,1))],
+  [sg.Text("",size=(1,1)), sg.Button("Medio",size=(20,1))],
+  [sg.Text("",size=(1,1)), sg.Button("Difícil",size=(20,1))],
+  [sg.Text("",size=(1,1)), sg.Text("Nivel elegido: "), sg.Text(nivel, key="niv", font="bold")], 
+  [sg.Text("",size=(1,1)), sg.Button("Configurar", size=(10,1), disabled=True)],
+# [sg.Text('Nivel')],[sg.InputText(key='nivel',size=(3,2)),sg.Text('F=Facil M=Medio D=Dificil')],
+  [sg.Text("")],
+  [sg.Text("",size=(1,1)), sg.Button("Comenzar",size=(20,2))]
+  ]
 window = sg.Window('Ingreso Juego').Layout(layout)
 
 #Cantidad de letras 
@@ -73,47 +82,63 @@ while True:
   
   if event == None:
 	  break 
+	  
+  if event == "Fácil":
+	  nivel="F"
+	  window["niv"].Update(nivel)
+	  window["Configurar"].Update(disabled=False)
+	  
+  if event == "Medio":
+	  nivel="M"
+	  window["niv"].Update(nivel)
+	  window["Configurar"].Update(disabled=False)
+	  
+  if event == "Difícil":
+	  nivel="D"
+	  window["niv"].Update(nivel)
+	  window["Configurar"].Update(disabled=False)
+  
   if event == "Comenzar":  
     if values["nom"] == "":
       sg.Popup("Debe ingresar un nombre")
-    else:
-      if not (values["nivel"].upper() == "F" or values["nivel"].upper() == "M" or values["nivel"].upper() == "D"):
-        sg.Popup("Nivel F=Facil M=Medio D=Dificil")
-      else:  
-        window.close()   
-        jugadorJ = jugador(values["nom"])
-        jugadorC = jugador('Computadora')
-        letras = inicializar_letras(letrasD)
-        puntos = inicializar_puntos(letrasD)
+  #  else:
+  #    if not (values["nivel"].upper() == "F" or values["nivel"].upper() == "M" or values["nivel"].upper() == "D"):
+  #      sg.Popup("Nivel F=Facil M=Medio D=Dificil")
+    else:  
+      window.close()   
+      jugadorJ = jugador(values["nom"])
+      jugadorC = jugador('Computadora')
+      letras = inicializar_letras(letrasD)
+      puntos = inicializar_puntos(letrasD)
         
-        cargar_tuplas_desocupadas(desocupadas)	
+      cargar_tuplas_desocupadas(desocupadas)	
         
-        if values["nivel"].upper() == "F":
-          tiempoJugada = seteo_tiempo(duracionJugada,"F")
-          tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"F")
-          jugada=jugadas(datetime.datetime.now(),"F",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
-        if values["nivel"].upper() == "M":
-          tiempoJugada = seteo_tiempo(duracionJugada,"M")
-          tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"M") 
-          jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos) 
-        if values["nivel"].upper() == "D":
-          tiempoJugada = seteo_tiempo(duracionJugada,"D")
-          tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"D")
-          jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
+      if nivel == "F":
+        tiempoJugada = seteo_tiempo(duracionJugada,"F")
+        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"F")
+        jugada=jugadas(datetime.datetime.now(),"F",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
+      if nivel == "M":
+        tiempoJugada = seteo_tiempo(duracionJugada,"M")
+        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"M") 
+        jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos) 
+      if nivel == "D":
+        tiempoJugada = seteo_tiempo(duracionJugada,"D")
+        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"D")
+        jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
   
         
-        jugadorJ.elijoL(letras)
-        jugadorC.elijoL(letras)
-        try: 
-          with open('topten.pkl', 'rb') as f:
-            topten=dict(pickle.load(f))
-        except:
-          topten={}  
-          print(topten) 
-        jugada.set_topten(topten)
-        scrabble.main(jugada)
-        break
-        
+      jugadorJ.elijoL(letras)
+      jugadorC.elijoL(letras)
+      try: 
+        with open('topten.pkl', 'rb') as f:
+          topten=dict(pickle.load(f))
+      except:
+        topten={}  
+        print(topten) 
+      jugada.set_topten(topten)
+      scrabble.main(jugada)
+      break
+      
   if event == "Configurar":
 	  columna1 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(5,1)), sg.Text("Cantidad", size=(6,1))], 
@@ -128,7 +153,7 @@ while True:
 				[sg.Text("")],
 				[sg.Text("Duración jugada")],
 				[sg.Text("Hs",size=(4,1)), sg.Text("Min",size=(3,1)),sg.Text("Seg",size=(4,1))],
-				[sg.Input(duracionJugada[values["nivel"]]["horas"],key="hor",size=(4,5)),sg.Input(duracionJugada[values["nivel"]]["minutos"],key="min",size=(4,5)), sg.Input(duracionJugada[values["nivel"]]["segundos"],key="seg",size=(4,5))]
+				[sg.Input(duracionJugada[nivel]["horas"],key="hor",size=(4,5)),sg.Input(duracionJugada[nivel]["minutos"],key="min",size=(4,5)), sg.Input(duracionJugada[nivel]["segundos"],key="seg",size=(4,5))]
 	               ]
 	               
 	  columna2 = [
@@ -144,7 +169,7 @@ while True:
 				[sg.Text("")],
 				[sg.Text("Duración elección palabra")],
 				[sg.Text("Hs",size=(4,1)), sg.Text("Min",size=(3,1)),sg.Text("Seg",size=(4,1))],
-				[sg.Input(duracionEleccionPalabra[values["nivel"]]["horas"],key="ho",size=(4,5)),sg.Input(duracionEleccionPalabra[values["nivel"]]["minutos"],key="mi",size=(4,5)), sg.Input(duracionEleccionPalabra[values["nivel"]]["segundos"],key="se",size=(4,5))]
+				[sg.Input(duracionEleccionPalabra[nivel]["horas"],key="ho",size=(4,5)),sg.Input(duracionEleccionPalabra[nivel]["minutos"],key="mi",size=(4,5)), sg.Input(duracionEleccionPalabra[nivel]["segundos"],key="se",size=(4,5))]
 	               ]
 	               
 	  columna3 = [

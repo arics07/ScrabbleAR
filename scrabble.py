@@ -156,12 +156,12 @@ def main(args):
 
 	letrasEnTablero = [] 
 	columna_1 = [
-        [sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre")],
+        [sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre", background_color="#FFC0CB")],
         [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel")],
         [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Reanudar", size=(10,1), key="reanudar"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
         [sg.Button("Ver TopTen", size=(10,1))],
         [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
-        [sg.Input(size=(15, 1), key="puntosJug"), sg.Text("", size=(1,1)), sg.Input(size=(15, 1), key="puntosPc")],
+        [sg.Text(size=(15, 1), key="puntosJug", background_color="white"), sg.Text("", size=(1,1)), sg.Text(size=(15, 1), key="puntosPc", background_color="white")],
         [sg.Text("Tiempo", justification="center")], [sg.Text(
             size=(10, 2), font=('Helvetica', 20), justification='center', key='tiempo')],
         [sg.Text("Computadora")],
