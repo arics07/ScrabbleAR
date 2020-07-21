@@ -120,9 +120,10 @@ def rellenar_atrilC(window,atrilC,letras):
 	print("relleno atrilc",atrilC)
 	return 
 
-def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras):
+def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
 	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
 	atrilC=jugadorC.get_atril()
+	triplica = False
 	#print(turno_computadora)
 	#print(atrilC)
 	while turno_computadora == True:
@@ -167,9 +168,34 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras):
 					#print("pos",pos)
 					#print("letra",letra)
 					atrilC[pos]=0
-					ptos=ptos+puntos.get(letra)
+					
+					p=puntos.get(letra)	
+					print("letra",letra,"puntos",p)
+					if (coord_x, coord_y) in casillas_naranja:
+						p=p*2
+						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
+					if (coord_x, coord_y) in casillas_azules: 
+						p=p*3						
+						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
+						p=p*3
+						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
+						p=(-1)*p
+						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
+					if (coord_x, coord_y) in casillas_rojas:
+						triplica = True
+					ptos=ptos+p
+					
 					desocupadas.remove((coord_x, coord_y))
 					coord_x = coord_x + 1
+					
+				if triplica:
+					ptos = ptos*3
+					
+					#ptos=ptos+puntos.get(letra)
+					
+					#coord_x = coord_x + 1
 				jugadorC.set_puntaje(ptos)
 				rellenar_atrilC(window,atrilC,letras)
 				jugadorC.set_atril(atrilC)
@@ -204,10 +230,35 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras):
 					#print("letra",letra)
                      
 					atrilC[pos]=0
-					#atrilC.remove(letra)
-					ptos=ptos+puntos.get(letra)
+					
+					p=puntos.get(letra)	
+					print("letra",letra,"puntos",p)
+					if (coord_x, coord_y) in casillas_naranja:
+						p=p*2
+						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
+					if (coord_x, coord_y) in casillas_azules: 
+						p=p*3						
+						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
+						p=p*3
+						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
+						p=(-1)*p
+						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
+					if (coord_x, coord_y) in casillas_rojas:
+						triplica = True
+					ptos=ptos+p
+					
 					desocupadas.remove((coord_x, coord_y))
-					coord_y = coord_y + 1
+					coord_x = coord_x + 1
+					
+				if triplica:
+					ptos = ptos*3
+					
+					#atrilC.remove(letra)
+					#ptos=ptos+puntos.get(letra)
+					
+					#coord_y = coord_y + 1
 				turno_computadora = False
 				jugadorC.set_puntaje(ptos)
 				rellenar_atrilC(window,atrilC,letras)

@@ -66,7 +66,7 @@ def rellenar_atril(window,atrilJ,letras):
 		#print(atrilJ)
 	return atrilJ
 	
-def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada):
+def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
 	for lcoord in listaCoordenadas:
 		x=lcoord[0]
 		y=lcoord[1]
@@ -81,6 +81,8 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 			window.FindElement(lcoord).Update("TP", button_color=("black", "#C91A4F"))
 		if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 			window.FindElement(lcoord).Update("x", button_color=("black", "#F00F0F"))
+		if jugada.get_nivel() == "F" and (x,y) in casillas_celeste:
+			window.FindElement(lcoord).Update("TL", button_color=("black", "#4893E9"))
 			
 		matriz[x][y] = 0
 		window.FindElement((x,y)).Update(disabled = False)
@@ -259,7 +261,7 @@ def main(args):
 			#print(jugadorJ.get_turno())
 			jugadorC.set_jugar()
 			turno_computadora = jugadorC.get_turno()
-			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 			#print('turno despues de que volvi de jugada pc ', turno_computadora)
 			window["puntosPc"].update(jugadorC.get_puntaje())
 			window["turno"].update(jugadorJ.get_nombre())
@@ -402,7 +404,7 @@ def main(args):
 						jugadorC.set_jugar()
 						#print(jugadorC.get_turno())
 						turno_computadora = jugadorC.get_turno()
-						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 			#-----------------------------------------------
 						esPrimeraJugada = False
 			#-----------------------------------------------
@@ -411,7 +413,7 @@ def main(args):
 						window["turno"].update(jugadorJ.get_nombre())
 						jugadorJ.set_jugar()
 					else:
-						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada)
+						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 						datosEleccion = {}
 						#print('lista coord ', listaCoordenadas)
 						#print('datos eleccion ', datosEleccion)
@@ -424,7 +426,7 @@ def main(args):
 						jugadorC.set_jugar()
 						window["turno"].update("COMPUTADORA")
 						turno_computadora = jugadorC.get_turno()
-						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 						window["puntosPc"].update(jugadorC.get_puntaje())
 						#print('turno despues de que volvi de jugada pc ', turno_computadora)
 						window["turno"].update(jugadorJ.get_nombre())
@@ -433,7 +435,7 @@ def main(args):
 					sg.Popup('La palabra debe pasar por el botón del centro!')
 					#print('estoy en el else de no esta en el centro')
 					#print('datos eleccion ', datosEleccion)
-					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada)
+					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					datosEleccion = {}
 					#print('lista coord ', listaCoordenadas)
 					#print('datos eleccion ', datosEleccion)
@@ -493,13 +495,13 @@ def main(args):
 					#print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
-					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					window["puntosPc"].update(jugadorC.get_puntaje())
 					#print('turno despues de que volvi de jugada pc ', turno_computadora)
 					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()
 				else:
-					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,jugada)
+					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					datosEleccion = {}
 					#print('lista coord ', listaCoordenadas)
 					#print('datos eleccion ', datosEleccion)
@@ -512,7 +514,7 @@ def main(args):
 					window["turno"].update("COMPUTADORA")
 			
 					turno_computadora = jugadorC.get_turno()
-					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					window["puntosPc"].update(jugadorC.get_puntaje())
 					#print('turno despues de que volvi de jugada pc ', turno_computadora)
 					window["turno"].update(jugadorJ.get_nombre())
@@ -527,7 +529,7 @@ def main(args):
 			turno_computadora = jugadorC.get_turno()
 			#print('turno pc ', turno_computadora)
 			window["turno"].update(jugadorC.get_nombre())
-			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 			#print("esprimer",esPrimerJugada)
 			#print("puntaje",jugadorC.get_puntaje())
 			esPrimerJugada=False
@@ -613,7 +615,7 @@ def main(args):
 					print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
-					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras)
+					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					print('turno despues de que volvi de jugada pc ', turno_computadora)
 					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()					 
