@@ -542,13 +542,13 @@ def main(args):
 					#ptos=int(values["puntosJug"])
 					ptos = jugadorJ.get_puntaje()	
 					puntaje = 0	
+					triplica = False
+					duplica = False
 					for lcoord in listaCoordenadas:
 						x=lcoord[0]
 						y=lcoord[1]
 						letra = matriz[x][y]	
-						p=puntos.get(letra)
-						triplica = False
-						duplica = False						
+						p=puntos.get(letra)						
 						
 #						print("letra",letra,"puntos",p)
 #						if (x,y) in casillas_naranja:

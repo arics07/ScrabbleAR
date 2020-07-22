@@ -128,6 +128,8 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
 				puntaje = 0
+				triplica = False
+				duplica = False
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					window.FindElement((coord_x,coord_y)).Update(disabled = True)
@@ -140,8 +142,6 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					atrilC[pos]=0
 					
 					p=puntos.get(letra)	
-					triplica = False
-					duplica = False
 					print("letra",letra,"puntos",p)
 #					if (coord_x, coord_y) in casillas_naranja:
 #						p=p*2
@@ -196,6 +196,8 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
 				puntaje = 0
+				triplica = False
+				duplica = False
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					
@@ -209,8 +211,6 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					#print("letra",letra)
                      
 					atrilC[pos]=0
-					duplica = False
-					triplica = False
 					p=puntos.get(letra)	
 					print("letra",letra,"puntos",p)
 #					if (coord_x, coord_y) in casillas_naranja:
