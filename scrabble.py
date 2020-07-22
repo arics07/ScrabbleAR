@@ -74,7 +74,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		letra = matriz[x][y]
 		window.FindElement(lcoord).Update("")
 		if (x,y) in casillas_naranja:
-			window.FindElement(lcoord).Update("DL", button_color=("black", "#F4963E"))
+			window.FindElement(lcoord).Update("DP", button_color=("black", "#F4963E"))
 		if (x,y) in casillas_azules:
 			window.FindElement(lcoord).Update("TL", button_color=("black", "#1A4C86"))
 		if (x,y) in casillas_rojas:
@@ -82,7 +82,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 			window.FindElement(lcoord).Update("x", button_color=("black", "#F00F0F"))
 		if jugada.get_nivel() == "F" and (x,y) in casillas_celeste:
-			window.FindElement(lcoord).Update("TL", button_color=("black", "#4893E9"))
+			window.FindElement(lcoord).Update("DL", button_color=("black", "#4893E9"))
 			
 		matriz[x][y] = 0
 		window.FindElement((x,y)).Update(disabled = False)
@@ -111,13 +111,13 @@ def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
     for cas in casillas_rojas:
         window[cas].update("TP", button_color=("black", "#C91A4F"))
     for cas in casillas_naranja:
-        window[cas].update("DL", button_color=("black", "#F4963E"))
+        window[cas].update("DP", button_color=("black", "#F4963E"))
 
         
 def tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste):
     tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
     for cas in casillas_celeste:
-        window[cas].update("TL", button_color=("black", "#4893E9"))
+        window[cas].update("DL", button_color=("black", "#4893E9"))
         
 def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento):
 	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
@@ -206,7 +206,7 @@ def main(args):
 	esValida = False
 	esHorizontal = False
 	esVertical = False
-	triplica = False
+#	triplica = False
 #	niv = jugada.get_nivel()
 	
 	#unionLetras = []
@@ -366,34 +366,42 @@ def main(args):
 						jugadaPC.eliminar_coord_en_pc(listaCoordenadas)
 						print(listaCoordenadas)
 
-						ptos=int(values["puntosJug"])
-						
+						#ptos=int(values["puntosJug"])
+						ptos = jugadorJ.get_puntaje()
+						puntaje = 0
+						duplica = False
+						triplica = False
 						for lcoord in listaCoordenadas:
 							x=lcoord[0]
 							y=lcoord[1]
 							letra = matriz[x][y]	
 							p=puntos.get(letra)	
 							print("letra",letra,"puntos",p)
-							if (x,y) in casillas_naranja:
-								p=p*2
-								print("letra",letra,"x",x,"y",y,"duplica")  
+#							if (x,y) in casillas_naranja:
+#								p=p*2
+#								print("letra",letra,"x",x,"y",y,"duplica")  
 							if (x,y) in casillas_azules: 
 								p=p*3						
 								print("letra",letra,"x",x,"y",y,"triplica")
 							if jugada.get_nivel() == "F" and (x,y) in casillas_celeste: 
-								p=p*3
+								p=p*2
 								print("letra",letra,"x",x,"y",y,"triplica")
 							if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 								p=(-1)*p
 								print("letra",letra,"x",x,"y",y,"descuenta")
 							if (x,y) in casillas_rojas:
 								triplica = True
+							if (x,y) in casillas_naranja:
+								duplica = True
 								
-							ptos=ptos+p	
+							puntaje=puntaje+p	
 							
 						if triplica:
-							ptos = ptos*3					    
-							
+							puntaje*3	
+						if duplica:
+							puntaje*2
+								    
+						ptos = ptos + puntaje	
 						listaCoordenadas = []
 						window["tot_letras"].Update(len(letras))
 
@@ -462,17 +470,21 @@ def main(args):
 					
 					print(listaCoordenadas)
 					
-					ptos=int(values["puntosJug"])
-						
+					#ptos=int(values["puntosJug"])
+					ptos = jugadorJ.get_puntaje()	
+					puntaje = 0	
 					for lcoord in listaCoordenadas:
 						x=lcoord[0]
 						y=lcoord[1]
 						letra = matriz[x][y]	
-						p=puntos.get(letra)	
-						print("letra",letra,"puntos",p)
-						if (x,y) in casillas_naranja:
-							p=p*2
-							print("letra",letra,"x",x,"y",y,"duplica")  
+						p=puntos.get(letra)
+						triplica = False
+						duplica = False						
+						
+#						print("letra",letra,"puntos",p)
+#						if (x,y) in casillas_naranja:
+#								p=p*2
+#							print("letra",letra,"x",x,"y",y,"duplica")  
 						if (x,y) in casillas_azules: 
 							p=p*3						
 							print("letra",letra,"x",x,"y",y,"triplica")
@@ -484,11 +496,16 @@ def main(args):
 							print("letra",letra,"x",x,"y",y,"descuenta")
 						if (x,y) in casillas_rojas:
 								triplica = True
-						ptos=ptos+p	
+						if (x,y) in casillas_naranja:
+								duplica = True
+						puntaje=puntaje+p	
 					
 					if triplica:
-							ptos = ptos*3
-							
+							puntaje*3
+					if duplica:
+						    puntaje*2
+					
+					ptos = ptos + puntaje		
 					listaCoordenadas = []	
 					window["tot_letras"].Update(len(letras))				    
 						

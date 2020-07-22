@@ -5,15 +5,6 @@ import itertools as it
 lista_atril = []
 
 
-#def list_to_dict(lista_atril):
-#	"""Esta función crea un diccionario con las letras que la computadora 
-#	tiene en su atril. El diccionario tiene la forma letra:ocurrencias"""
-#	hand_as_dict = {}
-#	for letra in lista_atril:
-#		hand_as_dict[letra] = hand_as_dict.get(letra, 0) + 1
-#	return hand_as_dict
-
-
 #lista_atril es una lista con las letras
 def build_words(lista_atril):
 	"""Esta función crea todas las combinaciones posibles con las letras que la computadora
@@ -29,29 +20,6 @@ def build_words(lista_atril):
 	#print(todas_las_palabras)
 	return todas_las_palabras
 	
-	#atril = list_to_dict(lista_atril)
-	#todas_las_palabras = [""]
-	#i = 0
-	#ew = ""
-	#while len(ew) < len(lista_atril):
-	#	ew = todas_las_palabras[i]
-	#	tempEW = []
-	#	for w in range(len(ew)):
-	#		tempEW.append(ew[w])
-	#	temp_hand_dict = dict(atril)
-	#	j = 0
-	#	while j < len(lista_atril):
-	#		if lista_atril[j] not in tempEW:
-	#			nueva_palabra = ew + (lista_atril[j])
-	#			todas_las_palabras.append(nueva_palabra)
-	#			j = j + temp_hand_dict[lista_atril[j]]
-	#		else:
-	#			tempEW.remove(lista_atril[j])
-	#			num = temp_hand_dict[lista_atril[j]] - 1
-	#			temp_hand_dict[lista_atril[j]] = num
-	#			j = j + 1
-	#	i = i + 1
-	#return todas_las_palabras
     
 def lista_a_diccionario(todas_las_palabras,validez):
 	""" Esta función devuelve un diccionario cuya clave es el tamaño 
@@ -111,6 +79,7 @@ def eliminar_coord_en_pc(listaCoordenadas):
 	return desocupadas
 	
 def rellenar_atrilC(window,atrilC,letras):
+	"""Esta función completa las siete letras en el atril de la cumputadora luego de que ésta juega su turno."""
 	for indice in range(len(atrilC)):
 		if atrilC[indice] == 0:
 			letra=random.choice(letras)
@@ -158,6 +127,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				#print(palabra_encontrada) #control
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
+				puntaje = 0
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					window.FindElement((coord_x,coord_y)).Update(disabled = True)
@@ -170,10 +140,12 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					atrilC[pos]=0
 					
 					p=puntos.get(letra)	
+					triplica = False
+					duplica = False
 					print("letra",letra,"puntos",p)
-					if (coord_x, coord_y) in casillas_naranja:
-						p=p*2
-						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
+#					if (coord_x, coord_y) in casillas_naranja:
+#						p=p*2
+#						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
 					if (coord_x, coord_y) in casillas_azules: 
 						p=p*3						
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
@@ -185,14 +157,19 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
 					if (coord_x, coord_y) in casillas_rojas:
 						triplica = True
-					ptos=ptos+p
+					if (coord_x, coord_y) in casillas_naranja:
+						duplica = True
+					puntaje=puntaje+p
 					
 					desocupadas.remove((coord_x, coord_y))
 					coord_x = coord_x + 1
 					
 				if triplica:
-					ptos = ptos*3
+					puntaje = puntaje*3
+				if duplica:
+					puntaje = puntaje*2
 					
+				ptos = ptos + puntaje
 					#ptos=ptos+puntos.get(letra)
 					
 					#coord_x = coord_x + 1
@@ -218,6 +195,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				#print(palabra_encontrada)
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
+				puntaje = 0
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					
@@ -231,12 +209,13 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					#print("letra",letra)
                      
 					atrilC[pos]=0
-					
+					duplica = False
+					triplica = False
 					p=puntos.get(letra)	
 					print("letra",letra,"puntos",p)
-					if (coord_x, coord_y) in casillas_naranja:
-						p=p*2
-						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
+#					if (coord_x, coord_y) in casillas_naranja:
+#						p=p*2
+#						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
 					if (coord_x, coord_y) in casillas_azules: 
 						p=p*3						
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
@@ -248,14 +227,19 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
 					if (coord_x, coord_y) in casillas_rojas:
 						triplica = True
-					ptos=ptos+p
+					if (coord_x, coord_y) in casillas_naranja:
+						duplica = True
+					puntaje=puntaje+p
 					
 					desocupadas.remove((coord_x, coord_y))
 					coord_x = coord_x + 1
 					
 				if triplica:
-					ptos = ptos*3
-					
+					puntaje = puntaje*3
+				if duplica:
+					puntaje = puntaje*2
+				
+				ptos = ptos + puntaje	
 					#atrilC.remove(letra)
 					#ptos=ptos+puntos.get(letra)
 					
