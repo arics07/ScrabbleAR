@@ -150,7 +150,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 						p=p*3						
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
 					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
-						p=p*3
+						p=p*2
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
 					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
 						p=(-1)*p
@@ -221,7 +221,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 						p=p*3						
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
 					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
-						p=p*3
+						p=p*2
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
 					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
 						p=(-1)*p

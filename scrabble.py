@@ -558,7 +558,7 @@ def main(args):
 							p=p*3						
 							print("letra",letra,"x",x,"y",y,"triplica")
 						if jugada.get_nivel() == "F" and (x,y) in casillas_celeste: 
-							p=p*3
+							p=p*2
 							print("letra",letra,"x",x,"y",y,"triplica")
 						if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 							p=(-1)*p
