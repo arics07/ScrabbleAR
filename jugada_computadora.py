@@ -170,6 +170,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					puntaje = puntaje*2
 					
 				ptos = ptos + puntaje
+				jugadorC.set_puntaje(ptos)
 					#ptos=ptos+puntos.get(letra)
 					
 					#coord_x = coord_x + 1
@@ -240,13 +241,14 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					puntaje = puntaje*2
 				
 				ptos = ptos + puntaje	
+				jugadorC.set_puntaje(ptos)
 					#atrilC.remove(letra)
 					#ptos=ptos+puntos.get(letra)
 					
 					#coord_y = coord_y + 1
 
+#		jugadorC.set_puntaje(ptos)
 		turno_computadora = False
-		jugadorC.set_puntaje(ptos)
 		rellenar_atrilC(window,atrilC,letras)
 		print("atrilC",atrilC) 
 		window["tot_letras"].Update(len(letras))
