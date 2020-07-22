@@ -105,21 +105,24 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 	return listaCoordenadas
 
 def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
-    window[(7, 7)].update(button_color=("black", "gray"))
-    for cas in casillas_azules:
-        window[cas].update("TL", button_color=("black", "#1A4C86"))
-    for cas in casillas_rojas:
-        window[cas].update("TP", button_color=("black", "#C91A4F"))
-    for cas in casillas_naranja:
-        window[cas].update("DP", button_color=("black", "#F4963E"))
+	"""Esta función inicializa el tablero del nivel medio (M)"""
+	window[(7, 7)].update(button_color=("black", "gray"))
+	for cas in casillas_azules:
+		window[cas].update("TL", button_color=("black", "#1A4C86"))
+	for cas in casillas_rojas:
+		window[cas].update("TP", button_color=("black", "#C91A4F"))
+	for cas in casillas_naranja:
+		window[cas].update("DP", button_color=("black", "#F4963E"))
 
         
 def tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste):
-    tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
-    for cas in casillas_celeste:
-        window[cas].update("DL", button_color=("black", "#4893E9"))
+	"""Esta función inicializa el tablero del nivel fácil (F)"""
+	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
+	for cas in casillas_celeste:
+		window[cas].update("DL", button_color=("black", "#4893E9"))
         
 def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento):
+	"""Esta función inicializa el tablero del nivel difícil (D)"""
 	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
 	for cas in casillas_descuento:
 		window[cas].update("x", button_color=("black", "#F00F0F"))
@@ -134,6 +137,67 @@ def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,l
 	datosEleccion.pop(letraElegida)
 	return datosEleccion
 
+def inicializar_casillas_azules():
+	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color azul"""
+	casillas = []
+	num = [1,5,9,13]
+	for i in num:
+		for j in num:
+			if not ((i==1 and j ==1) or (i==13 and j==13)):
+				casillas.append((i,j))
+	return casillas
+	
+def inicializar_casillas_rojas():
+	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color rojo"""
+	casillas = []
+	num = [0,7,14]
+	for i in num:
+		for j in num:
+			if not (i==7 and j==7):
+				casillas.append((i,j))
+	return casillas
+
+def inicializar_casillas_celeste():
+	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color celeste"""
+	casillas = []
+	num_1 = [2,6,8,12]
+	num_2 = [4,10]
+	for n in num_1:
+		for m in num_2:
+			casillas.append((m,n))
+			casillas.append((n,m))
+	num_3 = [1,13]
+	for n in num_3:
+		casillas.append((7,n))
+		casillas.append((n,7))
+	return casillas
+	
+	
+def inicializar_casillas_naranja():
+	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color celeste"""
+	casillas = []
+	num = [1,2,3,4,6,8,10,11,12,13]
+	n=-1
+	for i in num:
+		 casillas.append((i,i))
+		 casillas.append((i,num[n]))
+		 n = n-1			 
+	return casillas
+	
+def inicializar_casillas_descuento():
+	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color rojo y descontarán puntos"""
+	casillas = []
+	num_1 = [2,6,8,12]
+	num_2 = [4,10]
+	for i in num_1:
+		for n in num_2:
+			casillas.append((i,n))
+			casillas.append((n,i))
+	num_3 = [1,13]
+	for i in num_3:
+		casillas.append((i,7))
+		casillas.append((7,i))	
+	return casillas
 
 def main(args):  
 	jugada=args
@@ -146,13 +210,18 @@ def main(args):
 	sg.theme("GreenTan")
 
 	max_col = max_rows = 15
-    
-    
-	casillas_azules = [(1,5), (1,9), (5,1), (5,5), (5,9),(5,13), (9,1), (9,5), (9,9), (9,13), (13,5), (13,9)]
-	casillas_rojas = [(0,0), (0,7), (0,14), (7,0),(7,14), (14,0), (14,7), (14,14)]
-	casillas_celeste = [(0,3), (0,11), (2,6), (2,8), (3,0), (3,7), (3,14), (6,2), (6,6), (6,8), (6,12), (7,3), (7,11), (8,2), (8,6), (8,8), (8,12), (11,0), (11,7), (11,14), (12,6), (12,8), (14,3), (14,11)]
-	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
-	casillas_descuento = [(2,4), (2,10), (4,6), (10,6), (10,8), (12,4), (12,10), (7,1), (7,13), (1,7), (13,7), (4,2), (10,2), (4,12), (10,12), (6,4), (8,4), (6,10), (8,10), (4,8)]
+	
+	casillas_azules = inicializar_casillas_azules()
+	casillas_rojas = inicializar_casillas_rojas()
+	casillas_celeste = inicializar_casillas_celeste()
+	casillas_naranja = inicializar_casillas_naranja()
+	casillas_descuento = inicializar_casillas_descuento()
+	
+#	casillas_azules = [(1,5), (1,9), (5,1), (5,5), (5,9),(5,13), (9,1), (9,5), (9,9), (9,13), (13,5), (13,9)]
+#	casillas_rojas = [(0,0), (0,7), (0,14), (7,0),(7,14), (14,0), (14,7), (14,14)]
+#	casillas_celeste = [(0,3), (0,11), (2,6), (2,8), (3,0), (3,7), (3,14), (6,2), (6,6), (6,8), (6,12), (7,3), (7,11), (8,2), (8,6), (8,8), (8,12), (11,0), (11,7), (11,14), (12,6), (12,8), (14,3), (14,11)]
+#	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
+#	casillas_descuento = [(2,4), (2,10), (4,6), (10,6), (10,8), (12,4), (12,10), (7,1), (7,13), (1,7), (13,7), (4,2), (10,2), (4,12), (10,12), (6,4), (8,4), (6,10), (8,10), (4,8)]
 
 	letrasEnTablero = [] 
 	columna_1 = [
