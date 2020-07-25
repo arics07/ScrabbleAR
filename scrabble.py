@@ -249,7 +249,8 @@ def main(args):
 		button_color=("black", "tan")) for j in range(max_col)] for i in range(max_rows)]
 		
 	columna_2 = [[sg.Text("TURNO"),sg.Input(size=(15, 1), key="turno")],
-				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras")]
+				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras")],
+				[sg.Text("", size=(20,5), background_color="#EFE5C4", key="info")]
 				]
 		
 				   
