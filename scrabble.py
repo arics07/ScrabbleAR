@@ -9,11 +9,11 @@ from datetime import date
 def verTopTen(topt):
 	lista=[]
 	for key,value in topt.items():
-		lista.append((key,value["nivel"],value["puntaje"],value["fecha"]))
+		lista.append((key,value["puntaje"],value["fecha"]))
 	orden=[]
 	norden=1
 	for i in lista:
-		orden.append("{:^2}{:^30}{:^10}{:^20}{:^20}".format(str(norden),i[0],i[1],str(i[2]),str(i[3])))
+		orden.append("{:^2}{:^30}{:^20}{:^20}".format(str(norden),i[0],str(i[1]),str(i[2])))
 		norden = norden + 1
 	return orden
 
@@ -434,7 +434,7 @@ def main(args):
 					if esValida:
 						rellenar_atril(window,atrilJ,letras)
 						jugadaPC.eliminar_coord_en_pc(listaCoordenadas)
-						print(listaCoordenadas)
+						#print(listaCoordenadas)
 
 						#ptos=int(values["puntosJug"])
 						ptos = jugadorJ.get_puntaje()
@@ -446,7 +446,7 @@ def main(args):
 							y=lcoord[1]
 							letra = matriz[x][y]	
 							p=puntos.get(letra)	
-							print("letra",letra,"puntos",p)
+							#print("letra",letra,"puntos",p)
 #							if (x,y) in casillas_naranja:
 #								p=p*2
 #								print("letra",letra,"x",x,"y",y,"duplica")  
@@ -528,17 +528,17 @@ def main(args):
 				esHorizontal = False
 				esVertical = False
 				palabra = armar_palabra(listaCoordenadas,matriz)
-				print('palabra ',palabra)
-				print('voy a analizar la palabra')
+				#print('palabra ',palabra)
+				#print('voy a analizar la palabra')
 				esValida = ppattern.analizar_palabra_pat(palabra, esValida)
 				palabra = palabra.upper()
-				print('volvi de analizar la palabra',palabra)
-				print('palabra analizada es: ', esValida)
+				#print('volvi de analizar la palabra',palabra)
+				#print('palabra analizada es: ', esValida)
 				if esValida:
 					rellenar_atril(window,atrilJ,letras)
 					jugadaPC.eliminar_coord_en_pc(listaCoordenadas)
 					
-					print(listaCoordenadas)
+					#print(listaCoordenadas)
 					
 					#ptos=int(values["puntosJug"])
 					ptos = jugadorJ.get_puntaje()	
@@ -634,17 +634,38 @@ def main(args):
 											
 		if event == "finalizo" or contador == duracion_jugada: #equivale a 2 hs 
 			tiempoCorriendo = False
+			
 			topten=jugada.get_topten()
-			topten.setdefault(jugadorJ.get_nombre(),{'nivel': jugada.get_nivel() , 'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()})
-			topten=dict(sorted(topten.items(), key=lambda uno:uno[1]['puntaje'],reverse=True)[:10])
+			
+			try:
+				ntopten=topten[jugada.get_nivel()]
+			except:
+				ntopten={}
+			
+			njugada={'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()}
+			ntopten.setdefault(jugadorJ.get_nombre(),njugada)
+			#print("agrego",ntopten)
+			ntopten.items()
+					
+			ntopten=dict(sorted(ntopten.items(), key=lambda uno:uno[1]['puntaje'],reverse=True)[:10])
+			
+			topten[jugada.get_nivel()]=ntopten
+			
+			#print("ordeno",topten)
+			
 			with open('topten.pkl', 'wb') as f:
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 				f.close()
+			
 			break
 	    
 		if event == "Ver TopTen":
 			topten=jugada.get_topten()
-			layout2=[[sg.Text('ORDEN'),sg.Text('JUGADOR'),sg.Text('NIVEL'),sg.Text('PUNTAJE'),sg.Text('FECHA')],
+			try:
+				topten=topten[jugada.get_nivel()]
+			except:
+				topten={}
+			layout2=[[sg.Text('ORDEN'),sg.Text('JUGADOR'),sg.Text('PUNTAJE'),sg.Text('FECHA')],
 			[sg.Listbox(values=verTopTen(topten),key='topten',size=(50,10))],
 			[sg.Button("Cerrar",size=(10,2))]]
 			window2 = sg.Window('TOP TEN').Layout(layout2)
@@ -695,7 +716,7 @@ def main(args):
 			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
 				if jugada.get_cantCambios()<3:
 					jugadorJ.cambioL(letras,jugadorJ.get_atril(),window)
-					print(jugadorJ.get_atril())
+					#print(jugadorJ.get_atril())
 					jugada.sumarCambio()
 				else:
 					sg.Popup("ya hizo los 3 cambios permitidos")
@@ -705,11 +726,11 @@ def main(args):
 					
 					window["turno"].update("COMPUTADORA")
 					jugadorJ.set_dejarJugar()
-					print(jugadorJ.get_turno())
+					#print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
 					turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					print('turno despues de que volvi de jugada pc ', turno_computadora)
+					#print('turno despues de que volvi de jugada pc ', turno_computadora)
 					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()					 
 			else:
