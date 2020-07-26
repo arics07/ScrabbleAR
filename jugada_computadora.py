@@ -4,107 +4,57 @@ import itertools as it
 
 lista_atril = []
 
+def potencia(lista):
+    """    """
+    if len(lista) == 0:
+        return [[]]
+    r = potencia(lista[:-1])
+#   print(r + [s + [lista[-1]] for s in r])
+    return r + [s + [lista[-1]] for s in r]
+
 #lista_atril es una lista con las letras
-def build_words(lista_atril):
+def combinaciones(lista_atril):
 	"""Esta función crea todas las combinaciones posibles con las letras que la computadora
 	tiene en su atril"""
-	word = "".join(lista_atril)
-	#control
-	#print(word)
-	combinaciones = set()
-	for i in range(2, len(word)+1):
-		combinaciones.update((map("".join, it.permutations(word, i))))
-	todas_las_palabras = list(combinaciones)
-	#control
-	#print(todas_las_palabras)
-	return todas_las_palabras
-	
-    
-def lista_a_diccionario(todas_las_palabras,validez):
+	listas_de_fichas = []
+	for n in range(len(lista_atril)+1):
+		a = [s for s in potencia(lista_atril) if len(s) == n]
+		listas_de_fichas.extend(a)
+	print("INICIA LISTA ", listas_de_fichas, "FIN LISTAAA")
+	return(listas_de_fichas)	
+	    
+def lista_a_diccionario(listas_de_fichas,validez):
 	""" Esta función devuelve un diccionario cuya clave es el tamaño 
-	de la palabra y el valor es una palabra válida"""
+	de la palabra y el valor es una tupla que almacena la palabra en la pos=0 
+	y la lista con las fichas correspondientes en la pos=1"""
 	dic_palabras = {}
-	for palabra in todas_las_palabras:
-		validez = ppattern.analizar_palabra_pat(palabra,validez)
-		if validez==True:
-			tamanio = len(palabra)
-			if tamanio in dic_palabras:
-				dic_palabras[tamanio].append(palabra)
-			else:
-				dic_palabras[tamanio] = [palabra]
-	return dic_palabras
-
-#para el nivel facil y medio
-def busca_palabra_al_azar(lista_de_keys, dic_palabras):
-	#si el diccionario está vacío trae problemas!
-	if len(lista_de_keys) != 0:
-		try:
-			tam_elegido = random.randint(0, len(lista_de_keys)-1)
-			pos_palabra_elegida = random.randint(0, len(dic_palabras[lista_de_keys[tam_elegido]])-1)
-			palabra_encontrada = dic_palabras[lista_de_keys[tam_elegido]][pos_palabra_elegida]
-			dic_palabras[lista_de_keys[tam_elegido]].remove(palabra_encontrada)
-		except:
-			palabra_encontrada = ""
-			pass
+	#comb es una lista con las fichas
+	for comb in listas_de_fichas:
+		if len(comb)>1 : 
+			word = "".join(comb)
+			validez = ppattern.analizar_palabra_pat(word, validez)
+			if validez == True:
+				tamanio = len(word)
+				if tamanio in dic_palabras:
+					dic_palabras[tamanio].append((word, comb))
+				else:
+					dic_palabras[tamanio] = [(word, comb)]
+	print("diccionario ", dic_palabras)
+	return dic_palabras	
+	
+def palabra_compu_FM(longitud, dic_palabras, atrilC):	
+	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F. Devuelve una
+	tupla que contiene la palabra elegida en la pos=0 y la lista con las fichas correspondientes en la pos=1"""
+	palabra_encontrada = ("",[])
+	if longitud in dic_palabras:
+		palabra_encontrada = dic_palabras[longitud][-1]
+	else:
+		while longitud not in dic_palabras and longitud>1:
+			longitud = longitud - 1
+		if longitud>1 :
+			palabra_encontrada = dic_palabras[longitud][-1]		
+	#devuelve una tupla (palabra, [lista de fichas]
 	return palabra_encontrada
-
-def lista_de_fichas(palabra_encontrada, atrilC):
-	"""Esta función devuelve una lista con las fichas que la computadora va a poner en el tablero, en el orden correcto"""
-	palabra_en_lista = []
-	for i in palabra_encontrada:
-		palabra_en_lista.append(i)
-	letras_jugadas = []
-	pos = 0
-	while pos<len(palabra_en_lista):
-		if palabra_en_lista[pos]=="RR":
-			if pos+1<len(palabra_encontrada) and palabra_encontrada[pos+1]=="R" and "RR" in atrilC:
-				letras_jugadas.append("RR")
-				pos = pos + 1 
-			else:
-				letras_jugadas.append("R")
-		elif palabra_en_lista[pos]=="L":
-			if pos+1<len(palabra_encontrada) and palabra_encontrada[pos+1]=="L" and "LL" in atrilC:
-				letras_jugadas.append("LL")
-				pos = pos + 1
-			else:
-				letras_jugadas.append("L")
-		else:
-			letras_jugadas.append(palabra_en_lista[pos])
-		pos = pos + 1
-	print("Fichas: ", letras_jugadas)
-	return letras_jugadas
-	
-def palabra_compu_F(longitud, dic_palabras, atrilC):	
-	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F"""
-	palabra_encontrada = ""
-	lista_de_keys = []
-	for i in dic_palabras:
-		lista_de_keys.append(i)
-	if len(lista_de_keys) != 0:
-		palabra_encontrada = busca_palabra_al_azar(lista_de_keys, dic_palabras)
-		#check es una lista con las fichas que va a usar
-		check = lista_de_fichas(palabra_encontrada,  atrilC)
-		cant = len(check)
-		sin_loop = 0
-		while sin_loop<50 and ("R" in palabra_encontrada.upper() and "R" not in atrilC) or ("L" in palabra_encontrada.upper() and "L" not in atrilC) or cant>longitud:
-			print(1, cant)
-			palabra_encontrada = busca_palabra_al_azar(lista_de_keys, dic_palabras)
-			check = lista_de_fichas(palabra_encontrada, atrilC)
-			cant = len(check)
-			sin_loop = sin_loop + 1
-	return palabra_encontrada
-	
-	
-
-#def palabra_compu_M(longitud, dic_palabras, atrilC):	
-#	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel M"""
-#	palabra_encontrada = ''
-#	pass
-	
-#def palabra_compu_D(longitud, dic_palabras, atrilC):	
-#	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D"""
-#	palabra_encontrada = ''
-#	pass
 
 
 #porque elige al azar si va a jugar la palabra en forma horizontal o vertical
@@ -161,7 +111,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 		#dependiendo de lo que haya salido va a contar los casilleron libres desde la posicion elegida
 		espacios_libres = 0
 		#creo diccionario con las palabras validas
-		dicc = lista_a_diccionario(build_words(atrilC),validez)
+		dicc = lista_a_diccionario(combinaciones(atrilC),validez)  ######******######******######******#######*****
 		#print(dicc) #control
 		if direccion_palabra[hv]=='horizontal':
 #			print('entre a horizontal')  #control
@@ -169,29 +119,27 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				espacios_libres = espacios_libres + 1
 				x = x + 1
 			print('ESPACIOS LIBRES: ', espacios_libres)   #control
-			if espacios_libres > 1:
+			if espacios_libres <= 1:
+				window["info"].Update("La computadora pasó su turno")
+			elif espacios_libres > 1:
 				#busco una palabra que tenga una longitud igual o menor
 				print('entre!!')
 				#print(pal(espacios_libres, dicc))
-				palabra_encontrada = palabra_compu_F(espacios_libres, dicc, atrilC)
-	#--------------------------------------------------------------
-				letras_jugadas = lista_de_fichas(palabra_encontrada, atrilC)
-#				print(letras_jugadas)
-				print(atrilC)
-	#--------------------------------------------------------------		
+#				pack_palabra = palabra_compu_F(espacios_libres, dicc, atrilC)
+				#palabra encontrada es una tupla (palabra, [fichas])
+				pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
+#				print("PACKKKKKKKKKKKKK ", pack_palabra_encontrada)
+				palabra_encontrada = pack_palabra_encontrada[1]
+
 				print(palabra_encontrada) #control
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
 				puntaje = 0
 				triplica = False
 				duplica = False
-	#--------------------------------------------------------------
-#				letras_jugadas = lista_de_fichas(palabra_encontrada, atrilC)
-#				print(letras_jugadas)
-#				print(atrilC)
-	#--------------------------------------------------------------			
+		
 #				for letra in palabra_encontrada:
-				for letra in letras_jugadas:
+				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					window[(coord_x,coord_y)].Update(disabled = True)
 					#elimino del atril
@@ -204,9 +152,6 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					
 					p=puntos.get(letra)	
 					print("letra",letra,"puntos",p)
-#					if (coord_x, coord_y) in casillas_naranja:
-#						p=p*2
-#						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
 					if (coord_x, coord_y) in casillas_azules: 
 						p=p*3						
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
@@ -232,8 +177,8 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					puntaje = puntaje*2
 					
 				ptos = ptos + puntaje
-				if palabra_encontrada != "":
-					window["info"].Update("La palabra jugó la palabra {} y sumó {} puntos.".format(palabra_encontrada, puntaje))
+				if pack_palabra_encontrada[0] != "":
+					window["info"].Update("La computadora jugó la palabra {} y sumó {} puntos.".format(pack_palabra_encontrada[0], puntaje))
 				else:
 					window["info"].Update("La computadora pasó su turno")
 				jugadorC.set_puntaje(ptos)
@@ -254,29 +199,27 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				espacios_libres = espacios_libres + 1
 				y = y + 1
 			print('ESPACIOS LIBRES: ', espacios_libres)   #control
-			if espacios_libres > 1:
+			if espacios_libres <= 1:
+				window["info"].Update("La computadora pasó su turno")
+			elif espacios_libres > 1:
 				print('entreee')
 				#print(pal(espacios_libres, dicc))  #control
 				#busco una palabra que tenga una longitud igual o menor	
-				palabra_encontrada = palabra_compu_F(espacios_libres, dicc, atrilC)
+				pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
+				print("PACKKKKKKKKKKKKK ", pack_palabra_encontrada)
+				palabra_encontrada = pack_palabra_encontrada[1]
 				print(palabra_encontrada)
-		#--------------------------------------------------------------
-				letras_jugadas = lista_de_fichas(palabra_encontrada, atrilC)
-#				print(letras_jugadas)
+
 				print(atrilC)
-#--------------------------------------------------------------	
+
 				#la pasa al tablero
 				ptos=jugadorC.get_puntaje()
 				puntaje = 0
 				triplica = False
 				duplica = False
-		#--------------------------------------------------------------
-#				letras_jugadas = lista_de_fichas(palabra_encontrada, atrilC)
-#				print(letras_jugadas)
-#				print(atrilC)
-#--------------------------------------------------------------			
+		
 	#			for letra in palabra_encontrada:
-				for letra in letras_jugadas:
+				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					
 					#print('voy a deshabilitar')
@@ -291,9 +234,6 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					atrilC[pos]=0
 					p=puntos.get(letra)	
 					print("letra",letra,"puntos",p)
-#					if (coord_x, coord_y) in casillas_naranja:
-#						p=p*2
-#						print("letra",letra,"x",coord_x,"y",coord_y,"duplica")
 					if (coord_x, coord_y) in casillas_azules: 
 						p=p*3						
 						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
@@ -319,8 +259,8 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					puntaje = puntaje*2
 				
 				ptos = ptos + puntaje
-				if palabra_encontrada != "":
-					window["info"].Update("La palabra jugó la palabra {} y sumó {} puntos.".format(palabra_encontrada, puntaje))
+				if pack_palabra_encontrada[0] != "":
+					window["info"].Update("La computadora jugó la palabra {} y sumó {} puntos.".format(pack_palabra_encontrada[0], puntaje))
 				else:
 					window["info"].Update("La computadora pasó su turno")	
 				jugadorC.set_puntaje(ptos)
@@ -329,7 +269,6 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					
 					#coord_y = coord_y + 1
 
-#		jugadorC.set_puntaje(ptos)
 		turno_computadora = False
 		rellenar_atrilC(window,atrilC,letras)
 		print("atrilC",atrilC) 
