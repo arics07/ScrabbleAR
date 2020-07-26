@@ -1,27 +1,20 @@
 import validar_palabra_lexicon as ppattern
 import random
 import itertools as it
+from time import sleep 
 
 lista_atril = []
-
-def potencia(lista):
-    """    """
-    if len(lista) == 0:
-        return [[]]
-    r = potencia(lista[:-1])
-#   print(r + [s + [lista[-1]] for s in r])
-    return r + [s + [lista[-1]] for s in r]
 
 #lista_atril es una lista con las letras
 def combinaciones(lista_atril):
 	"""Esta función crea todas las combinaciones posibles con las letras que la computadora
 	tiene en su atril"""
 	listas_de_fichas = []
-	for n in range(len(lista_atril)+1):
-		a = [s for s in potencia(lista_atril) if len(s) == n]
+	for n in range(2,len(lista_atril)+1):
+		a= it.permutations(lista_atril, n)
 		listas_de_fichas.extend(a)
-	print("INICIA LISTA ", listas_de_fichas, "FIN LISTAAA")
-	return(listas_de_fichas)	
+	print("control combinaciones ", len(listas_de_fichas))
+	return listas_de_fichas	
 	    
 def lista_a_diccionario(listas_de_fichas,validez):
 	""" Esta función devuelve un diccionario cuya clave es el tamaño 
@@ -33,6 +26,7 @@ def lista_a_diccionario(listas_de_fichas,validez):
 		if len(comb)>1 : 
 			word = "".join(comb)
 			validez = ppattern.analizar_palabra_pat(word, validez)
+#			print("control analiza todas ", word,validez)
 			if validez == True:
 				tamanio = len(word)
 				if tamanio in dic_palabras:
@@ -88,6 +82,16 @@ def rellenar_atrilC(window,atrilC,letras):
 	print("relleno atrilC",atrilC)
 	return 
 	
+def compu_pensando(nivel, window):
+#	window["info"].Update("La computadora está pensando...")
+	if nivel=="F":
+		tiempo = random.randint(7,9)
+	elif nivel=="M":
+		tiempo = random.randint(5,7)
+	else:
+		tiempo = random.randint(1,3)
+	sleep(tiempo)
+		
 
 def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
 	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
@@ -95,7 +99,9 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 #	triplica = False
 	#print(turno_computadora)
 	#print(atrilC)
-	while turno_computadora == True:
+#	window["turno"].Update("COMPUTADORA")
+	if turno_computadora == True:		
+		compu_pensando(jugada.get_nivel(), window)
 		#va a buscar una posicion en el tablero al azar
 		if (7,7) in desocupadas:
 			x=7
@@ -275,4 +281,5 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 		window["tot_letras"].Update(len(letras))
 		jugadorC.set_atril(atrilC)
 		jugadorC.set_dejarJugar()
+#		window["turno"].Update("")
 		return turno_computadora
