@@ -91,6 +91,25 @@ def compu_pensando(nivel, window):
 	else:
 		tiempo = random.randint(1,3)
 	sleep(tiempo)
+	
+def calcular_puntos_letra(p, coord, nivel, duplica, triplica, casillas_azules, casillas_rojas, casillas_naranja, *args):
+#	p=puntos.get(letra)	
+#	print("letra",letra,"puntos",p)
+	if coord in casillas_azules: 
+		p=p*3						
+#		print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+	if nivel == "F" and coord in args: 
+		p=p*2
+#		print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+	if nivel == "D" and coord in args:
+		p=(-1)*p
+#		print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
+	if coord in casillas_rojas:
+		triplica = True
+	if coord in casillas_naranja:
+		duplica = True
+	return p,duplica,triplica
+	
 		
 
 def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
@@ -101,7 +120,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 	#print(atrilC)
 #	window["turno"].Update("COMPUTADORA")
 	if turno_computadora == True:		
-		compu_pensando(jugada.get_nivel(), window)
+#		compu_pensando(jugada.get_nivel(), window)
 		#va a buscar una posicion en el tablero al azar
 		if (7,7) in desocupadas:
 			x=7
@@ -129,7 +148,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				window["info"].Update("La computadora pasó su turno")
 			elif espacios_libres > 1:
 				#busco una palabra que tenga una longitud igual o menor
-				print('entre!!')
+#				print('entre!!')
 				#print(pal(espacios_libres, dicc))
 #				pack_palabra = palabra_compu_F(espacios_libres, dicc, atrilC)
 				#palabra encontrada es una tupla (palabra, [fichas])
@@ -144,33 +163,16 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				triplica = False
 				duplica = False
 		
-#				for letra in palabra_encontrada:
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					window[(coord_x,coord_y)].Update(disabled = True)
-					#elimino del atril
-					#window[datos_atril[letra]].Update('')
 					#elimino de la lista
 					pos=atrilC.index(letra)
 					#print("pos",pos)
 					#print("letra",letra)
 					atrilC[pos]=0
-					
-					p=puntos.get(letra)	
-					print("letra",letra,"puntos",p)
-					if (coord_x, coord_y) in casillas_azules: 
-						p=p*3						
-						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
-						p=p*2
-						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
-						p=(-1)*p
-						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
-					if (coord_x, coord_y) in casillas_rojas:
-						triplica = True
-					if (coord_x, coord_y) in casillas_naranja:
-						duplica = True
+					p, duplica, triplica=calcular_puntos_letra(puntos.get(letra), (coord_x, coord_y), jugada.get_nivel(), duplica, triplica, casillas_azules, casillas_rojas, casillas_naranja)
+
 					puntaje=puntaje+p
 					
 					print((coord_x,coord_y))
@@ -188,9 +190,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				else:
 					window["info"].Update("La computadora pasó su turno")
 				jugadorC.set_puntaje(ptos)
-					#ptos=ptos+puntos.get(letra)
-					
-					#coord_x = coord_x + 1
+
 				#jugadorC.set_puntaje(ptos)
 				#rellenar_atrilC(window,atrilC,letras)
 				#jugadorC.set_atril(atrilC)
@@ -212,7 +212,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				#print(pal(espacios_libres, dicc))  #control
 				#busco una palabra que tenga una longitud igual o menor	
 				pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
-				print("PACKKKKKKKKKKKKK ", pack_palabra_encontrada)
+#				print("PACKKKKKKKKKKKKK ", pack_palabra_encontrada)
 				palabra_encontrada = pack_palabra_encontrada[1]
 				print(palabra_encontrada)
 
@@ -224,35 +224,21 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				triplica = False
 				duplica = False
 		
-	#			for letra in palabra_encontrada:
 				for letra in palabra_encontrada:
 					window[(coord_x, coord_y)].Update(letra)
 					
 					#print('voy a deshabilitar')
 					window[(coord_x,coord_y)].Update(disabled = True)
-					#elimino del atril
-					#window[datos_atril[letra]].Update('')
 					#elimino de la lista
 					pos=atrilC.index(letra)
 					#print("pos",pos)
 					#print("letra",letra)
-                     
+                   
 					atrilC[pos]=0
+					
+					p, duplica, triplica=calcular_puntos_letra(puntos.get(letra), (coord_x, coord_y), jugada.get_nivel(), duplica, triplica, casillas_azules, casillas_rojas, casillas_naranja)
 					p=puntos.get(letra)	
-					print("letra",letra,"puntos",p)
-					if (coord_x, coord_y) in casillas_azules: 
-						p=p*3						
-						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
-						p=p*2
-						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
-						p=(-1)*p
-						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
-					if (coord_x, coord_y) in casillas_rojas:
-						triplica = True
-					if (coord_x, coord_y) in casillas_naranja:
-						duplica = True
+
 					puntaje=puntaje+p
 					
 					print((coord_x,coord_y))
@@ -270,10 +256,6 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 				else:
 					window["info"].Update("La computadora pasó su turno")	
 				jugadorC.set_puntaje(ptos)
-					#atrilC.remove(letra)
-					#ptos=ptos+puntos.get(letra)
-					
-					#coord_y = coord_y + 1
 
 		turno_computadora = False
 		rellenar_atrilC(window,atrilC,letras)
