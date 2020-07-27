@@ -83,7 +83,7 @@ def rellenar_atrilC(window,atrilC,letras):
 	return 
 	
 def compu_pensando(nivel, window):
-#	window["info"].Update("La computadora está pensando...")
+	window["info"].Update("La computadora está pensando...")
 	if nivel=="F":
 		tiempo = random.randint(7,9)
 	elif nivel=="M":

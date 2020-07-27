@@ -3,6 +3,7 @@ import scrabble
 import datetime
 import pickle
 import copy
+from random import randint
 from jugada_computadora import cargar_tuplas_desocupadas, desocupadas
 
 from jugador import jugador
@@ -99,20 +100,24 @@ while True:
       letras = inicializar_letras(letrasD)
       puntos = inicializar_puntos(letrasD)
         
-      cargar_tuplas_desocupadas(desocupadas)	
+      cargar_tuplas_desocupadas(desocupadas)
+      
+      decide_primer_turno = {0:"jugador", 1:"computadora"}
+      decide = randint(0,1)	
+      primerTurno = decide_primer_turno[decide]
         
       if nivel == "F":
         tiempoJugada = seteo_tiempo(duracionJugada,"F")
         tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"F")
-        jugada=jugadas(datetime.datetime.now(),"F",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
+        jugada=jugadas(datetime.datetime.now(),"F",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno)  
       if nivel == "M":
         tiempoJugada = seteo_tiempo(duracionJugada,"M")
         tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"M") 
-        jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos) 
+        jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno) 
       if nivel == "D":
         tiempoJugada = seteo_tiempo(duracionJugada,"D")
         tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"D")
-        jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos)  
+        jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno)  
   
         
       jugadorJ.elijoL(letras)

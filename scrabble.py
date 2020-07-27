@@ -276,6 +276,7 @@ def main(args):
 	esValida = False
 	esHorizontal = False
 	esVertical = False
+	primerTurno = jugada.get_primerTurno()
 #	triplica = False
 #	niv = jugada.get_nivel()
 	
@@ -337,6 +338,15 @@ def main(args):
 			window["puntosPc"].update(jugadorC.get_puntaje())
 			window["turno"].update(jugadorJ.get_nombre())
 			jugadorJ.set_jugar()
+			
+		if primerTurno=="computadora" and esPrimerJugada==True:
+			window["turno"].update("COMPUTADORA")
+			jugadorC.set_jugar()
+			#print(jugadorC.get_turno())
+			turno_computadora = jugadorC.get_turno()
+			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+			window["puntosPc"].update(jugadorC.get_puntaje())
+			esPrimerJugada=False
   
 		if event == 'Letra0':
 			letraElegida = accion_atril(window,atrilJ,0,event,datosEleccion)
@@ -488,12 +498,8 @@ def main(args):
 						#print(jugadorC.get_turno())
 						turno_computadora = jugadorC.get_turno()
 						turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-			#-----------------------------------------------
-						esPrimeraJugada = False
-			#-----------------------------------------------
 						window["puntosPc"].update(jugadorC.get_puntaje())
 						#print('turno despues de que volvi de jugada pc ', turno_computadora)
-						window["turno"].update("computadora")
 						jugadorJ.set_jugar()
 					else:
 						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
@@ -734,6 +740,17 @@ def main(args):
 					window["turno"].update(jugadorJ.get_nombre())
 					jugadorJ.set_jugar()					 
 			else:
-				sg.Popup("el atril no esta completo")				 	
+				sg.Popup("el atril no esta completo")	
+				
+#		if primerTurno=="computadora" and esPrimerJugada==True:
+#			window["turno"].update("COMPUTADORA")
+#			jugadorC.set_jugar()
+			#print(jugadorC.get_turno())
+#			turno_computadora = jugadorC.get_turno()
+#			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+#			window["puntosPc"].update(jugadorC.get_puntaje())
+#			esPrimerJugada=False			 	
+	
 	window.close() 	 
+	
  
