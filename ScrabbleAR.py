@@ -14,7 +14,8 @@ sg.theme("GreenTan")
 
 nom=""
 nivel=""
-layout=[[sg.Text('Jugador')],[sg.InputText(key='nom',size=(29,3))],
+layout=[[sg.Text('Jugador')],
+  [sg.InputText(key='nom',size=(29,3)),sg.Button("Reanudar",size=(20,1))],
   [sg.Text("Elegir nivel:")],
   [sg.Text("",size=(1,1)), sg.Button("Fácil",size=(20,1))],
   [sg.Text("",size=(1,1)), sg.Button("Medio",size=(20,1))],
@@ -67,73 +68,70 @@ def seteo_tiempo(duracionJugada,nivel):
 	return (hor + minu + seg)
   
 while True: 
-  event, values=window.Read() 
+	event, values=window.Read() 
   
-  if event == None:
-	  break 
-	  
-  if event == "Fácil":
-	  nivel="F"
-	  window["niv"].Update(nivel)
-	  window["Configurar"].Update(disabled=False)
-	  
-  if event == "Medio":
-	  nivel="M"
-	  window["niv"].Update(nivel)
-	  window["Configurar"].Update(disabled=False)
-	  
-  if event == "Difícil":
-	  nivel="D"
-	  window["niv"].Update(nivel)
-	  window["Configurar"].Update(disabled=False)
-  
-  if event == "Comenzar":  
-    if values["nom"] == "":
-      sg.Popup("Debe ingresar un nombre")
-  #  else:
-  #    if not (values["nivel"].upper() == "F" or values["nivel"].upper() == "M" or values["nivel"].upper() == "D"):
-  #      sg.Popup("Nivel F=Facil M=Medio D=Dificil")
-    else:  
-      window.close()   
-      jugadorJ = jugador(values["nom"])
-      jugadorC = jugador('Computadora')
-      letras = inicializar_letras(letrasD)
-      puntos = inicializar_puntos(letrasD)
+	if event == None:
+		break
+		 
+	if event == "Reanudar":
+		tiempoCorriendo = True
+		with open('scrabble.pkl', 'rb') as input:
+			jugada = pickle.load(input)
+		if not values["nom"] == jugada.get_jugadorJ().get_nombre():
+			sg.Popup("No puede reanudar ..es otro jugador")
+		else:			
+			window.close()  	
+			scrabble.main(jugada,"R")
+			break
         
-      cargar_tuplas_desocupadas(desocupadas)
+	if event == "Fácil":
+		nivel="F"
+		window["niv"].Update(nivel)
+		window["Configurar"].Update(disabled=False)
+	  
+	if event == "Medio":
+		nivel="M"
+		window["niv"].Update(nivel)
+		window["Configurar"].Update(disabled=False)
+	  
+	if event == "Difícil":
+		nivel="D"
+		window["niv"].Update(nivel)
+		window["Configurar"].Update(disabled=False)
+  
+	if event == "Comenzar":  
+		if values["nom"] == "":
+			sg.Popup("Debe ingresar un nombre")
+		else:  
+			window.close()   
+			jugadorJ = jugador(values["nom"])
+			jugadorC = jugador('Computadora')
+			letras = inicializar_letras(letrasD)
+			puntos = inicializar_puntos(letrasD)
       
-      decide_primer_turno = {0:"jugador", 1:"computadora"}
-      decide = randint(0,1)	
-      primerTurno = decide_primer_turno[decide]
-        
-      if nivel == "F":
-        tiempoJugada = seteo_tiempo(duracionJugada,"F")
-        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"F")
-        jugada=jugadas(datetime.datetime.now(),"F",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno)  
-      if nivel == "M":
-        tiempoJugada = seteo_tiempo(duracionJugada,"M")
-        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"M") 
-        jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno) 
-      if nivel == "D":
-        tiempoJugada = seteo_tiempo(duracionJugada,"D")
-        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"D")
-        jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno)  
-  
-        
-      jugadorJ.elijoL(letras)
-      jugadorC.elijoL(letras)
-      try: 
-        with open('topten.pkl', 'rb') as f:
-          topten=dict(pickle.load(f))
-      except:
-        topten={}  
-        print(topten) 
-      jugada.set_topten(topten)
-      scrabble.main(jugada)
-      break
+			cargar_tuplas_desocupadas(desocupadas)
       
-  if event == "Configurar":
-	  columna1 = [
+			decide_primer_turno = {0:"jugador", 1:"computadora"}
+			decide = randint(0,1)	
+			primerTurno = decide_primer_turno[decide]
+        
+			tiempoJugada = seteo_tiempo(duracionJugada,nivel)
+			tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,nivel)
+			jugada=jugadas(datetime.datetime.now(),nivel,tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno,[],[])
+       
+			jugadorJ.elijoL(letras)
+			jugadorC.elijoL(letras)
+			try: 
+				with open('topten.pkl', 'rb') as f:
+					topten=dict(pickle.load(f))
+			except:
+				topten={}  
+			jugada.set_topten(topten)
+			scrabble.main(jugada,"C")
+			break
+      
+	if event == "Configurar":
+		columna1 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
 				[sg.Text("A", size=(4,1)), sg.Input(letrasD["A"]["puntos"], size=(6,1), key=("A","p")), sg.Input(letrasD["A"]["cant"], size=(6,1), key=("A","c"))],
 				[sg.Text("B", size=(4,1)), sg.Input(letrasD["B"]["puntos"], size=(6,1), key=("B","p")), sg.Input(letrasD["B"]["cant"], size=(6,1), key=("B","c"))],
@@ -149,7 +147,7 @@ while True:
 				[sg.Input(duracionJugada[nivel]["horas"],key="hor",size=(4,5)),sg.Input(duracionJugada[nivel]["minutos"],key="min",size=(4,5)), sg.Input(duracionJugada[nivel]["segundos"],key="seg",size=(4,5))]
 	               ]
 	               
-	  columna2 = [
+		columna2 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
 				[sg.Text("I", size=(4,1)), sg.Input(letrasD["I"]["puntos"], size=(6,1), key=("I","p")), sg.Input(letrasD["I"]["cant"], size=(6,1), key=("I","c"))],
 				[sg.Text("J", size=(4,1)), sg.Input(letrasD["J"]["puntos"], size=(6,1), key=("J","p")), sg.Input(letrasD["J"]["cant"], size=(6,1), key=("J","c"))],
@@ -165,7 +163,7 @@ while True:
 				[sg.Input(duracionEleccionPalabra[nivel]["horas"],key="ho",size=(4,5)),sg.Input(duracionEleccionPalabra[nivel]["minutos"],key="mi",size=(4,5)), sg.Input(duracionEleccionPalabra[nivel]["segundos"],key="se",size=(4,5))]
 	               ]
 	               
-	  columna3 = [
+		columna3 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
 				[sg.Text("O", size=(4,1)), sg.Input(letrasD["O"]["puntos"], size=(6,1), key=("O","p")), sg.Input(letrasD["O"]["cant"], size=(6,1), key=("O","c"))],
 				[sg.Text("P", size=(4,1)), sg.Input(letrasD["P"]["puntos"], size=(6,1), key=("P","p")), sg.Input(letrasD["P"]["cant"], size=(6,1), key=("P","c"))],
@@ -177,7 +175,7 @@ while True:
 				[sg.Text("U", size=(4,1)), sg.Input(letrasD["U"]["puntos"], size=(6,1), key=("U","p")), sg.Input(letrasD["U"]["cant"], size=(6,1), key=("U","c"))]
 	               ]
 	               
-	  columna4 = [
+		columna4 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
 				[sg.Text("V", size=(4,1)), sg.Input(letrasD["V"]["puntos"], size=(6,1), key=("V","p")), sg.Input(letrasD["V"]["cant"], size=(6,1), key=("V","c"))],
 				[sg.Text("W", size=(4,1)), sg.Input(letrasD["W"]["puntos"], size=(6,1), key=("W","p")), sg.Input(letrasD["W"]["cant"], size=(6,1), key=("W","c"))],
@@ -186,59 +184,59 @@ while True:
 				[sg.Text("Z", size=(4,1)), sg.Input(letrasD["Z"]["puntos"], size=(6,1), key=("Z","p")), sg.Input(letrasD["Z"]["cant"], size=(6,1), key=("Z","c"))]
 				  ] 
 	               
-	  columnas_config = [[sg.Text("Puede haber hasta 20 fichas de cada letra. Los puntos pueden tomar valores entre 0 y 50.", text_color="blue")],
+		columnas_config = [[sg.Text("Puede haber hasta 20 fichas de cada letra. Los puntos pueden tomar valores entre 0 y 50.", text_color="blue")],
 				[sg.Column(columna1), sg.Column(columna2), sg.Column(columna3), sg.Column(columna4)],
 				[sg.Button("Guardar"), sg.Button("Reset")]
 	             ]
 	  
-	  window2 = sg.Window("Configuración").Layout(columnas_config)
+		window2 = sg.Window("Configuración").Layout(columnas_config)
 	  
-	  config = True
+		config = True
 	  
-	  while config:
-		  event2, values2 = window2.Read()
+		while config:
+			event2, values2 = window2.Read()
 		  
-		  if event2 is None:
-			  break
+			if event2 is None:
+				break
 			  
-		  if event2=="Guardar":
-			  sin_errores = True
-			  try:
-				  duracionJugada["F"]["horas"] = int(values2["hor"])
-				  duracionJugada["F"]["minutos"] = int(values2["min"])
-				  duracionJugada["F"]["segundos"] = int(values2["seg"])
-			  except:
-				  duracionJugada["F"]["horas"] = duracionJugada_backup["F"]["horas"]
-				  duracionJugada["F"]["minutos"] = duracionJugada_backup["F"]["minutos"]
-				  duracionJugada["F"]["segundos"] = duracionJugada_backup["F"]["segundos"]
-			  try:
-				  duracionEleccionPalabra["F"]["horas"] = int(values2["ho"])
-				  duracionEleccionPalabra["F"]["minutos"] = int(values2["mi"])
-				  duracionEleccionPalabra["F"]["segundos"] = int(values2["se"])
-			  except:
-				  duracionEleccionPalabra["F"]["horas"] = duracionEleccionPalabra_backup["F"]["horas"]
-				  duracionEleccionPalabra["F"]["minutos"] = duracionEleccionPalabra_backup["F"]["minutos"]
-				  duracionEleccionPalabra["F"]["segundos"] = duracionEleccionPalabra_backup["F"]["segundos"]
-			  for let in letrasD:
-				  if int(values2[(let,"c")])>=0 and int(values2[(let,"c")])<=20:
-					  try:
-						  letrasD[let]["cant"] = int(values2[(let,"c")])
-					  except:
-					      letrasD[let]["cant"] = letras_backup[let]["cant"]
-					      sin_errores=False
-				  else:
-					  sin_errores=False
+			if event2=="Guardar":
+				sin_errores = True
+				try:
+					duracionJugada["F"]["horas"] = int(values2["hor"])
+					duracionJugada["F"]["minutos"] = int(values2["min"])
+					duracionJugada["F"]["segundos"] = int(values2["seg"])
+				except:
+					duracionJugada["F"]["horas"] = duracionJugada_backup["F"]["horas"]
+					duracionJugada["F"]["minutos"] = duracionJugada_backup["F"]["minutos"]
+					duracionJugada["F"]["segundos"] = duracionJugada_backup["F"]["segundos"]
+				try:
+					duracionEleccionPalabra["F"]["horas"] = int(values2["ho"])
+					duracionEleccionPalabra["F"]["minutos"] = int(values2["mi"])
+					duracionEleccionPalabra["F"]["segundos"] = int(values2["se"])
+				except:
+					duracionEleccionPalabra["F"]["horas"] = duracionEleccionPalabra_backup["F"]["horas"]
+					duracionEleccionPalabra["F"]["minutos"] = duracionEleccionPalabra_backup["F"]["minutos"]
+					duracionEleccionPalabra["F"]["segundos"] = duracionEleccionPalabra_backup["F"]["segundos"]
+				for let in letrasD:
+					if int(values2[(let,"c")])>=0 and int(values2[(let,"c")])<=20:
+						try:
+							letrasD[let]["cant"] = int(values2[(let,"c")])
+						except:
+							letrasD[let]["cant"] = letras_backup[let]["cant"]
+							sin_errores=False
+					else:
+						sin_errores=False
 					  
-				  if int(values2[(let,"p")])>=0 and int(values2[(let,"p")])<=50:
-					  try:
-						  letrasD[let]["puntos"] = int(values2[(let,"p")])
-					  except:
-					      letrasD[let]["puntos"] = letras_backup[let]["puntos"]
-					      sin_errores=False
-				  else:
-					  sin_errores=False
-			  if sin_errores==False:
-				  sg.popup("Algunos de los valores no se modificaron porque no se ingresaron valores correctos")
+					if int(values2[(let,"p")])>=0 and int(values2[(let,"p")])<=50:
+						try:
+							letrasD[let]["puntos"] = int(values2[(let,"p")])
+						except:
+							letrasD[let]["puntos"] = letras_backup[let]["puntos"]
+							sin_errores=False
+					else:
+						sin_errores=False
+				if sin_errores==False:
+					sg.popup("Algunos de los valores no se modificaron porque no se ingresaron valores correctos")
 			  #-------------------------------------------------------------------------------
 			  #Actualizo la lista letras y el diccionario puntos
 			  #letras = inicializar_letras(letrasD)
@@ -247,12 +245,12 @@ while True:
 			  #	  puntos[i]=letrasD[i]["puntos"]
 			  #print(puntos)
 			  #--------------------------------------------------------------------------------------------------
-			  config=False
-			  window2.close()
+				config=False
+				window2.close()
 			  
-		  if event2=="Reset":
-			  letrasD = copy.deepcopy(letras_backup)
-			  for let in letrasD:
-				  window2[(let,"c")].Update(letrasD[let]["cant"])
-				  window2[(let,"p")].Update(letrasD[let]["puntos"])       
+			if event2=="Reset":
+				letrasD = copy.deepcopy(letras_backup)
+				for let in letrasD:
+					window2[(let,"c")].Update(letrasD[let]["cant"])
+					window2[(let,"p")].Update(letrasD[let]["puntos"])       
 

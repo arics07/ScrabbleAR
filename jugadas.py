@@ -1,6 +1,6 @@
 class jugadas:
     
-	def __init__(self, fecha, nivel, tiempo,tiempoEleccionP, jugadorJ, jugadorC, turno, letras, puntos, primerTurno):
+	def __init__(self, fecha, nivel, tiempo,tiempoEleccionP, jugadorJ, jugadorC, turno, letras,puntos, primerTurno, desocupadas, matriz):
 		self._fecha = fecha
 		self._nivel = nivel 
 		self._tiempo = tiempo
@@ -13,6 +13,8 @@ class jugadas:
 		self._puntos = puntos 
 		self._topTen = {}
 		self._primerTurno = primerTurno
+		self._desocupadas = desocupadas
+		self._matriz = matriz
    
 	def set_fecha(self, fecha):
 		self._fecha = fecha
@@ -83,5 +85,15 @@ class jugadas:
 	def sumarCambio(self):  
 		self._cantCambios+=1 
      
-    
-    
+	def set_desocupadas(self,listad):
+		self._desocupadas=listad
+		
+	def get_desocupadas(self):
+		return self._desocupadas
+		
+	def set_matriz(self,matriz):
+		self._matriz=matriz
+		
+	def get_matriz(self):
+		return self._matriz
+	

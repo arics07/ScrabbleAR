@@ -17,6 +17,13 @@ def verTopTen(topt):
 		norden = norden + 1
 	return orden
 
+def muestro_matriz(matriz,window):
+	print(matriz)
+	for x in range(15):
+		for y in range(15):
+			if not matriz[x][y] == 0:
+				window.FindElement((x,y)).Update(matriz[x][y],disabled = True)
+
 def muestro_l(window,atril): 
     for indice in range(len(atril)):
         letra = atril[indice] 
@@ -36,6 +43,7 @@ def accion_atril (window,atrilJ,pos,textBoton,datosEleccion):
 	
 def accion_tablero(window,event,listaCoordenadas,letraElegida,matriz):
 	posicionCasilleroTablero = event  #me da que boton del tablero toque
+	
 	listaCoordenadas.append(posicionCasilleroTablero)
 	
 	x=posicionCasilleroTablero[0]
@@ -199,12 +207,13 @@ def inicializar_casillas_descuento():
 		casillas.append((7,i))	
 	return casillas
 
-def main(args):  
+def main(args,tipoj):  
 	jugada=args
+	
 	puntos=jugada.get_puntos()
 	letras = jugada.get_letras()
 	#jugada.get_nivel()
-	jugada.set_fecha(date.today())
+	#jugada.set_fecha(date.today())
 	#turno = jugada.get_turno()
 	
 	sg.theme("GreenTan")
@@ -227,7 +236,7 @@ def main(args):
 	columna_1 = [
         [sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre", background_color="#FFC0CB")],
         [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel")],
-        [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Reanudar", size=(10,1), key="reanudar"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
+        [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
         [sg.Button("Ver TopTen", size=(10,1))],
         [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
         [sg.Text(size=(15, 1), key="puntosJug", background_color="white"), sg.Text("", size=(1,1)), sg.Text(size=(15, 1), key="puntosPc", background_color="white")],
@@ -252,7 +261,6 @@ def main(args):
 				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras")],
 				[sg.Text("", size=(20,5), background_color="#EFE5C4", key="info")]
 				]
-		
 				   
 	layout = [
         [sg.Column(columna_tablero), sg.Column(columna_2), sg.Column(columna_1)]
@@ -269,24 +277,24 @@ def main(args):
 	jugadorC=jugada.get_jugadorC()
 	duracion_jugada=jugada.get_tiempo()
 	duracion_elecc_palabra = jugada.get_tiempoEleccionP()
+	matriz=jugada.get_matriz()
+	primerTurno = jugada.get_primerTurno()
 	listaCoordenadas = []
-	matriz=[]
+	#matriz=[]
+	
 	datosEleccion = {}
 	datosEleccionC = {}
 	esValida = False
 	esHorizontal = False
 	esVertical = False
-	primerTurno = jugada.get_primerTurno()
+#	primerTurno = jugada.get_primerTurno()
 #	triplica = False
 #	niv = jugada.get_nivel()
 	
 	#unionLetras = []
 	atrilJ = jugadorJ._atril
 	atrilC = jugadorC._atril
-  
-	for i in range (15):
-		matriz.append([0]*15)  
-		
+ 
 	window["nivel"].update(jugada.get_nivel())	
 	window["nombre"].update(jugadorJ.get_nombre())
 	window["puntosJug"].update(jugadorJ.get_puntaje())
@@ -302,6 +310,12 @@ def main(args):
 		
 #	colores_tablero(window, casillas_azules,casillas_rojas, casillas_naranja, casillas_celeste)
   
+	if tipoj == "C":
+		for i in range (15):
+			matriz.append([0]*15)  
+	else:
+		muestro_matriz(matriz,window)
+		
 	muestro_l(window,jugadorJ.get_atril())
 	muestro_lc(window,jugadorC.get_atril())
 	#jugadorJ.set_turno = True
@@ -650,19 +664,12 @@ def main(args):
 			
 			njugada={'puntaje': jugadorJ.get_puntaje(), 'fecha': jugada.get_fecha()}
 			ntopten.setdefault(jugadorJ.get_nombre(),njugada)
-			#print("agrego",ntopten)
 			ntopten.items()
-					
 			ntopten=dict(sorted(ntopten.items(), key=lambda uno:uno[1]['puntaje'],reverse=True)[:10])
-			
 			topten[jugada.get_nivel()]=ntopten
-			
-			#print("ordeno",topten)
-			
 			with open('topten.pkl', 'wb') as f:
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 				f.close()
-			
 			break
 	    
 		if event == "Ver TopTen":
@@ -684,33 +691,22 @@ def main(args):
 			
 		if event ==  "posponer":
 			tiempoCorriendo = False
+			sg.Popup(matriz)
+			sg.Popup(jugadaPC.desocupadas)
+			#for x in range(15):
+			#	for y in range(15):
+			#		matriz[x][y] = window.FindElement((x,y))
+      
+			#sg.Popup(matriz)			
+			
+			jugada.set_desocupadas=jugadaPC.desocupadas	
+			jugada.set_matriz(matriz)
+					
 			with open('scrabble.pkl', 'wb') as output:
 				pickle.dump(jugada, output, pickle.HIGHEST_PROTOCOL)
 				output.close()
-			topten=jugada.get_topten()
-			print(topten)	
-			with open('topten.pkl', 'wb') as f:
-				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
-			f.close()	
 			break
-			
-		if event == "reanudar":
-			tiempoCorriendo = True
-			with open('scrabble.pkl', 'rb') as input:
-				jugada = pickle.load(input)
-			jugadorJ=jugada.get_jugadorJ()
-			
-			if not values["nombre"] == jugadorJ.get_nombre():
-				sg.Popup("No puede reanudar ..es otro jugador")
-			else:				
-				jugadorC=jugada.get_jugadorC()
-				window["nombre"].update(jugadorJ.get_nombre())
-				window["puntosJug"].update(jugadorJ.get_puntaje())
-		  
-				muestro_l(window,jugadorJ.get_atril())
-				muestro_lc(window,jugadorC.get_atril())
-				topten=jugada.get_topten()
-			
+				
 		if tiempoCorriendo: 
 			window["tiempo"].update("{:02d}:{:02d}:{:02d}".format((contador // 1000) // 360,(contador // 100) // 60, (contador // 100) % 60))
 			contador += 1
