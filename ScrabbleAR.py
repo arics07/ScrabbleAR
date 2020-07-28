@@ -109,32 +109,16 @@ while True:
 			letras = inicializar_letras(letrasD)
 			puntos = inicializar_puntos(letrasD)
       
-<<<<<<< HEAD
 			cargar_tuplas_desocupadas(desocupadas)
       
 			decide_primer_turno = {0:"jugador", 1:"computadora"}
 			decide = randint(0,1)	
 			primerTurno = decide_primer_turno[decide]
-=======
-      decide_primer_turno = {0:"jugador", 1:"computadora"}
-      decide = randint(0,1)	
-      primerTurno = decide_primer_turno[decide]
-      print("empieza ", primerTurno)
-        
-#      if nivel == "F":
-      tiempoJugada = seteo_tiempo(duracionJugada,nivel)
-      tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,nivel)
-      jugada=jugadas(datetime.datetime.now(),nivel,tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno)  
-#     if nivel == "M":
-#        tiempoJugada = seteo_tiempo(duracionJugada,"M")
-#        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"M") 
-#        jugada=jugadas(datetime.datetime.now(),"M",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno) 
-#      if nivel == "D":
-#        tiempoJugada = seteo_tiempo(duracionJugada,"D")
-#        tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,"D")
-#        jugada=jugadas(datetime.datetime.now(),"D",tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno)  
-  
->>>>>>> 9e329d15e0253c844af04678c8d4268283e81361
+
+			decide_primer_turno = {0:"jugador", 1:"computadora"}
+			decide = randint(0,1)	
+			primerTurno = decide_primer_turno[decide]
+			print("empieza ", primerTurno)
         
 			tiempoJugada = seteo_tiempo(duracionJugada,nivel)
 			tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,nivel)
