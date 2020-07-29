@@ -1,7 +1,7 @@
 import validar_palabra_lexicon as ppattern
 import random
 import itertools as it
-from time import sleep 
+#from time import sleep 
 
 lista_atril = []
 
@@ -82,15 +82,34 @@ def rellenar_atrilC(window,atrilC,letras):
 	print("relleno atrilC",atrilC)
 	return 
 	
-def compu_pensando(nivel, window):
-	window["info"].Update("La computadora está pensando...")
-	if nivel=="F":
-		tiempo = random.randint(7,9)
-	elif nivel=="M":
-		tiempo = random.randint(5,7)
-	else:
-		tiempo = random.randint(1,3)
-	sleep(tiempo)
+#def compu_pensando(nivel, window):
+#	window["info"].Update("La computadora está pensando...")
+#	if nivel=="F":
+#		tiempo = random.randint(7,9)
+#	elif nivel=="M":
+#		tiempo = random.randint(5,7)
+#	else:
+#		tiempo = random.randint(1,3)
+#	sleep(tiempo)
+
+def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,*args):
+	#p=puntos.get(letra)	
+	#print("letra",letra,"puntos",p)
+	if coord in casillas_azules: 
+		p=p*3
+		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+	if nivel == "F" and coord in args: 
+		p=p*2
+		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
+	if nivel == "D" and coord in args:
+		p=(-1)*p
+		#print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
+	if coord in casillas_rojas:
+		triplica = True
+	if coord in casillas_naranja:
+		duplica = True
+	return p,duplica,triplica
+	
 		
 
 def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
@@ -102,7 +121,7 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 	#print(atrilC)
 #	window["turno"].Update("COMPUTADORA")
 	if turno_computadora == True:		
-		compu_pensando(jugada.get_nivel(), window)
+		#compu_pensando(jugada.get_nivel(), window)
 		#va a buscar una posicion en el tablero al azar
 		if (7,7) in desocupadas:
 			x=7
@@ -158,21 +177,13 @@ def programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,ca
 					#print("letra",letra)
 					atrilC[pos]=0
 					
-					p=puntos.get(letra)	
-					print("letra",letra,"puntos",p)
-					if (coord_x, coord_y) in casillas_azules: 
-						p=p*3						
-						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-					if jugada.get_nivel() == "F" and (coord_x, coord_y) in casillas_celeste: 
-						p=p*2
-						print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-					if jugada.get_nivel() == "D" and (coord_x, coord_y) in casillas_descuento:
-						p=(-1)*p
-						print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
-					if (coord_x, coord_y) in casillas_rojas:
-						triplica = True
-					if (coord_x, coord_y) in casillas_naranja:
-						duplica = True
+					if jugada.get_nivel() == "F":
+						p,duplica,triplica=calcular_puntos_letras(puntos.get(letra),(coord_x,coord_y),jugada.get_nivel(),duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,casillas_celeste)
+					if jugada.get_nivel() == "M":
+						p,duplica,triplica=calcular_puntos_letras(puntos.get(letra),(coord_x,coord_y),jugada.get_nivel(),duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja)
+					if jugada.get_nivel() == "D":	
+						p,duplica,triplica=calcular_puntos_letras(puntos.get(letra),(coord_x,coord_y),jugada.get_nivel(),duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,casillas_descuento)
+					
 					puntaje=puntaje+p
 					
 					print((coord_x,coord_y))

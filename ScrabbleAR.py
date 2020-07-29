@@ -3,6 +3,7 @@ import scrabble
 import datetime
 import pickle
 import copy
+import random
 from random import randint
 from jugada_computadora import cargar_tuplas_desocupadas, desocupadas
 
@@ -14,6 +15,7 @@ sg.theme("GreenTan")
 
 nom=""
 nivel=""
+tiempoPensandoPC=0
 layout=[[sg.Text('Jugador')],
   [sg.InputText(key='nom',size=(29,3)),sg.Button("Reanudar",size=(20,1))],
   [sg.Text("Elegir nivel:")],
@@ -86,16 +88,19 @@ while True:
         
 	if event == "Fácil":
 		nivel="F"
+		tiempoPensandoPC = random.randint(7,9)
 		window["niv"].Update(nivel)
 		window["Configurar"].Update(disabled=False)
 	  
 	if event == "Medio":
 		nivel="M"
+		tiempoPensandoPC = random.randint(5,7)
 		window["niv"].Update(nivel)
 		window["Configurar"].Update(disabled=False)
 	  
 	if event == "Difícil":
 		nivel="D"
+		tiempoPensandoPC = random.randint(1,3)
 		window["niv"].Update(nivel)
 		window["Configurar"].Update(disabled=False)
   
@@ -110,10 +115,6 @@ while True:
 			puntos = inicializar_puntos(letrasD)
       
 			cargar_tuplas_desocupadas(desocupadas)
-      
-			decide_primer_turno = {0:"jugador", 1:"computadora"}
-			decide = randint(0,1)	
-			primerTurno = decide_primer_turno[decide]
 
 			decide_primer_turno = {0:"jugador", 1:"computadora"}
 			decide = randint(0,1)	
@@ -122,7 +123,8 @@ while True:
         
 			tiempoJugada = seteo_tiempo(duracionJugada,nivel)
 			tiempoEleccionPalabra = seteo_tiempo(duracionEleccionPalabra,nivel)
-			jugada=jugadas(datetime.datetime.now(),nivel,tiempoJugada,tiempoEleccionPalabra,jugadorJ,jugadorC,"J",letras,puntos,primerTurno,[],[])
+			print("tiempoPensandoPC ",tiempoPensandoPC)
+			jugada=jugadas(datetime.datetime.now(),nivel,tiempoJugada,tiempoEleccionPalabra,tiempoPensandoPC,jugadorJ,jugadorC,"J",letras,puntos,primerTurno,[],[])
        
 			jugadorJ.elijoL(letras)
 			jugadorC.elijoL(letras)
