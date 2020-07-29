@@ -287,11 +287,13 @@ def main(args,tipoj):
 	window.Finalize()
 
 	tiempoCorriendo = False
-	contador = 0
-	tiempoEleccionPalbara = False
+	#contador = 0
+	tiempoEleccionPalabra = False
 	contadorEleccionPalabra =0
 	tiempoPensandoPC = False
 	contadorPC = 0
+	
+	contador = jugada.get_contador()
 	jugadorJ=jugada.get_jugadorJ()
 	jugadorC=jugada.get_jugadorC()
 	duracion_jugada=jugada.get_tiempo()
@@ -299,6 +301,7 @@ def main(args,tipoj):
 	duracion_compu_pensando = jugada.get_tiempoPensandoPC()
 	matriz=jugada.get_matriz()
 	primerTurno = jugada.get_primerTurno()
+	
 	listaCoordenadas = []
 	#matriz=[]
 	
@@ -727,17 +730,11 @@ def main(args,tipoj):
 			
 		if event ==  "posponer":
 			tiempoCorriendo = False
-			sg.Popup(matriz)
-			sg.Popup(jugadaPC.desocupadas)
-			#for x in range(15):
-			#	for y in range(15):
-			#		matriz[x][y] = window.FindElement((x,y))
-      
-			#sg.Popup(matriz)			
-			
+					
 			jugada.set_desocupadas=jugadaPC.desocupadas	
 			jugada.set_matriz(matriz)
-					
+			jugada.set_contador(contador)
+			
 			with open('scrabble.pkl', 'wb') as output:
 				pickle.dump(jugada, output, pickle.HIGHEST_PROTOCOL)
 				output.close()

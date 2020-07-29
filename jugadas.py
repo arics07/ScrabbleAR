@@ -16,6 +16,7 @@ class jugadas:
 		self._primerTurno = primerTurno
 		self._desocupadas = desocupadas
 		self._matriz = matriz
+		self._contador = 0
    
 	def set_fecha(self, fecha):
 		self._fecha = fecha
@@ -103,4 +104,10 @@ class jugadas:
 		
 	def get_matriz(self):
 		return self._matriz
+	
+	def set_contador(self,contador):
+		self._contador=contador
+		
+	def get_contador(self):
+		return self._contador
 	
