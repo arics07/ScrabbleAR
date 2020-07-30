@@ -4,7 +4,6 @@ import jugada_computadora as jugadaPC
 import random
 import pickle
 from datetime import date
-#import build_words_pattern_nom as juegaCompu
  
 def verTopTen(topt):
 	lista=[]
@@ -25,16 +24,20 @@ def muestro_matriz(matriz,window):
 				window.FindElement((x,y)).Update(matriz[x][y],disabled = True)
 
 def muestro_l(window,atril): 
-    for indice in range(len(atril)):
-        letra = atril[indice] 
-        window.FindElement("Letra" + str(indice)).Update(letra)
+	"""Esta función visualiza la letra sobre el boton del atril del jugador."""
+	for indice in range(len(atril)):
+		letra = atril[indice] 
+		window.FindElement("Letra" + str(indice)).Update(letra)
 
 def muestro_lc(window,atril): 
-    for indice in range(len(atril)):
-        letra = atril[indice] 
-        window.FindElement("LetraC" + str(indice)).Update("*")
+	"""Esta función visualiza un * sobre el atril de la computadora."""
+	for indice in range(len(atril)):
+		letra = atril[indice] 
+		window.FindElement("LetraC" + str(indice)).Update("*")
    
+	
 def accion_atril (window,atrilJ,pos,textBoton,datosEleccion):
+	"""Esta función devuelve la letra seleccionada del atril y pone en 0 la posición que ocupaba dicha letra en el mismo."""
 	datosEleccion[pos] = atrilJ[pos]
 	letraElegida = atrilJ[pos]  
 	window.FindElement(textBoton).Update("")
@@ -42,7 +45,8 @@ def accion_atril (window,atrilJ,pos,textBoton,datosEleccion):
 	return letraElegida
 	
 def accion_tablero(window,event,listaCoordenadas,letraElegida,matriz):
-	posicionCasilleroTablero = event  #me da que boton del tablero toque
+	"""Esta función guarda, en la matriz de datos, el valor de la letra colocada en cada casillero.Retorna la lista de coordenadas de las casillas que se ocuparon para formar la palabra."""
+	posicionCasilleroTablero = event  
 	
 	listaCoordenadas.append(posicionCasilleroTablero)
 	
@@ -54,7 +58,10 @@ def accion_tablero(window,event,listaCoordenadas,letraElegida,matriz):
 	window.FindElement((x,y)).Update(disabled = True)
 	return listaCoordenadas
 	
+	
+	
 def armar_palabra(listaCoordenadas,matriz):
+	"""Esta función ordena la lista de coordenadas para poder unir cada letra ubicada en el tablero de manera correcta. Retorna la palabra."""
 	unionLetras = []
 	listaCoordenadas.sort()
 	for lcoord in listaCoordenadas:
@@ -65,16 +72,17 @@ def armar_palabra(listaCoordenadas,matriz):
 	return pal
 	
 def rellenar_atril(window,atrilJ,letras):
+	"""Esta función rellena los espacios vacios del atril después de haber colocado una palabra en el tablero y corroborar que es válida.Retorna el atril modificado"""
 	for indice in range(len(atrilJ)):
 		if atrilJ[indice] == 0:
 			letra=random.choice(letras)
 			atrilJ[indice] = letra
 			window.FindElement("Letra" + str(indice)).Update(letra)
 			letras.remove(letra)
-		#print(atrilJ)
 	return atrilJ
 	
 def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
+	"""Esta función devuelve las letras al atril si la palabra no es válida o, si es primer jugada y no coloco la palabra en el centro. Limpia el tablero y renueva el string de los casilleros especiales la palabra pasó por uno de ellos.Retorna la lista de coordenadas vacía """
 	for lcoord in listaCoordenadas:
 		x=lcoord[0]
 		y=lcoord[1]
@@ -136,7 +144,7 @@ def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, c
 		window[cas].update("x", button_color=("black", "#F00F0F"))
 	
 def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas):
-	
+	"""Esta función devuelve la letra al atril si cambia de direccion (horizontal/vertical) mientras arma la palabra"""
 	sg.Popup('debes seguir horizontal!')
 	posKeys = len(datosEleccion)
 	pos = list(datosEleccion.keys())[posKeys-1]
@@ -211,14 +219,13 @@ def inicializar_casillas_descuento():
 	return casillas
 
 def compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_computadora,esPrimerJugada,window,jugadorC,validez,puntos,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada,jugadorJ):
-	
+	"""Esta función ejecuta el módulo de a computadora una vez terminado el tiempo para pensar. Retorna los valores reiniciados de tiempoPensandoPC, contadorPC y esPrimerJugada."""
 	if contadorPC == (duracion_compu_pensando *100):
 		tiempoPensandoPC = False
 		contadorPC = 0
 		turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 		esPrimerJugada=False
 		window["puntosPc"].update(jugadorC.get_puntaje())
-		#print('turno despues de que volvi de jugada pc ', turno_computadora)
 		window["turno"].update(jugadorJ.get_nombre())
 		jugadorJ.set_jugar()
 		esPrimerJugada=False
@@ -354,14 +361,11 @@ def main(args,tipoj):
 			break
 			
 		tiempoEleccionPalabra = True
-		#print(duracion_jugada, duracion_elecc_palabra)
 		
 		if jugadorC.get_turno() == False:
-			#print(atrilC)
 			window["turno"].update(jugadorJ.get_nombre())
 			for i in range(len(atrilC)):
-				window["LetraC" + str(i)].Update(disabled=True)
-				#window.FindElement("LetraC" + str(i)).Update(disabled = True)
+				window.FindElement("LetraC" + str(i)).Update(disabled = True)
 				
 		if contadorEleccionPalabra == duracion_elecc_palabra: #equivale a 3 min
 			tiempoEleccionPalabra = False
@@ -379,6 +383,8 @@ def main(args,tipoj):
 			#jugadorJ.set_jugar()
 			
 		if primerTurno=="computadora" and esPrimerJugada==True:
+			#for i in range(len(atrilJ)):
+				#window.FindElement("Letra" + str(i)).Update(disabled = True)
 			window["turno"].update("COMPUTADORA")
 			jugadorC.set_jugar()
 			#print(jugadorC.get_turno())
@@ -392,56 +398,78 @@ def main(args,tipoj):
 			letraElegida = accion_atril(window,atrilJ,0,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 0:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
   
 		if event == 'Letra1':
 			letraElegida = accion_atril(window,atrilJ,1,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 1:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
   
 		if event == 'Letra2':
 			letraElegida = accion_atril(window,atrilJ,2,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 2:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
 	  
 		if event == 'Letra3':
 			letraElegida = accion_atril(window,atrilJ,3,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 3:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
 	  
 		if event == 'Letra4':
 			letraElegida = accion_atril(window,atrilJ,4,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 4:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
 	  
 		if event == 'Letra5':
 			letraElegida = accion_atril(window,atrilJ,5,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 5:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
 	  
 		if event == 'Letra6':
 			letraElegida = accion_atril(window,atrilJ,6,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 6:
-					window["Letra" + str(i)].Update(disabled=True)
-					#window.FindElement("Letra" + str(i)).Update(disabled = True)
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
+				else:
+					window.FindElement("Letra" + str(i)).Update(disabled = False)
+			
+			
 	  
 		if type(event) is tuple:
 			
 			for i in range(len(atrilJ)):
-				window["Letra" + str(i)].Update(disabled=False)
-				#window.FindElement("Letra" + str(i)).Update(disabled = False)
+				window.FindElement("Letra" + str(i)).Update(disabled = False)
+				if atrilJ[i] == 0:
+					window.FindElement("Letra" + str(i)).Update(disabled = True)
 			
 			if len(listaCoordenadas) == 0:
 				try:
@@ -468,13 +496,13 @@ def main(args,tipoj):
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 					if event[0] != coordx:
 						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
-						#print('listacoord ',listaCoordenadas)
+						
 				
 				if esVertical:
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 					if event[1] != coordy:
 						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
-						#print('listacoord ',listaCoordenadas)
+						
 			
 		if event == 'insertar':
 			print(esPrimerJugada)
@@ -749,15 +777,10 @@ def main(args,tipoj):
 		
 		if tiempoPensandoPC:
 			window["info"].Update("La computadora está pensando...")
-			for i in range(len(atrilJ)):
-				window["Letra" + str(i)].Update(disabled=True)
-				#window.FindElement("Letra" + str(i)).Update(disabled = True)
+			letraElegida = ''
 			contadorPC +=1
-			print("contador pc ",contadorPC, tiempoPensandoPC)
+			#print("contador pc ",contadorPC, tiempoPensandoPC)
 			tiempoPensandoPC,contadorPC,esPrimerJugada = compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_computadora,esPrimerJugada,window,jugadorC,validez,puntos,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada,jugadorJ)
-			for i in range(len(atrilJ)):
-				window["Letra" + str(i)].Update(disabled=False)
-				#window.FindElement("Letra" + str(i)).Update(disabled = False)
 	  
 		if event == "cambio":
 			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
