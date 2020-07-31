@@ -3,7 +3,9 @@ import validar_palabra_lexicon as ppattern
 import jugada_computadora as jugadaPC
 import random
 import pickle
+import fin_del_juego as pantalla_final
 from datetime import date
+
  
 def verTopTen(topt):
 	lista=[]
@@ -260,8 +262,8 @@ def main(args,tipoj):
 	columna_1 = [
         [sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre", background_color="#FFC0CB")],
         [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel")],
-        [sg.Button("Posponer", size=(10,1), key="posponer"), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1), key="finalizo")],
-        [sg.Button("Ver TopTen", size=(10,1))],
+        [sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" )), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
+        [sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
         [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
         [sg.Text(size=(15, 1), key="puntosJug", background_color="white"), sg.Text("", size=(1,1)), sg.Text(size=(15, 1), key="puntosPc", background_color="white")],
         [sg.Text("Tiempo", justification="center")], [sg.Text(
@@ -274,7 +276,7 @@ def main(args,tipoj):
         [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button(
             "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6")],
         [sg.Text("", size=(1,1))],
-        [sg.Button('Insertar Palabra', size=(12, 1), key="insertar"), sg.Button("Cambio letras", size=(12, 1), key="cambio"), sg.Button('Pasar', size=(9, 1), key="pasar")],
+        [sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="insertar"), sg.Button("Cambio letras", size=(12, 1), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio"), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="pasar")],
         [sg.Text("", size=(1,1))]
     ]
 
@@ -353,12 +355,15 @@ def main(args,tipoj):
 	tiempoCorriendo = True 
 	esPrimerJugada = True
 	validez = False
+	nombreGanador = ''
 	
 	while tiempoCorriendo == True:
 		event, values = window.Read(timeout=10)
 		
 		if event == None:
 			break
+		
+		print("turno pc ",jugadorC.get_turno())
 			
 		tiempoEleccionPalabra = True
 		
@@ -366,6 +371,7 @@ def main(args,tipoj):
 			window["turno"].update(jugadorJ.get_nombre())
 			for i in range(len(atrilC)):
 				window.FindElement("LetraC" + str(i)).Update(disabled = True)
+			
 				
 		if contadorEleccionPalabra == duracion_elecc_palabra: #equivale a 3 min
 			tiempoEleccionPalabra = False
@@ -399,8 +405,7 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 0:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
+				
 			
 			
   
@@ -409,8 +414,7 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 1:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
+				
 			
 			
   
@@ -419,8 +423,7 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 2:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
+				
 			
 			
 	  
@@ -429,8 +432,7 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 3:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
+				
 			
 			
 	  
@@ -439,8 +441,7 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 4:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
+				
 			
 			
 	  
@@ -449,8 +450,7 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 5:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
+				
 			
 			
 	  
@@ -459,9 +459,6 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 6:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				else:
-					window.FindElement("Letra" + str(i)).Update(disabled = False)
-			
 			
 	  
 		if type(event) is tuple:
@@ -719,7 +716,8 @@ def main(args,tipoj):
 			#window["turno"].update(jugadorJ.get_nombre())
 			#jugadorJ.set_jugar()
 											
-		if event == "finalizo" or contador == duracion_jugada: #equivale a 2 hs 
+		if event == "finalizo" or contador == duracion_jugada:
+			window.close()
 			tiempoCorriendo = False
 			
 			topten=jugada.get_topten()
@@ -737,7 +735,13 @@ def main(args,tipoj):
 			with open('topten.pkl', 'wb') as f:
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 				f.close()
-			break
+			
+			if jugadorJ.get_puntaje()>jugadorC.get_puntaje():
+				nombreGanador = jugadorJ.get_nombre()
+			else:
+				nombreGanador = jugadorC.get_nombre()
+				
+			pantalla_final.prograPpal(nombreGanador,jugadorJ,jugadorC,jugada.get_puntos())
 	    
 		if event == "Ver TopTen":
 			topten=jugada.get_topten()
@@ -777,10 +781,11 @@ def main(args,tipoj):
 		
 		if tiempoPensandoPC:
 			window["info"].Update("La computadora está pensando...")
-			letraElegida = ''
+			#letraElegida = ''
 			contadorPC +=1
-			#print("contador pc ",contadorPC, tiempoPensandoPC)
 			tiempoPensandoPC,contadorPC,esPrimerJugada = compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_computadora,esPrimerJugada,window,jugadorC,validez,puntos,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada,jugadorJ)
+			for i in range(len(atrilJ)):
+				window.FindElement("Letra" + str(i)).Update(disabled = False)
 	  
 		if event == "cambio":
 			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
