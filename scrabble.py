@@ -355,7 +355,7 @@ def main(args,tipoj):
 	#jugadorJ.set_turno = True
 	jugadorJ.set_jugar()
 	tiempoCorriendo = True 
-	esPrimerJugada = True
+	#esPrimerJugada = True
 	validez = False
 	nombreGanador = ''
 	
@@ -406,61 +406,42 @@ def main(args,tipoj):
 			for i in range(len(atrilJ)):
 				if i != 0:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				
-			
-			
   
 		if event == 'Letra1':
 			letraElegida = accion_atril(window,atrilJ,1,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 1:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				
-			
-			
   
 		if event == 'Letra2':
 			letraElegida = accion_atril(window,atrilJ,2,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 2:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				
-			
-			
 	  
 		if event == 'Letra3':
 			letraElegida = accion_atril(window,atrilJ,3,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 3:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				
-			
-			
 	  
 		if event == 'Letra4':
 			letraElegida = accion_atril(window,atrilJ,4,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 4:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				
-			
-			
 	  
 		if event == 'Letra5':
 			letraElegida = accion_atril(window,atrilJ,5,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 5:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-				
-			
-			
 	  
 		if event == 'Letra6':
 			letraElegida = accion_atril(window,atrilJ,6,event,datosEleccion)
 			for i in range(len(atrilJ)):
 				if i != 6:
 					window.FindElement("Letra" + str(i)).Update(disabled = True)
-			
 	  
 		if type(event) is tuple:
 			
@@ -494,13 +475,11 @@ def main(args,tipoj):
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 					if event[0] != coordx:
 						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
-						
 				
 				if esVertical:
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 					if event[1] != coordy:
 						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
-						
 			
 		if event == 'insertar':
 			print(esPrimerJugada)
@@ -551,9 +530,9 @@ def main(args,tipoj):
 							puntaje=puntaje+p	
 							
 						if triplica:
-							puntaje*3	
+							puntaje=puntaje*3	
 						if duplica:
-							puntaje*2
+							puntaje=puntaje*2
 								    
 						ptos = ptos + puntaje	
 						listaCoordenadas = []
@@ -638,6 +617,7 @@ def main(args,tipoj):
 #						if (x,y) in casillas_naranja:
 #								p=p*2
 #							print("letra",letra,"x",x,"y",y,"duplica")  
+						
 						if (x,y) in casillas_azules: 
 							p=p*3						
 							print("letra",letra,"x",x,"y",y,"triplica")
@@ -647,6 +627,7 @@ def main(args,tipoj):
 						if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 							p=(-1)*p
 							print("letra",letra,"x",x,"y",y,"descuenta")
+						
 						if (x,y) in casillas_rojas:
 								triplica = True
 						if (x,y) in casillas_naranja:
@@ -654,9 +635,9 @@ def main(args,tipoj):
 						puntaje=puntaje+p	
 					
 					if triplica:
-							puntaje*3
+							puntaje=puntaje*3
 					if duplica:
-						    puntaje*2
+						    puntaje=puntaje*2
 					
 					ptos = ptos + puntaje		
 					listaCoordenadas = []	

@@ -7,7 +7,7 @@ lista_atril = []
 
 #lista_atril es una lista con las letras
 def combinaciones(lista_atril):
-	"""Esta función crea todas las combinaciones posibles con las letras que la computadora
+	"""Esta función crea todas las combinaciones posiblegss con las letras que la computadora
 	tiene en su atril"""
 	listas_de_fichas = []
 	for n in range(2,len(lista_atril)+1):
@@ -129,13 +129,14 @@ def analizo_casillero(x,y,desocupadas):
 def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,*args):
 	#p=puntos.get(letra)	
 	#print("letra",letra,"puntos",p)
+	print("args",args)
 	if coord in casillas_azules: 
 		p=p*3
 		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-	if nivel == "F" and coord in args: 
+	if nivel == "F" and coord in args[0]: 
 		p=p*2
 		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
-	if nivel == "D" and coord in args:
+	if nivel == "D" and coord in args[0]:
 		p=(-1)*p
 		#print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
 	if coord in casillas_rojas:
@@ -143,7 +144,6 @@ def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casi
 	if coord in casillas_naranja:
 		duplica = True
 	return p,duplica,triplica
-	
 		
 
 def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
@@ -151,7 +151,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 	atrilC=jugadorC.get_atril()
 	matriz=jugada.get_matriz()
 	desocupadas = jugada.get_desocupadas()
-	print(desocupadas)
+	#print(desocupadas)
 #	window["turno"].Update("COMPUTADORA")
 	if turno_computadora == True:		
 		#compu_pensando(jugada.get_nivel(), window)
@@ -172,7 +172,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 	
 		#busca una posicion en el tablero al azar
 		x,y = busca_pos(desocupadas)
-		print('x= ', x, 'y=', y)  #control
+		#print('x= ', x, 'y=', y)  #control
 
 		#guardo los valores x e y de la key del casillero inicial
 		coord_x, coord_y = x, y  
@@ -183,7 +183,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		
 		#si no tiene espacio, entra en el if y empieza a buscar otro lugar (intenta 20 veces)
 		if espacios_libres < tam_pal_mas_corta:
-			print("estoy en espacion libre menor a tam pal mas corta")
+			#print("estoy en espacion libre menor a tam pal mas corta")
 			intentos = 20
 			#creo una copia de desocupadas para evitar que en los 20 intentos vuelva a elegir el mismo casillero
 			des = desocupadas.copy()
@@ -206,7 +206,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
 		#palabra_encontrada tiene la lista con las fichas	
 		palabra_encontrada = pack_palabra_encontrada[1]
-		print(palabra_encontrada) #control
+		#print(palabra_encontrada) #control
 		ptos=jugadorC.get_puntaje()
 		
 		#reseteo puntaje, triplica y duplica
@@ -233,11 +233,11 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 					
 			puntaje=puntaje+p
 					
-			print((coord_x,coord_y))
+			#print((coord_x,coord_y))
 			desocupadas.remove((coord_x, coord_y))
 			jugada.set_desocupadas(desocupadas)
 			
-			print(" desocupadas en jugada pc ", desocupadas)
+			#print(" desocupadas en jugada pc ", desocupadas)
 			
 			if direc == "horizontal":
 				coord_x = coord_x + 1
@@ -265,7 +265,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 	#se actualizan los datos y se termina el turno de la computadora
 	turno_computadora = False
 	rellenar_atrilC(window,atrilC,letras)
-	print("atrilC",atrilC) 
+	#print("atrilC",atrilC) 
 	window["tot_letras"].Update(len(letras))
 	jugadorC.set_atril(atrilC)
 	jugadorC.set_dejarJugar()
