@@ -345,7 +345,8 @@ def main(args,tipoj):
   
 	if tipoj == "C":
 		for i in range (15):
-			matriz.append([0]*15)  
+			matriz.append([0]*15) 
+		esPrimerJugada = True
 	else:
 		muestro_matriz(matriz,window)
 		esPrimerJugada = False
