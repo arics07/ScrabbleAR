@@ -1,10 +1,11 @@
 import PySimpleGUI as sg
 import math 
+import ScrabbleAR as menu
 
-def prograPpal(nombreGanador,jugadorJ,jugadorC,puntosLetras):
+def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	puntosLetrasCompu=0
 	puntosLetrasJugador=0
-	nombreGanador=nombreGanador.upper()
+	nombreGanador=""
 	compu=(jugadorC.get_nombre()).upper()
 	jugador=(jugadorJ.get_nombre()).upper()
 	atrilCompu=jugadorC.get_atril()
@@ -19,8 +20,16 @@ def prograPpal(nombreGanador,jugadorJ,jugadorC,puntosLetras):
 	atrilJugador = str(','.join(jugadorJ.get_atril()))
 	atrilCompu = str(','.join(jugadorC.get_atril()))
 	
-	puntosFinalesCompu = puntosLetrasCompu - jugadorC.get_puntaje()
-	puntosFinalesJugador = puntosLetrasJugador - jugadorJ.get_puntaje()
+
+	
+	puntosFinalesCompu = jugadorC.get_puntaje() - puntosLetrasCompu
+	puntosFinalesJugador = jugadorJ.get_puntaje() - puntosLetrasJugador
+	
+	if puntosFinalesCompu > puntosFinalesJugador:
+		nombreGanador = compu
+	else:
+		nombreGanador = jugador
+	
 	
 	#columna5=[
 	        # [sg.Graph(canvas_size=(300, 10), graph_bottom_left=(0,0), graph_top_right=(300, 10), key='graph2')]
@@ -86,7 +95,8 @@ def prograPpal(nombreGanador,jugadorJ,jugadorC,puntosLetras):
 			break
 		
 		if event == "volver":
-			print("Falta volver a llamar al menu")
+			window.close()
+			menu.main()
 		
 		window.close()
 

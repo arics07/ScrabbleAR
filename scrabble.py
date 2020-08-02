@@ -225,7 +225,7 @@ def compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_com
 	if contadorPC == (duracion_compu_pensando *100):
 		tiempoPensandoPC = False
 		contadorPC = 0
-		turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+		turno_computadora = jugadaPC.programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 		esPrimerJugada=False
 		window["puntosPc"].update(jugadorC.get_puntaje())
 		window["turno"].update(jugadorJ.get_nombre())
@@ -310,6 +310,7 @@ def main(args,tipoj):
 	duracion_compu_pensando = jugada.get_tiempoPensandoPC()
 	matriz=jugada.get_matriz()
 	primerTurno = jugada.get_primerTurno()
+	desocupadas = jugada.get_desocupadas()
 	
 	listaCoordenadas = []
 	#matriz=[]
@@ -347,6 +348,7 @@ def main(args,tipoj):
 			matriz.append([0]*15)  
 	else:
 		muestro_matriz(matriz,window)
+		esPrimerJugada = False
 		
 	muestro_l(window,jugadorJ.get_atril())
 	muestro_lc(window,jugadorC.get_atril())
@@ -362,8 +364,7 @@ def main(args,tipoj):
 		
 		if event == None:
 			break
-		
-		print("turno pc ",jugadorC.get_turno())
+		#print("primer jugada ", esPrimerJugada)
 			
 		tiempoEleccionPalabra = True
 		
@@ -516,8 +517,8 @@ def main(args,tipoj):
 					#print('palabra analizada es: ', esValida)
 					if esValida:
 						rellenar_atril(window,atrilJ,letras)
-						jugadaPC.eliminar_coord_en_pc(listaCoordenadas)
-						#print(listaCoordenadas)
+						desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
+						jugada.set_desocupadas(desocupadas)
 
 						#ptos=int(values["puntosJug"])
 						ptos = jugadorJ.get_puntaje()
@@ -617,7 +618,8 @@ def main(args,tipoj):
 				#print('palabra analizada es: ', esValida)
 				if esValida:
 					rellenar_atril(window,atrilJ,letras)
-					jugadaPC.eliminar_coord_en_pc(listaCoordenadas)
+					desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
+					jugada.set_desocupadas(desocupadas)
 					
 					#print(listaCoordenadas)
 					
@@ -735,13 +737,8 @@ def main(args,tipoj):
 			with open('topten.pkl', 'wb') as f:
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 				f.close()
-			
-			if jugadorJ.get_puntaje()>jugadorC.get_puntaje():
-				nombreGanador = jugadorJ.get_nombre()
-			else:
-				nombreGanador = jugadorC.get_nombre()
 				
-			pantalla_final.prograPpal(nombreGanador,jugadorJ,jugadorC,jugada.get_puntos())
+			pantalla_final.programa_principal(jugadorJ,jugadorC,jugada.get_puntos())
 	    
 		if event == "Ver TopTen":
 			topten=jugada.get_topten()
@@ -762,8 +759,8 @@ def main(args,tipoj):
 			
 		if event ==  "posponer":
 			tiempoCorriendo = False
-					
-			jugada.set_desocupadas=jugadaPC.desocupadas	
+	
+			jugada.set_desocupadas(desocupadas)
 			jugada.set_matriz(matriz)
 			jugada.set_contador(contador)
 			

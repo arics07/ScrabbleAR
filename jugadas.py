@@ -93,8 +93,8 @@ class jugadas:
 	def sumarCambio(self):  
 		self._cantCambios+=1 
      
-	def set_desocupadas(self,listad):
-		self._desocupadas=listad
+	def set_desocupadas(self,desocupadas):
+		self._desocupadas=desocupadas
 		
 	def get_desocupadas(self):
 		return self._desocupadas
