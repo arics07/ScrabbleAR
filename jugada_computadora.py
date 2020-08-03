@@ -7,13 +7,13 @@ lista_atril = []
 
 #lista_atril es una lista con las letras
 def combinaciones(lista_atril):
-	"""Esta función crea todas las combinaciones posiblegss con las letras que la computadora
+	"""Esta función crea todas las permutaciones con las fichas que la computadora
 	tiene en su atril"""
 	listas_de_fichas = []
 	for n in range(2,len(lista_atril)+1):
 		a= it.permutations(lista_atril, n)
 		listas_de_fichas.extend(a)
-	print("control combinaciones ", len(listas_de_fichas))
+	print("control permutaciones ", len(listas_de_fichas))
 	return listas_de_fichas	
 	    
 def lista_a_diccionario(listas_de_fichas,validez):
@@ -93,15 +93,20 @@ def rellenar_atrilC(window,atrilC,letras):
 #	sleep(tiempo)
 
 def busca_pos(desocupadas):
+	"""Esta función devuelve una tupla (x,y), correspondiente a la key de un casillero vacío en el tablero"""
 	if (7,7) in desocupadas:
 		x=7
 		y=7
 	else:
 		x=random.randint(0,14)
 		y=random.randint(0,14)
+		while (x,y) not in desocupadas and len(desocupadas)!=0:
+			x=random.randint(0,14)
+			y=random.randint(0,14)
 	return x,y
 
 def cuenta_espacios_libres(x,y,direccion,desocupadas):
+	"""Esta función cuenta la cantidad de casilleros vacíos desde el casillero (x,y), siendo x e y recibidos como parámetro, en la dirección que también recibe como parámetro"""
 	espacios_libres = 0
 	while (x,y) in desocupadas and x<=14 and espacios_libres<7:
 		espacios_libres = espacios_libres + 1
@@ -112,6 +117,7 @@ def cuenta_espacios_libres(x,y,direccion,desocupadas):
 	return espacios_libres
 	
 def analizo_casillero(x,y,desocupadas):
+	"""Esta función devuelve la dirección más conventiente (horizontal o vertical) para jugar desde el casillero (x,y)"""
 	direccion = {0: "horizontal", 1:"vertical"}
 	dir_azar = random.randint(0,1)
 	dir1 = direccion[dir_azar]
@@ -127,6 +133,7 @@ def analizo_casillero(x,y,desocupadas):
 		return esp1, dir1
 
 def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,*args):
+	"""Esta función calcula el puntaje aportado por una letra de la pabra jugada, dependiendo del casillero en que fue ubicada en el tablero. """
 	#p=puntos.get(letra)	
 	#print("letra",letra,"puntos",p)
 	print("args",args)
@@ -143,6 +150,7 @@ def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casi
 		triplica = True
 	if coord in casillas_naranja:
 		duplica = True
+	print("coord, dupl, tripl ", p,duplica,triplica)
 	return p,duplica,triplica
 		
 
@@ -192,8 +200,8 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 			while espacios_libres <tam_pal_mas_corta and intentos>0:
 				x,y = busca_pos(des)
 				coord_x, coord_y = x,y
-				espacios_libres, direc = analizo_casillero(x,y)
-				des.remove(coord_x,coord_y)
+				espacios_libres, direc = analizo_casillero(x,y,desocupadas)
+				des.remove((coord_x,coord_y))
 				intentos = intentos - 1
 			#si intentó 20 veces y no encontró lugar, se termina la partida
 			if intentos == 0:
@@ -264,11 +272,18 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 					
 					
 	#se actualizan los datos y se termina el turno de la computadora
-	turno_computadora = False
-	rellenar_atrilC(window,atrilC,letras)
-	#print("atrilC",atrilC) 
-	window["tot_letras"].Update(len(letras))
-	jugadorC.set_atril(atrilC)
-	jugadorC.set_dejarJugar()
-#	window["turno"].Update("")
-	return turno_computadora
+	turno_computadora = False	
+	try:
+		rellenar_atrilC(window,atrilC,letras)
+	except:
+		print("Terminó la partida porque no hay más letras en la bolsa")
+		window.close()
+		#SE TERMINÓ LA PARTIDA porque no se puede rellenar el atril
+		pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
+	else:
+		#print("atrilC",atrilC)
+		window["tot_letras"].Update(len(letras))
+		jugadorC.set_atril(atrilC)
+		jugadorC.set_dejarJugar()
+#		window["turno"].Update("")
+		return turno_computadora
