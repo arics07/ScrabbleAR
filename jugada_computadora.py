@@ -134,9 +134,7 @@ def analizo_casillero(x,y,desocupadas):
 
 def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,*args):
 	"""Esta función calcula el puntaje aportado por una letra de la pabra jugada, dependiendo del casillero en que fue ubicada en el tablero. """
-	#p=puntos.get(letra)	
-	#print("letra",letra,"puntos",p)
-	print("args",args)
+#	print("args",args)
 	if coord in casillas_azules: 
 		p=p*3
 		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
@@ -193,18 +191,19 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		if espacios_libres < tam_pal_mas_corta:
 			#print("estoy en espacion libre menor a tam pal mas corta")
 			intentos = 20
+			
 			#creo una copia de desocupadas para evitar que en los 20 intentos vuelva a elegir el mismo casillero
 			des = desocupadas.copy()
 			print("soy des ",des)
 			des.remove((coord_x,coord_y))
-			while espacios_libres <tam_pal_mas_corta and intentos>0:
+			while espacios_libres <tam_pal_mas_corta and intentos>0 and len(des)!=0:
 				x,y = busca_pos(des)
 				coord_x, coord_y = x,y
 				espacios_libres, direc = analizo_casillero(x,y,desocupadas)
 				des.remove((coord_x,coord_y))
 				intentos = intentos - 1
 			#si intentó 20 veces y no encontró lugar, se termina la partida
-			if intentos == 0:
+			if intentos == 0 or len(des)==0:
 				window.close()
 				#SE TERMINÓ LA PARTIDA porque no encontró lugar en el tablero
 				pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
