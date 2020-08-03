@@ -62,7 +62,7 @@ def main():
 	  [sg.Text("",size=(1,1)), sg.Button("Configurar", size=(10,1), disabled=True)],
 	# [sg.Text('Nivel')],[sg.InputText(key='nivel',size=(3,2)),sg.Text('F=Facil M=Medio D=Dificil')],
 	  [sg.Text("")],
-	  [sg.Text("",size=(1,1)), sg.Button("Comenzar",size=(20,2))]
+	  [sg.Text("",size=(1,1)), sg.Button("Comenzar",size=(20,2),disabled=True)]
 	  ]
 	window = sg.Window('Ingreso Juego').Layout(layout)
 
@@ -108,6 +108,7 @@ def main():
 			tiempoPensandoPC = random.randint(7,9)
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
+			window["Comenzar"].Update(disabled=False)
 			datosSlierRango = duracionJugada[nivel]["horas"]["rango"]
 			datosSliderValorDefault= duracionJugada[nivel]["horas"]["cant"]
 			datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
@@ -121,6 +122,7 @@ def main():
 			tiempoPensandoPC = random.randint(5,7)
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
+			window["Comenzar"].Update(disabled=False)
 			datosSlierRango = duracionJugada[nivel]["minutos"]["rango"]
 			datosSliderValorDefault= duracionJugada[nivel]["minutos"]["cant"]
 			datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
@@ -134,6 +136,7 @@ def main():
 			tiempoPensandoPC = random.randint(1,3)
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
+			window["Comenzar"].Update(disabled=False)
 			datosSlierRango = duracionJugada[nivel]["minutos"]["rango"]
 			datosSliderValorDefault= duracionJugada[nivel]["minutos"]["cant"]
 			datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]

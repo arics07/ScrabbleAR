@@ -43,11 +43,11 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	         [sg.Text("FICHAS SIN JUGAR:",justification="center",size=(30,1))],
 	         [sg.Text(atrilJugador,justification="center",size=(30,1))],
 	         [sg.Text("")],
-	         [sg.Text("PUNTOS ACTUALES:",justification="center",size=(30,1)), sg.Text(jugadorJ.get_puntaje())], 
+	         [sg.Text("PUNTOS ACTUALES:",justification="center",size=(30,1)), sg.Text(jugadorJ.get_puntaje(),background_color="#FFFFFF")], 
 	         [sg.Text("         -",justification="left")],
-	         [sg.Text("PUNTOS FICHAS:",justification="center",size=(30,1)), sg.Text(puntosLetrasJugador)],
+	         [sg.Text("PUNTOS FICHAS:",justification="center",size=(30,1)), sg.Text(puntosLetrasJugador,background_color="#FFFFFF")],
 	         [sg.Text("              ________________________________")],
-	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesJugador)], 
+	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesJugador,background_color="#FFFFFF")], 
 			 ]
 	columna2=[
 	         [sg.Text(compu,justification="center",size=(30,1))],
@@ -55,21 +55,23 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	         [sg.Text("FICHAS SIN JUGAR:",justification="center",size=(30,1))],
 	         [sg.Text(atrilCompu,justification="center",size=(30,1))],
 	         [sg.Text("")],
-	         [sg.Text("PUNTOS ACTUALES:",justification="center",size=(30,1)), sg.Text(jugadorC.get_puntaje())], 
+	         [sg.Text("PUNTOS ACTUALES:",justification="center",size=(30,1)), sg.Text(jugadorC.get_puntaje(),background_color="#FFFFFF")], 
 	         [sg.Text("         -",justification="left")],
-	         [sg.Text("PUNTOS FICHAS:",justification="center",size=(30,1)), sg.Text(puntosLetrasCompu)],
+	         [sg.Text("PUNTOS FICHAS:",justification="center",size=(30,1)), sg.Text(puntosLetrasCompu,background_color="#FFFFFF")],
 	         [sg.Text("              ________________________________")],
-	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesCompu)],
+	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesCompu,background_color="#FFFFFF")],
 			 ]
 	columna3=[
-	         [sg.Text("GANADOR/GANADORA", justification="center",text_color="white", size=(85,1))],
-	         [sg.Text(nombreGanador,justification="center",text_color="white", size=(85,1),key="nomJugador")]
+	         [sg.Text("GANADOR/GANADORA", justification="center",text_color="white", size=(75,1),font=(30))],
+	         [sg.Text(nombreGanador,justification="center",text_color="white", size=(75,1),key="nomJugador",font=(30))]
 	         ]
 	columna4=[
 	         [sg.Graph(canvas_size=(10, 250), graph_bottom_left=(0,0), graph_top_right=(10, 250), key='graph')]
 	         ]
 	layout=[
 	       [sg.Column(columna3)],
+	       [sg.Text("")],
+	       [sg.Text("RESULTADOS",size=(75,1), justification="center",font=(20))],
 	       [sg.Text("")],
 	       [sg.Column(columna1),sg.Text(""),sg.Text(""),sg.Column(columna4),sg.Column(columna2),sg.Text("")],
 	       [sg.Text("")],

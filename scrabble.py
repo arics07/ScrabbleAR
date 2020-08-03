@@ -58,6 +58,7 @@ def accion_tablero(window,event,listaCoordenadas,letraElegida,matriz):
 	window[posicionCasilleroTablero].update(letraElegida)
 	matriz[x][y] = letraElegida
 	window.FindElement((x,y)).Update(disabled = True)
+	window.FindElement((x,y)).Update(button_color=("white","black"))
 	return listaCoordenadas
 	
 	
@@ -91,6 +92,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		
 		letra = matriz[x][y]
 		window.FindElement(lcoord).Update("")
+		window.FindElement((x,y)).Update(button_color=("white","tan"))
 		if (x,y) in casillas_naranja:
 			window.FindElement(lcoord).Update("DP", button_color=("black", "#F4963E"))
 		if (x,y) in casillas_azules:
@@ -259,37 +261,55 @@ def main(args,tipoj):
 #	casillas_descuento = [(2,4), (2,10), (4,6), (10,6), (10,8), (12,4), (12,10), (7,1), (7,13), (1,7), (13,7), (4,2), (10,2), (4,12), (10,12), (6,4), (8,4), (6,10), (8,10), (4,8)]
 
 	letrasEnTablero = [] 
-	columna_1 = [
-        [sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre", background_color="#FFC0CB")],
-        [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel")],
-        [sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" )), sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
-        [sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
-        [sg.Text("Puntos Jugador", size=(16,1)), sg.Text("Puntos Compu")], 
-        [sg.Text(size=(15, 1), key="puntosJug", background_color="white"), sg.Text("", size=(1,1)), sg.Text(size=(15, 1), key="puntosPc", background_color="white")],
-        [sg.Text("Tiempo", justification="center")], [sg.Text(
-            size=(10, 2), font=('Helvetica', 20), justification='center', key='tiempo')],
-        [sg.Text("Computadora")],
-        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC2"), sg.Button(
-            "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC6")],
-        [sg.Text(" ", size=(1, 1))],
-        [sg.Text("Jugador")],
-        [sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button(
-            "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6")],
-        [sg.Text("", size=(1,1))],
-        [sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="insertar"), sg.Button("Cambio letras", size=(12, 1), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio"), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="pasar")],
-        [sg.Text("", size=(1,1))]
-    ]
-
-	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), 
-		button_color=("black", "tan")) for j in range(max_col)] for i in range(max_rows)]
-		
-	columna_2 = [[sg.Text("TURNO"),sg.Input(size=(15, 1), key="turno")],
+	
+	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False,enable_events=True, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), 
+		button_color=("white", "tan")) for j in range(max_col)] for i in range(max_rows)]
+	
+	columna_5 = [
+	            [sg.Text("Puntos Compu")],
+	            [sg.Text(size=(15, 1), key="puntosPc", background_color="white")]
+	            ]
+	
+	columna_4 = [
+	            [sg.Text("Puntos Jugador", size=(12,1))],
+	            [sg.Text(size=(15, 1), key="puntosJug", background_color="white")]
+	            ]
+	
+	columna_3 = [
+	            [sg.Text("        Tiempo", justification="center")],
+	            [sg.Text(size=(10, 2), font=('Helvetica', 15), justification='center', key='tiempo')]
+	            ]
+	
+	columna_2 = [
+	            [sg.Text("TURNO"),sg.Text(size=(15, 1), key="turno",background_color="#FFFFFF")],
+	            [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel",background_color="#FFFFFF")],
+	            [sg.Text("", size=(1,1))],
 				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras")],
-				[sg.Text("", size=(20,5), background_color="#EFE5C4", key="info")]
+				[sg.Text("", size=(20,5), background_color="#EFE5C4", key="info")],
+				[sg.Text(" ", size=(1, 1))],
+				[sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" ))],
+				[sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
+				[sg.Text(" ", size=(1, 1))],
+				[sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
 				]
+		
+	columna_1 = [
+	            [sg.Column(columna_4),sg.Column(columna_3),sg.Column(columna_5)],
+                [sg.Text("", size=(3,1)),sg.Text("Computadora")],
+                [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC2"), sg.Button(
+                 "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC6")],
+                [sg.Text(" ", size=(1, 1))],
+	            [sg.Text("", size=(3,1)),sg.Column(columna_tablero),sg.Text("", size=(3,1)),sg.Column(columna_2)],
+	            [sg.Text(" ", size=(1, 1))],
+	            [sg.Text("", size=(3,1)),sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre",background_color="#FFFFFF")],
+	            [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6"),sg.Text(" ", size=(1, 1)), sg.Button("Cambio letras", size=(12, 1), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio")],
+	            [sg.Text("", size=(1,1))],
+	            [sg.Text("", size=(8,1)),sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="insertar"),sg.Text(" ", size=(1, 1)), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="pasar")],
+	            [sg.Text("", size=(1,1))]
+	            ]
 				   
 	layout = [
-        [sg.Column(columna_tablero), sg.Column(columna_2), sg.Column(columna_1)]
+        [sg.Column(columna_1)]
 		]
 
 	window = sg.Window("::::::::: SCRABBLE AR :::::::::", layout)
@@ -329,7 +349,7 @@ def main(args,tipoj):
 	atrilC = jugadorC._atril
  
 	window["nivel"].update(jugada.get_nivel())	
-	window["nombre"].update(jugadorJ.get_nombre())
+	window["nombre"].update((jugadorJ.get_nombre()).upper())
 	window["puntosJug"].update(jugadorJ.get_puntaje())
 	window["puntosPc"].update(jugadorC.get_puntaje())
 	
@@ -373,6 +393,19 @@ def main(args,tipoj):
 			window["turno"].update(jugadorJ.get_nombre())
 			for i in range(len(atrilC)):
 				window.FindElement("LetraC" + str(i)).Update(disabled = True)
+			
+			window["finalizo"].update(disabled = False)
+			window["cambio"].update(disabled = False)
+			window["posponer"].update(disabled = False)
+			window["pasar"].update(disabled = False)
+			window["insertar"].update(disabled = False)
+			
+		elif jugadorC.get_turno():
+			window["finalizo"].update(disabled = True)
+			window["cambio"].update(disabled = True)
+			window["posponer"].update(disabled = True)
+			window["pasar"].update(disabled = True)
+			window["insertar"].update(disabled = True)
 			
 				
 		if contadorEleccionPalabra == duracion_elecc_palabra: #equivale a 3 min
