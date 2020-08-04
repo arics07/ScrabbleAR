@@ -66,13 +66,20 @@ def main():
 	  ]
 	window = sg.Window('Ingreso Juego').Layout(layout)
 
-	  
-	letrasD = { "A": {"cant":11,"puntos":1},"B":{"cant":3,"puntos":3},"C":{"cant":4,"puntos":2},"D":{"cant":4,"puntos":2},"E":{"cant":11,"puntos":1},"F":{"cant":2,"puntos":4},"G":{"cant":2,"puntos":2},
-	  "H":{"cant":2,"puntos":4},"I":{"cant":2,"puntos":1},"J":{"cant":2,"puntos":6},"K":{"cant":1,"puntos":8},"L":{"cant":4,"puntos":1},"LL":{"cant":1,"puntos":8},"M":{"cant":3,"puntos":3},"N":{"cant":5,"puntos":1},"Ñ":{"cant":1,"puntos":8},
-	  "O":{"cant":4,"puntos":1},"P":{"cant":2,"puntos":3},"Q":{"cant":1,"puntos":8},"R":{"cant":4,"puntos":1},"RR":{"cant":1,"puntos":8},"S":{"cant":7,"puntos":1},"T":{"cant":4,"puntos":1},"U":{"cant":6,"puntos":4},"V":{"cant":2,"puntos":4},
-	  "W":{"cant":1,"puntos":8},"X":{"cant":1,"puntos":8},"Y":{"cant":1,"puntos":4},"Z":{"cant":1,"puntos":10}}
-
-
+	try: 
+		with open('confi.pkl', 'rb') as f:
+			letrasD=dict(pickle.load(f))
+			f.close()
+			print("recupero",letrasD)
+	except:
+		letrasD = { "A": {"cant":11,"puntos":1},"B":{"cant":3,"puntos":3},"C":{"cant":4,"puntos":2},"D":{"cant":4,"puntos":2},"E":{"cant":11,"puntos":1},"F":{"cant":2,"puntos":4},"G":{"cant":2,"puntos":2},
+		"H":{"cant":2,"puntos":4},"I":{"cant":2,"puntos":1},"J":{"cant":2,"puntos":6},"K":{"cant":1,"puntos":8},"L":{"cant":4,"puntos":1},"LL":{"cant":1,"puntos":8},"M":{"cant":3,"puntos":3},"N":{"cant":5,"puntos":1},"Ñ":{"cant":1,"puntos":8},
+		"O":{"cant":4,"puntos":1},"P":{"cant":2,"puntos":3},"Q":{"cant":1,"puntos":8},"R":{"cant":4,"puntos":1},"RR":{"cant":1,"puntos":8},"S":{"cant":7,"puntos":1},"T":{"cant":4,"puntos":1},"U":{"cant":6,"puntos":4},"V":{"cant":2,"puntos":4},
+		"W":{"cant":1,"puntos":8},"X":{"cant":1,"puntos":8},"Y":{"cant":1,"puntos":4},"Z":{"cant":1,"puntos":10}}
+		with open('confi.pkl', 'wb') as f:
+			pickle.dump(letrasD, f, pickle.HIGHEST_PROTOCOL)
+			f.close()
+		print("guardo",letrasD)		
 
 	duracionJugada = {"F": {"horas":{"cant":1,"rango":(1,2)},"minutos":{"cant":0,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":45,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":30,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}}
 
@@ -82,8 +89,6 @@ def main():
 	duracionJugada_backup = copy.deepcopy(duracionJugada)
 	duracionEleccionPalabra_backup = copy.deepcopy(duracionEleccionPalabra)
 
-
-	  
 	while True: 
 		event, values=window.Read() 
 	  
@@ -93,15 +98,20 @@ def main():
 		if event == "Reanudar":
 			tiempoCorriendo = True
 			esPrimerJugada=False
-			with open('scrabble.pkl', 'rb') as input:
-				jugada = pickle.load(input)
-				print(jugada)
-			if not values["nom"] == jugada.get_jugadorJ().get_nombre():
-				sg.Popup("No puede reanudar ..es otro jugador")
-			else:			
-				window.close()  	
-				scrabble.main(jugada,"R")
-				break
+			try: 
+				with open('scrabble.pkl', 'rb') as input:
+					jugada = pickle.load(input)
+					input.close()
+					
+			except:
+				sg.Popup("No hay jugada guardada")	
+			else:	
+				if not values["nom"] == jugada.get_jugadorJ().get_nombre():
+					sg.Popup("No puede reanudar ..es otro jugador")
+				else:			
+					window.close()  	
+					scrabble.main(jugada,"R")
+					break
 			
 		if event == "Fácil":
 			nivel="F"
@@ -172,6 +182,7 @@ def main():
 				try: 
 					with open('topten.pkl', 'rb') as f:
 						topten=dict(pickle.load(f))
+						f.close()
 				except:
 					topten={}  
 				jugada.set_topten(topten)
