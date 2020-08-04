@@ -841,19 +841,19 @@ def main(args,tipoj):
 				else:
 					sg.Popup("ya hizo los 3 cambios permitidos")
 					
-					jugadorJ.set_dejarJugar()	
-					print(jugadorJ.get_turno())	
+				jugadorJ.set_dejarJugar()	
+				print(jugadorJ.get_turno())	
 					
-					window["turno"].update("COMPUTADORA")
-					jugadorJ.set_dejarJugar()
-					#print(jugadorJ.get_turno())
-					jugadorC.set_jugar()
-					turno_computadora = jugadorC.get_turno()
-					tiempoPensandoPC = True
-					#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					#print('turno despues de que volvi de jugada pc ', turno_computadora)
-					#window["turno"].update(jugadorJ.get_nombre())
-					#jugadorJ.set_jugar()					 
+				window["turno"].update("COMPUTADORA")
+				jugadorJ.set_dejarJugar()
+				#print(jugadorJ.get_turno())
+				jugadorC.set_jugar()
+				turno_computadora = jugadorC.get_turno()
+				tiempoPensandoPC = True
+				#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+				#print('turno despues de que volvi de jugada pc ', turno_computadora)
+				#window["turno"].update(jugadorJ.get_nombre())
+				#jugadorJ.set_jugar()					 
 			else:
 				sg.Popup("el atril no esta completo")	
 				
