@@ -93,6 +93,9 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		letra = matriz[x][y]
 		window.FindElement(lcoord).Update("")
 		window.FindElement((x,y)).Update(button_color=("white","tan"))
+		
+		if (x,y) == (7,7):
+			window.FindElement(lcoord).Update(button_color=("black", "gray"))
 		if (x,y) in casillas_naranja:
 			window.FindElement(lcoord).Update("DP", button_color=("black", "#F4963E"))
 		if (x,y) in casillas_azules:
@@ -110,6 +113,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 	for pos,val in datosEleccion.items() :
 		atrilJ[pos] = val
 		window.FindElement("Letra" + str(pos)).Update(val)
+		window.FindElement("Letra" + str(pos)).Update(disabled = False)
 	
 	listaCoordenadas = []
 		
@@ -147,15 +151,31 @@ def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, c
 	for cas in casillas_descuento:
 		window[cas].update("x", button_color=("black", "#F00F0F"))
 	
-def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas):
+def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,casillas_celeste,jugada):
 	"""Esta función devuelve la letra al atril si cambia de direccion (horizontal/vertical) mientras arma la palabra"""
-	sg.Popup('debes seguir horizontal!')
 	posKeys = len(datosEleccion)
 	pos = list(datosEleccion.keys())[posKeys-1]
 	window.FindElement(event).Update("")
+	
+	window.FindElement(event).Update(button_color=("black","tan"))
+	
+	if (x,y) == (7,7):
+		window.FindElement(lcoord).Update(button_color=("black", "gray"))
+	if event in casillas_naranja:
+		window.FindElement(event).Update("DP", button_color=("black", "#F4963E"))
+	if event in casillas_azules:
+		window.FindElement(event).Update("TL", button_color=("black", "#1A4C86"))
+	if event in casillas_rojas:
+		window.FindElement(event).Update("TP", button_color=("black", "#C91A4F"))
+	if jugada.get_nivel() == "D" and event in casillas_descuento:
+		window.FindElement(event).Update("x", button_color=("black", "#F00F0F"))
+	if jugada.get_nivel() == "F" and event in casillas_celeste:
+		window.FindElement(event).Update("DL", button_color=("black", "#4893E9"))
+	
 	listaCoordenadas.remove(event)
 	atrilJ[pos]= letraElegida
 	window.FindElement("Letra" + str(pos)).Update(letraElegida)
+	window.FindElement("Letra" + str(pos)).Update(disabled = False)
 	datosEleccion.pop(pos)
 	print(datosEleccion, letraElegida)
 	return datosEleccion
@@ -262,54 +282,55 @@ def main(args,tipoj):
 
 	letrasEnTablero = [] 
 	
-	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False,enable_events=True, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "tan" ), 
-		button_color=("white", "tan")) for j in range(max_col)] for i in range(max_rows)]
+	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False,enable_events=True, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "black" ), 
+		button_color=("white", "tan")) for i in range(max_col)] for j in range(max_rows)]
 	
 	columna_5 = [
 	            [sg.Text("Puntos Compu")],
-	            [sg.Text(size=(15, 1), key="puntosPc", background_color="white")]
+	            [sg.Text(size=(10, 1), key="puntosPc", background_color="white")]
 	            ]
 	
 	columna_4 = [
 	            [sg.Text("Puntos Jugador", size=(12,1))],
-	            [sg.Text(size=(15, 1), key="puntosJug", background_color="white")]
+	            [sg.Text(size=(10, 1), key="puntosJug", background_color="white")]
 	            ]
 	
 	columna_3 = [
-	            [sg.Text("        Tiempo", justification="center")],
-	            [sg.Text(size=(10, 2), font=('Helvetica', 15), justification='center', key='tiempo')]
+	            [sg.Text("              Tiempo", justification="center")],
+	            [sg.Text("", size=(1,1)),sg.Text(size=(10, 1), font=('Helvetica', 15), justification='center', key='tiempo')]
 	            ]
 	
 	columna_2 = [
-	            [sg.Text("TURNO"),sg.Text(size=(15, 1), key="turno",background_color="#FFFFFF")],
-	            [sg.Text("Nivel: "),sg.Text(size=(3,1), key="nivel",background_color="#FFFFFF")],
+	            [sg.Text("", size=(1,1)),sg.Column(columna_3)],
+	            [sg.Column(columna_4),sg.Column(columna_5)],
+	            [sg.Text("", size=(1,1))],
+	            [sg.Text("TURNO"),sg.Text(size=(18, 1), key="turno",background_color="#FFFFFF")],
+	            [sg.Text("Nivel:   "),sg.Text(size=(3,1), key="nivel",background_color="#FFFFFF")],
 	            [sg.Text("", size=(1,1))],
 				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras")],
-				[sg.Text("", size=(20,5), background_color="#EFE5C4", key="info")],
+				[sg.Text("", size=(26,5), background_color="#EFE5C4", key="info")],
 				[sg.Text(" ", size=(1, 1))],
-				[sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" ))],
-				[sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
+				[sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" )),sg.Text("", size=(1,1)),sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
 				[sg.Text(" ", size=(1, 1))],
 				[sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
 				]
 		
 	columna_1 = [
-	            [sg.Column(columna_4),sg.Column(columna_3),sg.Column(columna_5)],
                 [sg.Text("", size=(3,1)),sg.Text("Computadora")],
                 [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC2"), sg.Button(
                  "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC6")],
                 [sg.Text(" ", size=(1, 1))],
-	            [sg.Text("", size=(3,1)),sg.Column(columna_tablero),sg.Text("", size=(3,1)),sg.Column(columna_2)],
-	            [sg.Text(" ", size=(1, 1))],
+	            [sg.Text("", size=(3,1)),sg.Column(columna_tablero),sg.Text("", size=(3,1))],
+	            [sg.Text("", size=(1,1))],
 	            [sg.Text("", size=(3,1)),sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre",background_color="#FFFFFF")],
-	            [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6"),sg.Text(" ", size=(1, 1)), sg.Button("Cambio letras", size=(12, 1), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio")],
+	            [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6"),sg.Text(" ", size=(1, 1)), sg.Button("Cambio\nletras", size=(6, 2), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio")],
 	            [sg.Text("", size=(1,1))],
 	            [sg.Text("", size=(8,1)),sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="insertar"),sg.Text(" ", size=(1, 1)), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="pasar")],
 	            [sg.Text("", size=(1,1))]
 	            ]
 				   
 	layout = [
-        [sg.Column(columna_1)]
+        [sg.Column(columna_1),sg.Column(columna_2) ]
 		]
 
 	window = sg.Window("::::::::: SCRABBLE AR :::::::::", layout)
@@ -406,6 +427,14 @@ def main(args,tipoj):
 			window["posponer"].update(disabled = True)
 			window["pasar"].update(disabled = True)
 			window["insertar"].update(disabled = True)
+		
+		if jugadorJ.get_turno():
+			for i in range(len(atrilJ)):
+				window.FindElement("Letra" + str(i)).Update(disabled = False)
+		elif jugadorJ.get_turno() == False:
+			for i in range(len(atrilJ)):
+				window.FindElement("Letra" + str(i)).Update(disabled = True)
+			
 			
 				
 		if contadorEleccionPalabra == duracion_elecc_palabra: #equivale a 3 min
@@ -495,11 +524,11 @@ def main(args,tipoj):
 			elif len(listaCoordenadas) == 1:
 				
 				if event[0] == coordx:
-					esHorizontal = True
-					esvertical = False
-				else:
-					esVertical = True
 					esHorizontal = False
+					esVertical = True
+				else:
+					esVertical = False
+					esHorizontal = True
 				
 				listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
 
@@ -507,13 +536,15 @@ def main(args,tipoj):
 				
 				if esHorizontal:
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
-					if event[0] != coordx:
-						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
+					if event[1] != coordy:
+						sg.Popup('debes seguir horizontal!')
+						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,casillas_celeste,jugada)
 				
 				if esVertical:
 					listaCoordenadas = accion_tablero(window,event,listaCoordenadas,letraElegida,matriz)
-					if event[1] != coordy:
-						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas)
+					if event[0] != coordx:
+						sg.Popup('debes seguir vertical!')
+						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,casillas_celeste,jugada)
 			
 		if event == 'insertar':
 			print(esPrimerJugada)
@@ -595,15 +626,17 @@ def main(args,tipoj):
 						#print('lista coord ', listaCoordenadas)
 						#print('datos eleccion ', datosEleccion)
 						#print(atrilJ)
-						esPrimerJugada =False
+						esPrimerJugada =True
 						
-						sg.Popup('La palabra no es válida, turno de la computadora')
-						jugadorJ.set_dejarJugar()
+						window["info"].Update("La palabra {} no es válida, intente de nuevo.".format(palabra))
+						
+						#--sg.Popup('La palabra no es válida, turno de la computadora')
+						#--jugadorJ.set_dejarJugar()
 						#print(jugadorJ.get_turno())
-						jugadorC.set_jugar()
-						window["turno"].update("COMPUTADORA")
-						turno_computadora = jugadorC.get_turno()
-						tiempoPensandoPC = True
+						##--jugadorC.set_jugar()
+						##--window["turno"].update("COMPUTADORA")
+						##--turno_computadora = jugadorC.get_turno()
+						##--tiempoPensandoPC = True
 						#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 						#window["puntosPc"].update(jugadorC.get_puntaje())
 						#print('turno despues de que volvi de jugada pc ', turno_computadora)
@@ -699,14 +732,16 @@ def main(args,tipoj):
 					#print('datos eleccion ', datosEleccion)
 					print(atrilJ)
 					
-					sg.Popup('La palabra no es válida, turno de la computadora')
-					jugadorJ.set_dejarJugar()
+					window["info"].Update("La palabra {} no es válida, intente de nuevo.".format(palabra))
+					
+					##--sg.Popup('La palabra no es válida, turno de la computadora')
+					##--jugadorJ.set_dejarJugar()
 					#print(jugadorJ.get_turno())
-					jugadorC.set_jugar()
-					window["turno"].update("COMPUTADORA")
+					##--jugadorC.set_jugar()
+					##--window["turno"].update("COMPUTADORA")
 			
-					turno_computadora = jugadorC.get_turno()
-					tiempoPensandoPC = True
+					##--turno_computadora = jugadorC.get_turno()
+					##--tiempoPensandoPC = True
 					#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					#window["puntosPc"].update(jugadorC.get_puntaje())
 					#print('turno despues de que volvi de jugada pc ', turno_computadora)
@@ -796,8 +831,6 @@ def main(args,tipoj):
 			#letraElegida = ''
 			contadorPC +=1
 			tiempoPensandoPC,contadorPC,esPrimerJugada = compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_computadora,esPrimerJugada,window,jugadorC,validez,puntos,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada,jugadorJ)
-			for i in range(len(atrilJ)):
-				window.FindElement("Letra" + str(i)).Update(disabled = False)
 	  
 		if event == "cambio":
 			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
