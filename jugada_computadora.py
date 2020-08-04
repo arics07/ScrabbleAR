@@ -37,23 +37,57 @@ def lista_a_diccionario(listas_de_fichas,validez):
 	return dic_palabras	
 	
 def palabra_compu_FM(longitud, dic_palabras, atrilC):	
-	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F. Devuelve una
+	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F y M. Devuelve una
 	tupla que contiene la palabra elegida en la pos=0 y la lista con las fichas correspondientes en la pos=1"""
 	palabra_encontrada = ("",[])
 	if longitud in dic_palabras:
-		palabra_encontrada = dic_palabras[longitud][-1]
+		palabra_encontrada = dic_palabras[longitud][0]
 	else:
 		while longitud not in dic_palabras and longitud>1:
 			longitud = longitud - 1
 		if longitud>1 :
-			palabra_encontrada = dic_palabras[longitud][-1]		
+			palabra_encontrada = dic_palabras[longitud][0]		
 	#devuelve una tupla (palabra, [lista de fichas]
 	return palabra_encontrada
 
-
-#porque elige al azar si va a jugar la palabra en forma horizontal o vertical
-#direccion_palabra = {0:'horizontal', 1:'vertical'}
-
+def mejor_puntaje(lis_palabras, puntos):
+	"""Esta función elige la palabra que más puntaje aporta. La computadora la usa para jugar en el nivel D"""
+	print("listaaaa ",lis_palabras)
+	max_puntaje = -1
+	#i es una tupla
+	for i in lis_palabras:
+		puntaje_i = 0
+		for ficha in i[1]:
+			puntaje_i = puntaje_i + puntos.get(ficha)
+		if puntaje_i > max_puntaje:
+			max_puntaje = puntaje_i
+			max_tupla = i
+	return max_tupla
+						
+		
+def palabra_compu_D(longitud, dic_palabras, atrilC, puntos):	
+	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D. Devuelve una
+	tupla que contiene la palabra elegida en la pos=0 y la lista con las fichas correspondientes en la pos=1"""
+	palabra_encontrada = ("",[])
+	lis_palabras = []
+	for tam in dic_palabras:
+		if tam<=longitud:
+			lis_palabras.extend(dic_palabras[tam])
+		#me quedo con la que aporta mayor puntaje
+	palabra_encontrada = mejor_puntaje(lis_palabras, puntos)
+		####-------------------------####		
+#	else:
+#		while longitud not in dic_palabras and longitud>1:
+#			longitud = longitud - 1
+#		if longitud>1 :
+			#tomo la lista de palabras
+#			lis_palabras = dic_palabras[longitud]
+			#me quedo con la que aporta mayor puntaje
+#			palabra_encontrada = mejor_puntaje(lis_palabras, puntos)
+			####-------------------------####
+		
+	#devuelve una tupla (palabra, [lista de fichas]
+	return palabra_encontrada
 
 
 def cargar_tuplas_desocupadas(desocupadas):
@@ -82,15 +116,6 @@ def rellenar_atrilC(window,atrilC,letras):
 	print("relleno atrilC",atrilC)
 	return 
 	
-#def compu_pensando(nivel, window):
-#	window["info"].Update("La computadora está pensando...")
-#	if nivel=="F":
-#		tiempo = random.randint(7,9)
-#	elif nivel=="M":
-#		tiempo = random.randint(5,7)
-#	else:
-#		tiempo = random.randint(1,3)
-#	sleep(tiempo)
 
 def busca_pos(desocupadas):
 	"""Esta función devuelve una tupla (x,y), correspondiente a la key de un casillero vacío en el tablero"""
@@ -210,7 +235,10 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		
 		#si enocntró lugar, busca una palabra en su diccionario
 		#pack_palabra_encontrada tiene una tupla (string, [lista de fichas])
-		pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
+		if jugada.get_nivel() == "F" or jugada.get_nivel() == "M":
+			pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
+		elif jugada.get_nivel() == "D":
+			pack_palabra_encontrada = palabra_compu_D(espacios_libres, dicc, atrilC, puntos)
 		#palabra_encontrada tiene la lista con las fichas	
 		palabra_encontrada = pack_palabra_encontrada[1]
 		#print(palabra_encontrada) #control

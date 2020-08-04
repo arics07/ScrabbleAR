@@ -3,7 +3,7 @@ import scrabble
 import datetime
 import pickle
 import copy
-import random
+#import random
 from random import randint
 import jugada_computadora as jugadaPC
 from jugador import jugador
@@ -105,7 +105,7 @@ def main():
 			
 		if event == "Fácil":
 			nivel="F"
-			tiempoPensandoPC = random.randint(7,9)
+			tiempoPensandoPC = randint(7,9)
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
 			window["Comenzar"].Update(disabled=False)
@@ -119,7 +119,7 @@ def main():
 		  
 		if event == "Medio":
 			nivel="M"
-			tiempoPensandoPC = random.randint(5,7)
+			tiempoPensandoPC = randint(5,7)
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
 			window["Comenzar"].Update(disabled=False)
@@ -133,7 +133,7 @@ def main():
 		  
 		if event == "Difícil":
 			nivel="D"
-			tiempoPensandoPC = random.randint(1,3)
+			tiempoPensandoPC = randint(1,3)
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
 			window["Comenzar"].Update(disabled=False)
