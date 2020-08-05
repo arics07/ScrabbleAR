@@ -8,7 +8,7 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 	
 	columna1 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
-				[sg.Text("A", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["B"]["puntos"], size=(4,1), key=("A","p")), sg.Combo(interv_punt, default_value=letrasD["A"]["cant"], size=(4,1), key=("A","c"))],
+				[sg.Text("A", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["A"]["puntos"], size=(4,1), key=("A","p")), sg.Combo(interv_punt, default_value=letrasD["A"]["cant"], size=(4,1), key=("A","c"))],
 				[sg.Text("B", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["B"]["puntos"], size=(4,1), key=("B","p")), sg.Combo(interv_punt, default_value=letrasD["B"]["cant"], size=(4,1), key=("B","c"))],
 				[sg.Text("C", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["C"]["puntos"], size=(4,1), key=("C","p")), sg.Combo(interv_punt, default_value=letrasD["C"]["cant"], size=(4,1), key=("C","c"))],
 				[sg.Text("D", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["D"]["puntos"], size=(4,1), key=("D","p")), sg.Combo(interv_punt, default_value=letrasD["D"]["cant"], size=(4,1), key=("D","c"))],
