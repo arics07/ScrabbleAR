@@ -2,16 +2,20 @@ import PySimpleGUI as sg
 import copy
 
 def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,nivel,letrasD,duracionJugada,duracionEleccionPalabra,letras_backup,duracionJugada_backup,duracionEleccionPalabra_backup,datosSlierRango2,datosSliderValorDefault2,valorDefCombo2):
+	
+	interv_cant = list(range(1,51))
+	interv_punt = list(range(1,21))
+	
 	columna1 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
-				[sg.Text("A", size=(4,1)), sg.Input(letrasD["A"]["puntos"], size=(6,1), key=("A","p")), sg.Input(letrasD["A"]["cant"], size=(6,1), key=("A","c"))],
-				[sg.Text("B", size=(4,1)), sg.Input(letrasD["B"]["puntos"], size=(6,1), key=("B","p")), sg.Input(letrasD["B"]["cant"], size=(6,1), key=("B","c"))],
-				[sg.Text("C", size=(4,1)), sg.Input(letrasD["C"]["puntos"], size=(6,1), key=("C","p")), sg.Input(letrasD["C"]["cant"], size=(6,1), key=("C","c"))],
-				[sg.Text("D", size=(4,1)), sg.Input(letrasD["D"]["puntos"], size=(6,1), key=("D","p")), sg.Input(letrasD["D"]["cant"], size=(6,1), key=("D","c"))],
-				[sg.Text("E", size=(4,1)), sg.Input(letrasD["E"]["puntos"], size=(6,1), key=("E","p")), sg.Input(letrasD["E"]["cant"], size=(6,1), key=("E","c"))],
-				[sg.Text("F", size=(4,1)), sg.Input(letrasD["F"]["puntos"], size=(6,1), key=("F","p")), sg.Input(letrasD["F"]["cant"], size=(6,1), key=("F","c"))],
-				[sg.Text("G", size=(4,1)), sg.Input(letrasD["G"]["puntos"], size=(6,1), key=("G","p")), sg.Input(letrasD["G"]["cant"], size=(6,1), key=("G","c"))],
-				[sg.Text("H", size=(4,1)), sg.Input(letrasD["H"]["puntos"], size=(6,1), key=("H","p")), sg.Input(letrasD["H"]["cant"], size=(6,1), key=("H","c"))],
+				[sg.Text("A", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["B"]["puntos"], size=(4,1), key=("A","p")), sg.Combo(interv_punt, default_value=letrasD["A"]["cant"], size=(4,1), key=("A","c"))],
+				[sg.Text("B", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["B"]["puntos"], size=(4,1), key=("B","p")), sg.Combo(interv_punt, default_value=letrasD["B"]["cant"], size=(4,1), key=("B","c"))],
+				[sg.Text("C", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["C"]["puntos"], size=(4,1), key=("C","p")), sg.Combo(interv_punt, default_value=letrasD["C"]["cant"], size=(4,1), key=("C","c"))],
+				[sg.Text("D", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["D"]["puntos"], size=(4,1), key=("D","p")), sg.Combo(interv_punt, default_value=letrasD["D"]["cant"], size=(4,1), key=("D","c"))],
+				[sg.Text("E", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["E"]["puntos"], size=(4,1), key=("E","p")), sg.Combo(interv_punt, default_value=letrasD["E"]["cant"], size=(4,1), key=("E","c"))],
+				[sg.Text("F", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["F"]["puntos"], size=(4,1), key=("F","p")), sg.Combo(interv_punt, default_value=letrasD["F"]["cant"], size=(4,1), key=("F","c"))],
+				[sg.Text("G", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["G"]["puntos"], size=(4,1), key=("G","p")), sg.Combo(interv_punt, default_value=letrasD["G"]["cant"], size=(4,1), key=("G","c"))],
+				[sg.Text("H", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["H"]["puntos"], size=(4,1), key=("H","p")), sg.Combo(interv_punt, default_value=letrasD["H"]["cant"], size=(4,1), key=("H","c"))],
 				[sg.Text("")],
 				[sg.Text("Duración jugada")],
 				[sg.Combo(["Horas", "Minutos","Segundos"],default_value=valorDefCombo, key="combo",enable_events=True)],
@@ -20,14 +24,14 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 	               
 	columna2 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
-				[sg.Text("I", size=(4,1)), sg.Input(letrasD["I"]["puntos"], size=(6,1), key=("I","p")), sg.Input(letrasD["I"]["cant"], size=(6,1), key=("I","c"))],
-				[sg.Text("J", size=(4,1)), sg.Input(letrasD["J"]["puntos"], size=(6,1), key=("J","p")), sg.Input(letrasD["J"]["cant"], size=(6,1), key=("J","c"))],
-				[sg.Text("K", size=(4,1)), sg.Input(letrasD["K"]["puntos"], size=(6,1), key=("K","p")), sg.Input(letrasD["K"]["cant"], size=(6,1), key=("K","c"))],
-				[sg.Text("L", size=(4,1)), sg.Input(letrasD["L"]["puntos"], size=(6,1), key=("L","p")), sg.Input(letrasD["L"]["cant"], size=(6,1), key=("L","c"))],
-				[sg.Text("LL", size=(4,1)), sg.Input(letrasD["LL"]["puntos"], size=(6,1), key=("LL","p")), sg.Input(letrasD["LL"]["cant"], size=(6,1), key=("LL","c"))],
-				[sg.Text("M", size=(4,1)), sg.Input(letrasD["M"]["puntos"], size=(6,1), key=("M","p")), sg.Input(letrasD["M"]["cant"], size=(6,1), key=("M","c"))],
-				[sg.Text("N", size=(4,1)), sg.Input(letrasD["N"]["puntos"], size=(6,1), key=("N","p")), sg.Input(letrasD["N"]["cant"], size=(6,1), key=("N","c"))],
-				[sg.Text("Ñ", size=(4,1)), sg.Input(letrasD["Ñ"]["puntos"], size=(6,1), key=("Ñ","p")), sg.Input(letrasD["Ñ"]["cant"], size=(6,1), key=("Ñ","c"))],
+				[sg.Text("I", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["I"]["puntos"], size=(4,1), key=("I","p")), sg.Combo(interv_punt, default_value=letrasD["I"]["cant"], size=(4,1), key=("I","c"))],
+				[sg.Text("J", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["J"]["puntos"], size=(4,1), key=("J","p")), sg.Combo(interv_punt, default_value=letrasD["J"]["cant"], size=(4,1), key=("J","c"))],
+				[sg.Text("K", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["K"]["puntos"], size=(4,1), key=("K","p")), sg.Combo(interv_punt, default_value=letrasD["K"]["cant"], size=(4,1), key=("K","c"))],
+				[sg.Text("L", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["L"]["puntos"], size=(4,1), key=("L","p")), sg.Combo(interv_punt, default_value=letrasD["L"]["cant"], size=(4,1), key=("L","c"))],
+				[sg.Text("LL", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["LL"]["puntos"], size=(4,1), key=("LL","p")), sg.Combo(interv_punt, default_value=letrasD["LL"]["cant"], size=(4,1), key=("LL","c"))],
+				[sg.Text("M", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["M"]["puntos"], size=(4,1), key=("M","p")), sg.Combo(interv_punt, default_value=letrasD["M"]["cant"], size=(4,1), key=("M","c"))],
+				[sg.Text("N", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["N"]["puntos"], size=(4,1), key=("N","p")), sg.Combo(interv_punt, default_value=letrasD["N"]["cant"], size=(4,1), key=("N","c"))],
+				[sg.Text("Ñ", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["Ñ"]["puntos"], size=(4,1), key=("Ñ","p")), sg.Combo(interv_punt, default_value=letrasD["Ñ"]["cant"], size=(4,1), key=("Ñ","c"))],
 				[sg.Text("")],
 				[sg.Text("Duración elección palabra")],
 				[sg.Combo(["Minutos","Segundos"],default_value=valorDefCombo2, key="combo2",enable_events=True)],
@@ -36,23 +40,23 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 	               
 	columna3 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
-				[sg.Text("O", size=(4,1)), sg.Input(letrasD["O"]["puntos"], size=(6,1), key=("O","p")), sg.Input(letrasD["O"]["cant"], size=(6,1), key=("O","c"))],
-				[sg.Text("P", size=(4,1)), sg.Input(letrasD["P"]["puntos"], size=(6,1), key=("P","p")), sg.Input(letrasD["P"]["cant"], size=(6,1), key=("P","c"))],
-				[sg.Text("Q", size=(4,1)), sg.Input(letrasD["Q"]["puntos"], size=(6,1), key=("Q","p")), sg.Input(letrasD["Q"]["cant"], size=(6,1), key=("Q","c"))],
-				[sg.Text("R", size=(4,1)), sg.Input(letrasD["R"]["puntos"], size=(6,1), key=("R","p")), sg.Input(letrasD["R"]["cant"], size=(6,1), key=("R","c"))],
-				[sg.Text("RR", size=(4,1)), sg.Input(letrasD["RR"]["puntos"], size=(6,1), key=("RR","p")), sg.Input(letrasD["RR"]["cant"], size=(6,1), key=("RR","c"))],
-				[sg.Text("S", size=(4,1)), sg.Input(letrasD["S"]["puntos"], size=(6,1), key=("S","p")), sg.Input(letrasD["S"]["cant"], size=(6,1), key=("S","c"))],
-				[sg.Text("T", size=(4,1)), sg.Input(letrasD["T"]["puntos"], size=(6,1), key=("T","p")), sg.Input(letrasD["T"]["cant"], size=(6,1), key=("T","c"))],
-				[sg.Text("U", size=(4,1)), sg.Input(letrasD["U"]["puntos"], size=(6,1), key=("U","p")), sg.Input(letrasD["U"]["cant"], size=(6,1), key=("U","c"))]
+				[sg.Text("O", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["O"]["puntos"], size=(4,1), key=("O","p")), sg.Combo(interv_punt, default_value=letrasD["O"]["cant"], size=(4,1), key=("O","c"))],
+				[sg.Text("P", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["P"]["puntos"], size=(4,1), key=("P","p")), sg.Combo(interv_punt, default_value=letrasD["P"]["cant"], size=(4,1), key=("P","c"))],
+				[sg.Text("Q", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["Q"]["puntos"], size=(4,1), key=("Q","p")), sg.Combo(interv_punt, default_value=letrasD["Q"]["cant"], size=(4,1), key=("Q","c"))],
+				[sg.Text("R", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["R"]["puntos"], size=(4,1), key=("R","p")), sg.Combo(interv_punt, default_value=letrasD["R"]["cant"], size=(4,1), key=("R","c"))],
+				[sg.Text("RR", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["RR"]["puntos"], size=(4,1), key=("RR","p")), sg.Combo(interv_punt, default_value=letrasD["RR"]["cant"], size=(4,1), key=("RR","c"))],
+				[sg.Text("S", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["S"]["puntos"], size=(4,1), key=("S","p")), sg.Combo(interv_punt, default_value=letrasD["S"]["cant"], size=(4,1), key=("S","c"))],
+				[sg.Text("T", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["T"]["puntos"], size=(4,1), key=("T","p")), sg.Combo(interv_punt, default_value=letrasD["T"]["cant"], size=(4,1), key=("T","c"))],
+				[sg.Text("U", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["U"]["puntos"], size=(4,1), key=("U","p")), sg.Combo(interv_punt, default_value=letrasD["U"]["cant"], size=(4,1), key=("U","c"))]
 				]
 	               
 	columna4 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
-				[sg.Text("V", size=(4,1)), sg.Input(letrasD["V"]["puntos"], size=(6,1), key=("V","p")), sg.Input(letrasD["V"]["cant"], size=(6,1), key=("V","c"))],
-				[sg.Text("W", size=(4,1)), sg.Input(letrasD["W"]["puntos"], size=(6,1), key=("W","p")), sg.Input(letrasD["W"]["cant"], size=(6,1), key=("W","c"))],
-				[sg.Text("X", size=(4,1)), sg.Input(letrasD["X"]["puntos"], size=(6,1), key=("X","p")), sg.Input(letrasD["X"]["cant"], size=(6,1), key=("X","c"))],
-				[sg.Text("Y", size=(4,1)), sg.Input(letrasD["Y"]["puntos"], size=(6,1), key=("Y","p")), sg.Input(letrasD["Y"]["cant"], size=(6,1), key=("Y","c"))],
-				[sg.Text("Z", size=(4,1)), sg.Input(letrasD["Z"]["puntos"], size=(6,1), key=("Z","p")), sg.Input(letrasD["Z"]["cant"], size=(6,1), key=("Z","c"))]
+				[sg.Text("V", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["V"]["puntos"], size=(4,1), key=("V","p")), sg.Combo(interv_punt, default_value=letrasD["V"]["cant"], size=(4,1), key=("V","c"))],
+				[sg.Text("W", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["W"]["puntos"], size=(4,1), key=("W","p")), sg.Combo(interv_punt, default_value=letrasD["W"]["cant"], size=(4,1), key=("W","c"))],
+				[sg.Text("X", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["X"]["puntos"], size=(4,1), key=("X","p")), sg.Combo(interv_punt, default_value=letrasD["X"]["cant"], size=(4,1), key=("X","c"))],
+				[sg.Text("Y", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["Y"]["puntos"], size=(4,1), key=("Y","p")), sg.Combo(interv_punt, default_value=letrasD["Y"]["cant"], size=(4,1), key=("Y","c"))],
+				[sg.Text("Z", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["Z"]["puntos"], size=(4,1), key=("Z","p")), sg.Combo(interv_punt, default_value=letrasD["Z"]["cant"], size=(4,1), key=("Z","c"))]
 				  ] 
 	               
 	columnas_config = [[sg.Text("Puede haber hasta 20 fichas de cada letra. Los puntos pueden tomar valores entre 0 y 50.", text_color="blue")],
@@ -128,23 +132,24 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 			#--------------------------------------------------------------------------------------------------------------------
 			
 			for let in letrasD:
-				if int(values[(let,"c")])>=0 and int(values[(let,"c")])<=20:
-					try:
+				try:
+					if int(values[(let,"c")])>0 and int(values[(let,"c")])<=20:
 						letrasD[let]["cant"] = int(values[(let,"c")])
-					except:
-						letrasD[let]["cant"] = letras_backup[let]["cant"]
+					else:
 						sin_errores=False
-				else:
+				except:
+					letrasD[let]["cant"] = letras_backup[let]["cant"]
 					sin_errores=False
-					  
-				if int(values[(let,"p")])>=0 and int(values[(let,"p")])<=50:
-					try:
+				
+				try:
+					if int(values[(let,"p")])>0 and int(values[(let,"p")])<=50:
 						letrasD[let]["puntos"] = int(values[(let,"p")])
-					except:
-						letrasD[let]["puntos"] = letras_backup[let]["puntos"]
+					else:
 						sin_errores=False
-				else:
+				except:
+					letrasD[let]["puntos"] = letras_backup[let]["puntos"]
 					sin_errores=False
+				
 			if sin_errores==False:
 				sg.popup("Algunos de los valores no se modificaron porque no se ingresaron valores correctos")
 			  #-------------------------------------------------------------------------------
