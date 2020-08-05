@@ -68,22 +68,41 @@ def main():
 
 	try: 
 		with open('confi.pkl', 'rb') as f:
-			letrasD=dict(pickle.load(f))
+			confi=dict(pickle.load(f))
 			f.close()
-			print("recupero",letrasD)
+			
+		print(confi)
+			
+		letrasD=confi["letrasD"]
+		duracionJugada=confi["duracionJugada"]
+		duracionEleccionPalabra=confi["duracionElecccionPalabra"]
+		
+		print("existe")
+		print("letrasD",letrasD)
+		print("duracionJugada",duracionJugada)
+		print("duracionEleccionPalabra",duracionEleccionPalabra)
+			
 	except:
+		
 		letrasD = { "A": {"cant":11,"puntos":1},"B":{"cant":3,"puntos":3},"C":{"cant":4,"puntos":2},"D":{"cant":4,"puntos":2},"E":{"cant":11,"puntos":1},"F":{"cant":2,"puntos":4},"G":{"cant":2,"puntos":2},
 		"H":{"cant":2,"puntos":4},"I":{"cant":2,"puntos":1},"J":{"cant":2,"puntos":6},"K":{"cant":1,"puntos":8},"L":{"cant":4,"puntos":1},"LL":{"cant":1,"puntos":8},"M":{"cant":3,"puntos":3},"N":{"cant":5,"puntos":1},"Ñ":{"cant":1,"puntos":8},
 		"O":{"cant":4,"puntos":1},"P":{"cant":2,"puntos":3},"Q":{"cant":1,"puntos":8},"R":{"cant":4,"puntos":1},"RR":{"cant":1,"puntos":8},"S":{"cant":7,"puntos":1},"T":{"cant":4,"puntos":1},"U":{"cant":6,"puntos":4},"V":{"cant":2,"puntos":4},
 		"W":{"cant":1,"puntos":8},"X":{"cant":1,"puntos":8},"Y":{"cant":1,"puntos":4},"Z":{"cant":1,"puntos":10}}
+		
+		duracionJugada = {"F": {"horas":{"cant":1,"rango":(1,2)},"minutos":{"cant":0,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":45,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":30,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}}
+
+		duracionEleccionPalabra = {"F": {"minutos":{"cant":3,"rango":(1,5)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"minutos":{"cant":2,"rango":(1,4)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"minutos":{"cant":1,"rango":(1,3)},"segundos":{"cant":0,"rango":(1,59)}}}
+		
+		confi={'letrasD': letrasD, 'duracionJugada': duracionJugada, "duracionEleccionPalabra":duracionEleccionPalabra}
+			
 		with open('confi.pkl', 'wb') as f:
-			pickle.dump(letrasD, f, pickle.HIGHEST_PROTOCOL)
+			pickle.dump(confi, f)
 			f.close()
-		print("guardo",letrasD)		
+		print("guardo con",confi)		
 
-	duracionJugada = {"F": {"horas":{"cant":1,"rango":(1,2)},"minutos":{"cant":0,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":45,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":30,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}}
+	#duracionJugada = {"F": {"horas":{"cant":1,"rango":(1,2)},"minutos":{"cant":0,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":45,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"horas":{"cant":0,"rango":(1,2)},"minutos":{"cant":30,"rango":(1,59)},"segundos":{"cant":0,"rango":(1,59)}}}
 
-	duracionEleccionPalabra = {"F": {"minutos":{"cant":3,"rango":(1,5)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"minutos":{"cant":2,"rango":(1,4)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"minutos":{"cant":1,"rango":(1,3)},"segundos":{"cant":0,"rango":(1,59)}}}
+	#duracionEleccionPalabra = {"F": {"minutos":{"cant":3,"rango":(1,5)},"segundos":{"cant":0,"rango":(1,59)}}, "M": {"minutos":{"cant":2,"rango":(1,4)},"segundos":{"cant":0,"rango":(1,59)}},"D":{"minutos":{"cant":1,"rango":(1,3)},"segundos":{"cant":0,"rango":(1,59)}}}
 
 	letras_backup = copy.deepcopy(letrasD)
 	duracionJugada_backup = copy.deepcopy(duracionJugada)
@@ -102,7 +121,7 @@ def main():
 				with open('scrabble.pkl', 'rb') as input:
 					jugada = pickle.load(input)
 					input.close()
-					
+		
 			except:
 				sg.Popup("No hay jugada guardada")	
 			else:	
