@@ -6,20 +6,20 @@ import fin_del_juego as pantalla_final
 lista_atril = []
 
 #lista_atril es una lista con las letras
-def combinaciones(lista_atril):
+def permutaciones(lista_atril):
 	"""Esta función crea todas las permutaciones con las fichas que la computadora
 	tiene en su atril"""
 	listas_de_fichas = []
 	for n in range(2,len(lista_atril)+1):
 		a= it.permutations(lista_atril, n)
 		listas_de_fichas.extend(a)
-	print("control permutaciones ", len(listas_de_fichas))
+	listas_de_fichas = list(set(listas_de_fichas))
+#	print("control permutaciones ", len(listas_de_fichas))
 	return listas_de_fichas	
 	    
 def lista_a_diccionario(listas_de_fichas,validez):
 	""" Esta función devuelve un diccionario cuya clave es el tamaño 
-	de la palabra y el valor es una tupla que almacena la palabra en la pos=0 
-	y la lista con las fichas correspondientes en la pos=1"""
+	de la palabra (cantidad de fichas, no de letras) y el valor es una lista con las fichas correspondientes a la palabra (en orden)"""
 	dic_palabras = {}
 	#comb es una lista con las fichas
 	for comb in listas_de_fichas:
@@ -28,11 +28,12 @@ def lista_a_diccionario(listas_de_fichas,validez):
 			validez = ppattern.analizar_palabra_pat(word, validez)
 #			print("control analiza todas ", word,validez)
 			if validez == True:
-				tamanio = len(word)
+				tamanio = len(comb)
 				if tamanio in dic_palabras:
-					dic_palabras[tamanio].append((word, comb))
+					dic_palabras[tamanio].append(comb)
 				else:
-					dic_palabras[tamanio] = [(word, comb)]
+					dic_palabras[tamanio] = [comb]
+	#control
 	print("diccionario ", dic_palabras)
 	return dic_palabras	
 	
@@ -47,7 +48,7 @@ def palabra_compu_FM(longitud, dic_palabras, atrilC):
 			longitud = longitud - 1
 		if longitud>1 :
 			palabra_encontrada = dic_palabras[longitud][0]		
-	#devuelve una tupla (palabra, [lista de fichas]
+	#devuelve una [lista de fichas]
 	return palabra_encontrada
 
 def mejor_puntaje(lis_palabras, puntos):
@@ -57,36 +58,23 @@ def mejor_puntaje(lis_palabras, puntos):
 	#i es una tupla
 	for i in lis_palabras:
 		puntaje_i = 0
-		for ficha in i[1]:
+		for ficha in i:
 			puntaje_i = puntaje_i + puntos.get(ficha)
 		if puntaje_i > max_puntaje:
 			max_puntaje = puntaje_i
-			max_tupla = i
-	return max_tupla
+			max_pal = i
+	return max_pal
 						
 		
 def palabra_compu_D(longitud, dic_palabras, atrilC, puntos):	
-	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D. Devuelve una
-	tupla que contiene la palabra elegida en la pos=0 y la lista con las fichas correspondientes en la pos=1"""
+	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D. De todas las palabras que puede jugar elige la que aporta mayor puntaje"""
 	palabra_encontrada = ("",[])
 	lis_palabras = []
 	for tam in dic_palabras:
 		if tam<=longitud:
 			lis_palabras.extend(dic_palabras[tam])
-		#me quedo con la que aporta mayor puntaje
+	#me quedo con la que aporta mayor puntaje
 	palabra_encontrada = mejor_puntaje(lis_palabras, puntos)
-		####-------------------------####		
-#	else:
-#		while longitud not in dic_palabras and longitud>1:
-#			longitud = longitud - 1
-#		if longitud>1 :
-			#tomo la lista de palabras
-#			lis_palabras = dic_palabras[longitud]
-			#me quedo con la que aporta mayor puntaje
-#			palabra_encontrada = mejor_puntaje(lis_palabras, puntos)
-			####-------------------------####
-		
-	#devuelve una tupla (palabra, [lista de fichas]
 	return palabra_encontrada
 
 
@@ -162,33 +150,29 @@ def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casi
 #	print("args",args)
 	if coord in casillas_azules: 
 		p=p*3
-		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
 	if nivel == "F" and coord in args[0]: 
 		p=p*2
-		#print("letra",letra,"x",coord_x,"y",coord_y,"triplica")
 	if nivel == "D" and coord in args[0]:
 		p=(-1)*p
-		#print("letra",letra,"x",coord_x,"y",coord_y,"descuenta")
 	if coord in casillas_rojas:
 		triplica = True
 	if coord in casillas_naranja:
 		duplica = True
+	#control
 	print("coord, dupl, tripl ", p,duplica,triplica)
 	return p,duplica,triplica
 		
 
 def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
-	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige al azar si va a jugar horizonal o verticalmente, cuanta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar."""
+	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige si va a jugar horizonal o verticalmente (la mejor opción), cuenta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar. Para el nivel D además elige la palabra de mayor puntaje. En caso de no poder palabra en un casillero por falta de espacio, busca otro (intenta 20 veces)"""
 	atrilC=jugadorC.get_atril()
 	matriz=jugada.get_matriz()
 	desocupadas = jugada.get_desocupadas()
-	#print(desocupadas)
-#	window["turno"].Update("COMPUTADORA")
+
 	if turno_computadora == True:		
-		#compu_pensando(jugada.get_nivel(), window)
 		
 		#creo diccionario con las palabras validas
-		dicc = lista_a_diccionario(combinaciones(atrilC),validez)  ######******######******######******#######****
+		dicc = lista_a_diccionario(permutaciones(atrilC),validez)  
 		
 		#si el diccionario está vacío, no puede formar ninguna palabra --> termina la partida
 		if len(dicc) == 0:
@@ -203,12 +187,11 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 	
 		#busca una posicion en el tablero al azar
 		x,y = busca_pos(desocupadas)
-		#print('x= ', x, 'y=', y)  #control
+		#print('x= ', x, 'y=', y)  
 
 		#guardo los valores x e y de la key del casillero inicial
 		coord_x, coord_y = x, y  
 
-######-------------------------------------------------------------------------------------------
 		#veo si puedo poner una palabra en ese casillero
 		espacios_libres, direc = analizo_casillero(x,y,desocupadas)
 		
@@ -234,13 +217,13 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 				pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
 		
 		#si enocntró lugar, busca una palabra en su diccionario
-		#pack_palabra_encontrada tiene una tupla (string, [lista de fichas])
+		#palabra_encontrada es una [lista de fichas]
 		if jugada.get_nivel() == "F" or jugada.get_nivel() == "M":
-			pack_palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
+			palabra_encontrada = palabra_compu_FM(espacios_libres, dicc, atrilC)
 		elif jugada.get_nivel() == "D":
-			pack_palabra_encontrada = palabra_compu_D(espacios_libres, dicc, atrilC, puntos)
+			palabra_encontrada = palabra_compu_D(espacios_libres, dicc, atrilC, puntos)
 		#palabra_encontrada tiene la lista con las fichas	
-		palabra_encontrada = pack_palabra_encontrada[1]
+#		palabra_encontrada = pack_palabra_encontrada[1]
 		#print(palabra_encontrada) #control
 		ptos=jugadorC.get_puntaje()
 		
@@ -267,12 +250,10 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 			if jugada.get_nivel() == "D":	
 				p,duplica,triplica=calcular_puntos_letras(puntos.get(letra),(coord_x,coord_y),jugada.get_nivel(),duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,casillas_descuento)
 					
-			puntaje=puntaje+p
-					
+			puntaje=puntaje+p					
 			#print((coord_x,coord_y))
 			desocupadas.remove((coord_x, coord_y))
-			jugada.set_desocupadas(desocupadas)
-			
+			jugada.set_desocupadas(desocupadas)			
 			#print(" desocupadas en jugada pc ", desocupadas)
 			
 			if direc == "horizontal":
@@ -287,16 +268,13 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 					
 		ptos = ptos + puntaje
 		
-		#window["puntosPC"].Update(ptos)
 		#informa 
-		if pack_palabra_encontrada[0] != "":
-			window["info"].Update("La computadora jugó la palabra {} y sumó {} puntos.".format(pack_palabra_encontrada[0], puntaje))
+		if palabra_encontrada != "":
+			window["info"].Update("La computadora jugó la palabra {} y sumó {} puntos.".format("".join(palabra_encontrada), puntaje))
 			
 		jugadorC.set_puntaje(ptos)
 #		else:
 #			window["info"].Update("La computadora pasó su turno")
-
-					
 					
 	#se actualizan los datos y se termina el turno de la computadora
 	turno_computadora = False	
@@ -312,5 +290,4 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		window["tot_letras"].Update(len(letras))
 		jugadorC.set_atril(atrilC)
 		jugadorC.set_dejarJugar()
-#		window["turno"].Update("")
 		return turno_computadora
