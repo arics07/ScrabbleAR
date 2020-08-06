@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import copy
 
 def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letras_backup,duracionJugada_backup,duracionEleccionPalabra_backup):
+	"""Esta función muestra una ventana que permite cambiar la configuración tanto de las fichas como del tiempo de juego."""
 	
 	interv_cant = list(range(1,51))
 	interv_punt = list(range(1,21))

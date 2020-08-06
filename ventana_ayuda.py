@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 
 def ayuda_al_jugador():
-	
+	"""Esta función abre una ventana que indica al jugador cómo poner una palabra en el tablero, cómo usar los botones 'Insertar Palabra', 'Cambio Letras' y 'Pasar', y muestra información de los casilleros del tablero."""
 	sg.theme("GreenTan")
 	
 	layout=[
