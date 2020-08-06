@@ -65,10 +65,12 @@ def main():
 	  ]
 	window = sg.Window('Ingreso Juego').Layout(layout)
 
-#	try: 
-	with open('confi.pkl', 'rb') as f:
-		confi=dict(pickle.load(f))
-		f.close()
+	try: 
+		with open('confi.pkl', 'rb') as f:
+			confi=dict(pickle.load(f))
+			f.close()
+	except:
+		sg.Popup("No se encontró el archivo confi.pkl")
 			
 	print(confi)
 			
@@ -142,13 +144,13 @@ def main():
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
 			window["Comenzar"].Update(disabled=False)
-			datosSlierRango = duracionJugada[nivel]["horas"]["rango"]
-			datosSliderValorDefault= duracionJugada[nivel]["horas"]["cant"]
-			datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
-			datosSliderValorDefault2 = duracionEleccionPalabra[nivel]["minutos"]["cant"]
+			#datosSlierRango = duracionJugada[nivel]["horas"]["rango"]
+			#datosSliderValorDefault= duracionJugada[nivel]["horas"]["cant"]
+			#datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
+			#datosSliderValorDefault2 = duracionEleccionPalabra[nivel]["minutos"]["cant"]
 			
-			valorDefCombo = "Horas"
-			valorDefCombo2 = "Minutos"
+			#valorDefCombo = "Horas"
+			#valorDefCombo2 = "Minutos"
 		  
 		if event == "Medio":
 			nivel="M"
@@ -156,13 +158,13 @@ def main():
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
 			window["Comenzar"].Update(disabled=False)
-			datosSlierRango = duracionJugada[nivel]["minutos"]["rango"]
-			datosSliderValorDefault= duracionJugada[nivel]["minutos"]["cant"]
-			datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
-			datosSliderValorDefault2 = duracionEleccionPalabra[nivel]["minutos"]["cant"]
+			#datosSlierRango = duracionJugada[nivel]["minutos"]["rango"]
+			#datosSliderValorDefault= duracionJugada[nivel]["minutos"]["cant"]
+			#datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
+			#datosSliderValorDefault2 = duracionEleccionPalabra[nivel]["minutos"]["cant"]
 			
 			valorDefCombo = "Minutos"
-			valorDefCombo2 = "Minutos"
+			#valorDefCombo2 = "Minutos"
 		  
 		if event == "Difícil":
 			nivel="D"
@@ -170,13 +172,13 @@ def main():
 			window["niv"].Update(nivel)
 			window["Configurar"].Update(disabled=False)
 			window["Comenzar"].Update(disabled=False)
-			datosSlierRango = duracionJugada[nivel]["minutos"]["rango"]
-			datosSliderValorDefault= duracionJugada[nivel]["minutos"]["cant"]
-			datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
-			datosSliderValorDefault2 = duracionEleccionPalabra[nivel]["minutos"]["cant"]
+			#datosSlierRango = duracionJugada[nivel]["minutos"]["rango"]
+			#datosSliderValorDefault= duracionJugada[nivel]["minutos"]["cant"]
+			#datosSlierRango2 = duracionEleccionPalabra[nivel]["minutos"]["rango"]
+			#datosSliderValorDefault2 = duracionEleccionPalabra[nivel]["minutos"]["cant"]
 			
-			valorDefCombo = "Minutos"
-			valorDefCombo2 = "Minutos"
+			#valorDefCombo = "Minutos"
+			#valorDefCombo2 = "Minutos"
 	  
 		if event == "Comenzar":  
 			if values["nom"] == "":
@@ -207,13 +209,14 @@ def main():
 						topten=dict(pickle.load(f))
 						f.close()
 				except:
+					sg.Popup("No hay datos de de TopTen")
 					topten={}  
 				jugada.set_topten(topten)
 				scrabble.main(jugada,"C")
 				break
 		  
 		if event == "Configurar":
-			nivel,letrasD,duracionJugada,duracionEleccionPalabra= conf.programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,nivel,letrasD,duracionJugada,duracionEleccionPalabra,letras_backup,duracionJugada_backup,duracionEleccionPalabra_backup,datosSlierRango2,datosSliderValorDefault2,valorDefCombo2)
+			nivel,letrasD,duracionJugada,duracionEleccionPalabra= conf.programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letras_backup,duracionJugada_backup,duracionEleccionPalabra_backup)
 			print(duracionJugada)
 
 if __name__ == '__main__':

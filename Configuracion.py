@@ -1,10 +1,15 @@
 import PySimpleGUI as sg
 import copy
 
-def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,nivel,letrasD,duracionJugada,duracionEleccionPalabra,letras_backup,duracionJugada_backup,duracionEleccionPalabra_backup,datosSlierRango2,datosSliderValorDefault2,valorDefCombo2):
+def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letras_backup,duracionJugada_backup,duracionEleccionPalabra_backup):
 	
 	interv_cant = list(range(1,51))
 	interv_punt = list(range(1,21))
+	
+	if nivel == "F":
+		num = 0
+	else:
+		num = 1
 	
 	columna1 = [
 				[sg.Text("Letra", size=(4,1)), sg.Text("Puntos", size=(6,1)), sg.Text("Cantidad", size=(7,1))], 
@@ -18,8 +23,8 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 				[sg.Text("H", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["H"]["puntos"], size=(4,1), key=("H","p")), sg.Combo(interv_punt, default_value=letrasD["H"]["cant"], size=(4,1), key=("H","c"))],
 				[sg.Text("")],
 				[sg.Text("Duración jugada")],
-				[sg.Combo(["Horas", "Minutos","Segundos"],default_value=valorDefCombo, key="combo",enable_events=True)],
-				[sg.Slider(range=(datosSlierRango),default_value=datosSliderValorDefault,size=(20,15),orientation='horizontal',key="slider",enable_events=True)]
+				[sg.Combo(["Horas", "Minutos","Segundos"],default_value=(list(duracionJugada[nivel].keys())[num]).capitalize(), key="combo",enable_events=True)],
+				[sg.Slider(range=(duracionJugada[nivel][list(duracionJugada[nivel].keys())[num]]["rango"]),default_value=duracionJugada[nivel][list(duracionJugada[nivel].keys())[num]]["cant"],size=(20,15),orientation='horizontal',key="slider",enable_events=True)]
 				]
 	               
 	columna2 = [
@@ -34,8 +39,8 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 				[sg.Text("Ñ", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["Ñ"]["puntos"], size=(4,1), key=("Ñ","p")), sg.Combo(interv_punt, default_value=letrasD["Ñ"]["cant"], size=(4,1), key=("Ñ","c"))],
 				[sg.Text("")],
 				[sg.Text("Duración elección palabra")],
-				[sg.Combo(["Minutos","Segundos"],default_value=valorDefCombo2, key="combo2",enable_events=True)],
-				[sg.Slider(range=(datosSlierRango2),default_value=datosSliderValorDefault2,size=(20,15),orientation='horizontal',key="slider2",enable_events=True)]
+				[sg.Combo(["Minutos","Segundos"],default_value=(list(duracionEleccionPalabra[nivel].keys())[0]).capitalize(), key="combo2",enable_events=True)],
+				[sg.Slider(range=(duracionEleccionPalabra[nivel]["minutos"]["rango"]),default_value=duracionEleccionPalabra[nivel]["minutos"]["cant"],size=(20,15),orientation='horizontal',key="slider2",enable_events=True)]
 				]
 	               
 	columna3 = [
@@ -71,6 +76,9 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 	  
 	while config:
 		event, values = window.Read()
+		#pos = list(duracionJugada[nivel].keys())
+		
+		#print ("combooo1  ", values["combo"], "  combooo2  ", values["combo2"],"  pooos ", pos[0])
 	
 		if values["combo"] == "Horas":
 			window.FindElement("slider").Update(range = duracionJugada[nivel]["horas"]["rango"])
@@ -110,6 +118,7 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 					duracionJugada[nivel]["segundos"]["cant"] = int(values["slider"])
 					duracionJugada[nivel]["horas"]["cant"] = 0
 					duracionJugada[nivel]["minutos"]["cant"] = 0
+				
 			except:
 				duracionJugada[nivel]["horas"]["cant"] = duracionJugada_backup[nivel]["horas"]["cant"]
 				duracionJugada[nivel]["minutos"]["cant"] = duracionJugada_backup[nivel]["minutos"]["cant"]
@@ -170,25 +179,21 @@ def programa_principal(valorDefCombo,datosSlierRango,datosSliderValorDefault,niv
 			duracionJugada = copy.deepcopy(duracionJugada_backup)
 			duracionEleccionPalabra =copy.deepcopy(duracionEleccionPalabra_backup)
 			
-			window.FindElement("slider").Update(range = duracionJugada[nivel]["horas"]["rango"])
-			window.FindElement("slider2").Update(range = duracionEleccionPalabra[nivel]["minutos"]["rango"])
+			if nivel == "F":
+				window["slider"].Update(duracionJugada[nivel]["horas"]["cant"])
+				window["slider2"].Update(duracionEleccionPalabra[nivel]["minutos"]["cant"])
+				window["slider"].Update(duracionJugada[nivel]["horas"]["rango"])
+				window["slider2"].Update(duracionEleccionPalabra[nivel]["minutos"]["rango"])
+				window["combo"].Update((list(duracionJugada[nivel].keys())[num]).capitalize())
+				window["combo2"].Update((list(duracionEleccionPalabra[nivel].keys())[num]).capitalize())
 			
-			#if nivel == "F":
-				#valorDefCombo = "Horas"
-				#window["combo"].Update(default_value=valorDefCombo)
-				
-			#if nivel == "M":
-				#valorDefCombo2 = "Minutos"
-				#window["combo2"].Update(default_value=valorDefCombo2)
-				#valorDefCombo = "Minutos"
-				#window["combo"].Update(default_value=valorDefCombo)
-			
-			#if nivel == "D":
-				#valorDefCombo2 = "Minutos"
-				#window["combo2"].Update(default_value=valorDefCombo2)
-				#valorDefCombo = "Minutos"
-				#window["combo"].Update(default_value=valorDefCombo)
-
+			if nivel == "M" or nivel == "D":
+				window["slider"].Update(duracionJugada[nivel]["minutos"]["cant"])
+				window["slider2"].Update(duracionEleccionPalabra[nivel]["minutos"]["cant"])
+				window["slider"].Update(duracionJugada[nivel]["minutos"]["rango"])
+				window["slider2"].Update(duracionEleccionPalabra[nivel]["minutos"]["rango"])
+				window["combo"].Update((list(duracionJugada[nivel].keys())[1]).capitalize())
+				window["combo2"].Update((list(duracionEleccionPalabra[nivel].keys())[0]).capitalize())
 			
 			for let in letrasD:
 				window[(let,"c")].Update(letrasD[let]["cant"])

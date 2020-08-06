@@ -281,7 +281,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 	try:
 		rellenar_atrilC(window,atrilC,letras)
 	except:
-		print("Terminó la partida porque no hay más letras en la bolsa")
+		sg.Popup("No hay más letras en la bolsa.Finalizó la partida")
 		window.close()
 		#SE TERMINÓ LA PARTIDA porque no se puede rellenar el atril
 		pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
