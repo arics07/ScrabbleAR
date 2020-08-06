@@ -64,7 +64,7 @@ def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letr
 				[sg.Text("Z", size=(4,1)), sg.Combo(interv_cant, default_value=letrasD["Z"]["puntos"], size=(4,1), key=("Z","p")), sg.Combo(interv_punt, default_value=letrasD["Z"]["cant"], size=(4,1), key=("Z","c"))]
 				  ] 
 	               
-	columnas_config = [[sg.Text("Puede haber hasta 20 fichas de cada letra. Los puntos pueden tomar valores entre 0 y 50.", text_color="blue")],
+	columnas_config = [[sg.Text("Puede haber hasta 20 fichas de cada letra. Los puntos pueden tomar valores entre 0 y 50.", background_color="#F0F553", font=("Helvetica",12))],
 				[sg.Column(columna1), sg.Column(columna2), sg.Column(columna3), sg.Column(columna4)],
 				[sg.Button("Guardar"), sg.Button("Reset")]
 				]

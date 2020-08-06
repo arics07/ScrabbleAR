@@ -33,4 +33,3 @@ def ayuda_al_jugador():
 		if event =="salir":
 			windowAyuda.close()
 
-ayuda_al_jugador()
