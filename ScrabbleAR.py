@@ -52,8 +52,10 @@ def main():
 	nom=""
 	nivel=""
 	tiempoPensandoPC=0
-	layout=[[sg.Text('Jugador')],
-	  [sg.InputText(key='nom',size=(29,3)),sg.Button("Reanudar",size=(20,1))],
+	layout=[
+	  [sg.Text("ScrabbleAR", font=("Helvetica",25))],
+	  [sg.Text("Jugador")],
+	  [sg.InputText(key="nom",size=(29,3)),sg.Button("Reanudar",size=(20,1))],
 	  [sg.Text("Elegir nivel:")],
 	  [sg.Text("",size=(1,1)), sg.Button("Fácil",size=(20,1))],
 	  [sg.Text("",size=(1,1)), sg.Button("Medio",size=(20,1))],

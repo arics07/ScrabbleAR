@@ -5,6 +5,7 @@ import random
 import pickle
 import fin_del_juego as pantalla_final
 from datetime import date
+import ventana_ayuda
 
  
 def verTopTen(topt):
@@ -330,7 +331,7 @@ def main(args,tipoj):
 				[sg.Text(" ", size=(1, 1))],
 				[sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" )),sg.Text("", size=(1,1)),sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
 				[sg.Text(" ", size=(1, 1))],
-				[sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
+				[sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo"), sg.Button("Ayuda", size=(10,1))],
 				]
 		
 	columna_1 = [
@@ -850,6 +851,9 @@ def main(args,tipoj):
 				break
 			except:
 				sg.Popup("No se guardó correctamente la partida")
+		
+		if event == "ayuda":
+			ventana_ayuda.ayuda_al_jugador()
 				
 		if tiempoCorriendo: 
 			window["tiempo"].update("{:02d}:{:02d}:{:02d}".format((contador // 1000) // 360,(contador // 100) // 60, (contador // 100) % 60))
