@@ -6,7 +6,6 @@ import pickle
 import fin_del_juego as pantalla_final
 from datetime import date
 import ventana_ayuda
-
  
 def verTopTen(topt):
 	"""Esta función retorna la informacion de topTen para visualizar cuando se clickea el botón."""
@@ -22,11 +21,11 @@ def verTopTen(topt):
 
 def muestro_matriz(matriz,window):
 	"""Esta función completa el tablero con la información de la partida que fue pospuesta."""
-	print(matriz)
 	for x in range(15):
 		for y in range(15):
 			if not matriz[x][y] == 0:
 				window.FindElement((x,y)).Update(matriz[x][y],disabled = True)
+				window.FindElement((x,y)).Update(button_color=("white","black"))
 
 def muestro_l(window,atril): 
 	"""Esta función visualiza la letra sobre el boton del atril del jugador."""
@@ -124,15 +123,6 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 	listaCoordenadas = []
 	datosEleccion = {}
 		
-	#for indice in range(len(atrilJ)):
-		#if atrilJ[indice]== 0:
-			#valor = random.choice(guardoLetrasTemporal)
-			#atrilJ[indice]= valor
-			#guardoLetrasTemporal.remove(valor)
-			#window.FindElement("Letra" + str(indice)).Update(valor)
-	#unionLetras = []
-	#listaCoordenadas = []
-	#print(listaCoordenadas)
 	return listaCoordenadas,datosEleccion
 
 def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
@@ -184,70 +174,7 @@ def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,l
 	window.FindElement("Letra" + str(pos)).Update(letraElegida)
 	window.FindElement("Letra" + str(pos)).Update(disabled = False)
 	datosEleccion.pop(pos)
-	print(datosEleccion, letraElegida)
 	return datosEleccion
-
-#def inicializar_casillas_azules():
-#	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color azul"""
-#	casillas = []
-#	num = [1,5,9,13]
-#	for i in num:
-#		for j in num:
-#			if not ((i==1 and j ==1) or (i==13 and j==13)):
-#				casillas.append((i,j))
-#	return casillas
-	
-#def inicializar_casillas_rojas():
-#	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color rojo"""
-#	casillas = []
-#	num = [0,7,14]
-#	for i in num:
-#		for j in num:
-#			if not (i==7 and j==7):
-#				casillas.append((i,j))
-#	return casillas
-
-#def inicializar_casillas_celeste():
-#	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color celeste"""
-#	casillas = []
-#	num_1 = [2,6,8,12]
-#	num_2 = [4,10]
-#	for n in num_1:
-#		for m in num_2:
-#			casillas.append((m,n))
-#			casillas.append((n,m))
-#	num_3 = [1,13]
-#	for n in num_3:
-#		casillas.append((7,n))
-#		casillas.append((n,7))
-#	return casillas
-	
-	
-#def inicializar_casillas_naranja():
-#	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color celeste"""
-#	casillas = []
-#	num = [1,2,3,4,6,8,10,11,12,13]
-#	n=-1
-#	for i in num:
-#		 casillas.append((i,i))
-#		 casillas.append((i,num[n]))
-#		 n = n-1			 
-#	return casillas
-	
-#def inicializar_casillas_descuento():
-#	"""Esta función devuelve una lista que contiene las tuplas correspondientes a las key de los botones del tablero que se verán de color rojo y descontarán puntos"""
-#	casillas = []
-#	num_1 = [2,6,8,12]
-#	num_2 = [4,10]
-#	for i in num_1:
-#		for n in num_2:
-#			casillas.append((i,n))
-#			casillas.append((n,i))
-#	num_3 = [1,3,11,13]
-#	for i in num_3:
-#		casillas.append((i,7))
-#		casillas.append((7,i))			
-#	return casillas
 
 def compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_computadora,esPrimerJugada,window,jugadorC,validez,puntos,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada,jugadorJ):
 	"""Esta función ejecuta el módulo de a computadora una vez terminado el tiempo para pensar. Retorna los valores reiniciados de tiempoPensandoPC, contadorPC y esPrimerJugada."""
@@ -267,26 +194,11 @@ def main(args,tipoj):
 	
 	puntos=jugada.get_puntos()
 	letras = jugada.get_letras()
-	#jugada.get_nivel()
-	#jugada.set_fecha(date.today())
-	#turno = jugada.get_turno()
 	
 	sg.theme("GreenTan")
 
 	max_col = max_rows = 15
 	
-#	casillas_azules = inicializar_casillas_azules()
-#	casillas_rojas = inicializar_casillas_rojas()
-#	casillas_celeste = inicializar_casillas_celeste()
-#	casillas_naranja = inicializar_casillas_naranja()
-#	casillas_descuento = inicializar_casillas_descuento()
-	
-#	casillas_azules = [(1,5), (1,9), (5,1), (5,5), (5,9),(5,13), (9,1), (9,5), (9,9), (9,13), (13,5), (13,9)]
-#	casillas_rojas = [(0,0), (0,7), (0,14), (7,0),(7,14), (14,0), (14,7), (14,14)]
-#	casillas_celeste = [(0,3), (0,11), (2,6), (2,8), (3,0), (3,7), (3,14), (6,2), (6,6), (6,8), (6,12), (7,3), (7,11), (8,2), (8,6), (8,8), (8,12), (11,0), (11,7), (11,14), (12,6), (12,8), (14,3), (14,11)]
-#	casillas_naranja = [(1,1), (2,2), (3,3), (4,4), (6,6), (8,8), (10,10), (11,11), (12,12), (13,13), (13,1), (12,2), (11,3), (10,4), (8,6), (6,8), (4,10), (3,11), (2,12), (1,13)]
-#	casillas_descuento = [(2,4), (2,10), (4,6), (10,6), (10,8), (12,4), (12,10), (7,1), (7,13), (1,7), (13,7), (4,2), (10,2), (4,12), (10,12), (6,4), (8,4), (6,10), (8,10), (4,8), (0,2), (2,0), (3,7), (7,3), (11,7), (7,11), (0,12), (12,0), (14,12), (12,14), (2,14)]
-
 	try:
 		with open('confi.pkl', 'rb') as f:
 			confi=dict(pickle.load(f))
@@ -371,18 +283,13 @@ def main(args,tipoj):
 	desocupadas = jugada.get_desocupadas()
 	
 	listaCoordenadas = []
-	#matriz=[]
 	
 	datosEleccion = {}
 	datosEleccionC = {}
 	esValida = False
 	esHorizontal = False
 	esVertical = False
-#	primerTurno = jugada.get_primerTurno()
-#	triplica = False
-#	niv = jugada.get_nivel()
-	
-	#unionLetras = []
+
 	atrilJ = jugadorJ._atril
 	atrilC = jugadorC._atril
  
@@ -411,10 +318,8 @@ def main(args,tipoj):
 		
 	muestro_l(window,jugadorJ.get_atril())
 	muestro_lc(window,jugadorC.get_atril())
-	#jugadorJ.set_turno = True
 	jugadorJ.set_jugar()
 	tiempoCorriendo = True 
-	#esPrimerJugada = True
 	validez = False
 	nombreGanador = ''
 	
@@ -423,7 +328,6 @@ def main(args,tipoj):
 		
 		if event == None:
 			break
-		#print("primer jugada ", esPrimerJugada)
 			
 		tiempoEleccionPalabra = True
 		
@@ -451,35 +355,21 @@ def main(args,tipoj):
 		elif jugadorJ.get_turno() == False:
 			for i in range(len(atrilJ)):
 				window.FindElement("Letra" + str(i)).Update(disabled = True)
-			
-			
 				
 		if contadorEleccionPalabra == duracion_elecc_palabra: 
 			tiempoEleccionPalabra = False
 			contadorEleccionPalabra = 0
 			window["turno"].update("COMPUTADORA")
 			jugadorJ.set_dejarJugar()
-			#print(jugadorJ.get_turno())
 			jugadorC.set_jugar()
 			turno_computadora = jugadorC.get_turno()
 			tiempoPensandoPC = True
-			#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-			#print('turno despues de que volvi de jugada pc ', turno_computadora)
-			#window["puntosPc"].update(jugadorC.get_puntaje())
-			#window["turno"].update(jugadorJ.get_nombre())
-			#jugadorJ.set_jugar()
 			
 		if primerTurno=="computadora" and esPrimerJugada==True:
-			#for i in range(len(atrilJ)):
-				#window.FindElement("Letra" + str(i)).Update(disabled = True)
 			window["turno"].update("COMPUTADORA")
 			jugadorC.set_jugar()
-			#print(jugadorC.get_turno())
 			turno_computadora = jugadorC.get_turno()
 			tiempoPensandoPC = True
-			#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-			#window["puntosPc"].update(jugadorC.get_puntaje())
-			#esPrimerJugada=False
   
 		if event == 'Letra0':
 			letraElegida = accion_atril(window,atrilJ,0,event,datosEleccion)
@@ -564,7 +454,6 @@ def main(args,tipoj):
 						datosEleccion= no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,casillas_celeste,jugada)
 			
 		if event == 'insertar':
-			print(esPrimerJugada)
 			if esPrimerJugada:
 				if (7,7) in listaCoordenadas:
 					esHorizontal = False
@@ -581,7 +470,6 @@ def main(args,tipoj):
 						desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
 						jugada.set_desocupadas(desocupadas)
 
-						#ptos=int(values["puntosJug"])
 						ptos = jugadorJ.get_puntaje()
 						puntaje = 0
 						duplica = False
@@ -591,19 +479,12 @@ def main(args,tipoj):
 							y=lcoord[1]
 							letra = matriz[x][y]	
 							p=puntos.get(letra)	
-							#print("letra",letra,"puntos",p)
-#							if (x,y) in casillas_naranja:
-#								p=p*2
-#								print("letra",letra,"x",x,"y",y,"duplica")  
 							if (x,y) in casillas_azules: 
 								p=p*3						
-								print("letra",letra,"x",x,"y",y,"triplica")
 							if jugada.get_nivel() == "F" and (x,y) in casillas_celeste: 
 								p=p*2
-								print("letra",letra,"x",x,"y",y,"triplica")
 							if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 								p=(-1)*p
-								print("letra",letra,"x",x,"y",y,"descuenta")
 							if (x,y) in casillas_rojas:
 								triplica = True
 							if (x,y) in casillas_naranja:
@@ -620,9 +501,6 @@ def main(args,tipoj):
 						listaCoordenadas = []
 						window["tot_letras"].Update(len(letras))
 
-						#for j in palabra:
-						#	ptos=ptos+puntos.get(j)
-									
 						window["puntosJug"].update(ptos)
 						window["infoJ"].Update("{} jugó la palabra {} y sumó {} puntos.".format((jugadorJ.get_nombre()).upper(),palabra, puntaje))
 						
@@ -631,44 +509,17 @@ def main(args,tipoj):
 						esPrimerJugada = False
 						window["turno"].update("COMPUTADORA")
 						jugadorC.set_jugar()
-						#print(jugadorC.get_turno())
 						turno_computadora = jugadorC.get_turno()
 						tiempoPensandoPC = True
-						#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-						#window["puntosPc"].update(jugadorC.get_puntaje())
-						#print('turno despues de que volvi de jugada pc ', turno_computadora)
-						#jugadorJ.set_jugar()
 					else:
 						listaCoordenadas,datosEleccion = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-						#datosEleccion = {}
-						#print('lista coord ', listaCoordenadas)
-						#print('datos eleccion ', datosEleccion)
-						#print(atrilJ)
 						esPrimerJugada =True
 						
 						window["infoJ"].Update("La palabra {} no es válida, intente de nuevo.".format(palabra))
 						
-						#--sg.Popup('La palabra no es válida, turno de la computadora')
-						#--jugadorJ.set_dejarJugar()
-						#print(jugadorJ.get_turno())
-						##--jugadorC.set_jugar()
-						##--window["turno"].update("COMPUTADORA")
-						##--turno_computadora = jugadorC.get_turno()
-						##--tiempoPensandoPC = True
-						#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-						#window["puntosPc"].update(jugadorC.get_puntaje())
-						#print('turno despues de que volvi de jugada pc ', turno_computadora)
-						#window["turno"].update(jugadorJ.get_nombre())
-						#jugadorJ.set_jugar()
 				else:
 					sg.Popup('La palabra debe pasar por el botón del centro!')
-					#print('estoy en el else de no esta en el centro')
-					#print('datos eleccion ', datosEleccion)
 					listaCoordenadas,datosEleccion = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					#datosEleccion = {}
-					#print('lista coord ', listaCoordenadas)
-					#print('datos eleccion ', datosEleccion)
-					#print("atrilJ",atrilJ)
 					esPrimerJugada =True
 			else:
 				esHorizontal = False
@@ -692,9 +543,6 @@ def main(args,tipoj):
 					desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
 					jugada.set_desocupadas(desocupadas)
 					
-					#print(listaCoordenadas)
-					
-					#ptos=int(values["puntosJug"])
 					ptos = jugadorJ.get_puntaje()	
 					puntaje = 0	
 					triplica = False
@@ -705,20 +553,12 @@ def main(args,tipoj):
 						letra = matriz[x][y]	
 						p=puntos.get(letra)						
 						
-#						print("letra",letra,"puntos",p)
-#						if (x,y) in casillas_naranja:
-#								p=p*2
-#							print("letra",letra,"x",x,"y",y,"duplica")  
-						
 						if (x,y) in casillas_azules: 
 							p=p*3						
-							print("letra",letra,"x",x,"y",y,"triplica")
 						if jugada.get_nivel() == "F" and (x,y) in casillas_celeste: 
 							p=p*2
-							print("letra",letra,"x",x,"y",y,"triplica")
 						if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
 							p=(-1)*p
-							print("letra",letra,"x",x,"y",y,"descuenta")
 						
 						if (x,y) in casillas_rojas:
 								triplica = True
@@ -747,54 +587,19 @@ def main(args,tipoj):
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
 					tiempoPensandoPC = True
-					#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					#window["puntosPc"].update(jugadorC.get_puntaje())
-					#print('turno despues de que volvi de jugada pc ', turno_computadora)
-					#window["turno"].update(jugadorJ.get_nombre())
-					#jugadorJ.set_jugar()
 				else:
 					listaCoordenadas,datosEleccion= devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					#datosEleccion = {}
-					#print('lista coord ', listaCoordenadas)
-					#print('datos eleccion ', datosEleccion)
-					print(atrilJ)
 					
 					window["infoJ"].Update("La palabra {} no es válida, intente de nuevo.".format(palabra))
 					
-					##--sg.Popup('La palabra no es válida, turno de la computadora')
-					##--jugadorJ.set_dejarJugar()
-					#print(jugadorJ.get_turno())
-					##--jugadorC.set_jugar()
-					##--window["turno"].update("COMPUTADORA")
-			
-					##--turno_computadora = jugadorC.get_turno()
-					##--tiempoPensandoPC = True
-					#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					#window["puntosPc"].update(jugadorC.get_puntaje())
-					#print('turno despues de que volvi de jugada pc ', turno_computadora)
-					#window["turno"].update(jugadorJ.get_nombre())
-					#jugadorJ.set_jugar()
-			print(esPrimerJugada)
-			
 		if event == 'pasar':
 			jugadorJ.set_dejarJugar()
-			#print(jugadorJ.get_turno())
-			#abiri modulo compu
 			window["infoJ"].Update("Pasaste el turno.")
 			jugadorC.set_jugar()
 			turno_computadora = jugadorC.get_turno()
 			#print('turno pc ', turno_computadora)
 			window["turno"].update(jugadorC.get_nombre())
 			tiempoPensandoPC = True
-			#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-			#print("esprimer",esPrimerJugada)
-			#print("puntaje",jugadorC.get_puntaje())
-			#esPrimerJugada=False
-			#print("esprimer",esPrimerJugada)	
-			#window["puntosPc"].update(jugadorC.get_puntaje())
-			#print('turno despues de que volvi de jugada pc ', turno_computadora)
-			#window["turno"].update(jugadorJ.get_nombre())
-			#jugadorJ.set_jugar()
 											
 		if event == "finalizo" or contador == duracion_jugada:
 			window.close()
@@ -864,48 +669,35 @@ def main(args,tipoj):
 		
 		if tiempoPensandoPC:
 			window["info"].Update("La computadora está pensando...")
-			#letraElegida = ''
 			contadorPC +=1
 			tiempoPensandoPC,contadorPC,esPrimerJugada = compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_computadora,esPrimerJugada,window,jugadorC,validez,puntos,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada,jugadorJ)
 	  
 		if event == "cambio":
 			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
-				if jugada.get_cantCambios()<3:
-					jugadorJ.cambioL(letras,jugadorJ.get_atril(),window)
-					#print(jugadorJ.get_atril())
-					jugada.sumarCambio()
-					window["infoJ"].Update("Cambiaste las letras de tu atril. Es turno de la computadora.")
-					
+				letras={"A","B","C","v","q","d"}
+				print(len(letras))
+				if len(letras)<7:
+					sg.Popup("la bolsa de letras tiene menos de 7 letras")
 				else:
-					sg.Popup("ya hizo los 3 cambios permitidos")
-					window["cambio"].update(disabled = True)
+					if jugada.get_cantCambios()<3:
+						jugadorJ.cambioL(letras,jugadorJ.get_atril(),window)
+						jugada.sumarCambio()
+						window["infoJ"].Update("Cambiaste las letras de tu atril. Es turno de la computadora.")
 					
-				jugadorJ.set_dejarJugar()	
-				#print(jugadorJ.get_turno())	
+					else:
+						sg.Popup("ya hizo los 3 cambios permitidos")
+						window["cambio"].update(disabled = True)
 					
-				window["turno"].update("COMPUTADORA")
-				#jugadorJ.set_dejarJugar()
-				#print(jugadorJ.get_turno())
-				jugadorC.set_jugar()
-				turno_computadora = jugadorC.get_turno()
-				tiempoPensandoPC = True
+					jugadorJ.set_dejarJugar()	
+			
+					window["turno"].update("COMPUTADORA")
+					jugadorC.set_jugar()
+					turno_computadora = jugadorC.get_turno()
+					tiempoPensandoPC = True
 				
-				#turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-				#print('turno despues de que volvi de jugada pc ', turno_computadora)
-				#window["turno"].update(jugadorJ.get_nombre())
-				#jugadorJ.set_jugar()					 
 			else:
 				sg.Popup("el atril no esta completo")	
 				
-#		if primerTurno=="computadora" and esPrimerJugada==True:
-#			window["turno"].update("COMPUTADORA")
-#			jugadorC.set_jugar()
-			#print(jugadorC.get_turno())
-#			turno_computadora = jugadorC.get_turno()
-#			turno_computadora = jugadaPC.programaPrincipal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-#			window["puntosPc"].update(jugadorC.get_puntaje())
-#			esPrimerJugada=False			 	
-	
 	window.close() 	 
 	
  
