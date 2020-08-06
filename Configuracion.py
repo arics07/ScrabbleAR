@@ -140,6 +140,8 @@ def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letr
 				duracionEleccionPalabra[nivel]["segundos"]["cant"] = duracionEleccionPalabra_backup[nivel]["segundos"]["cant"]
 			
 			#--------------------------------------------------------------------------------------------------------------------
+			conf_erronea_c = []
+			conf_erronea_p = []
 			
 			for let in letrasD:
 				try:
@@ -147,21 +149,35 @@ def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letr
 						letrasD[let]["cant"] = int(values[(let,"c")])
 					else:
 						sin_errores=False
+						dato = "".join([let, " "])
+						conf_erronea_c.append(dato)
 				except:
 					letrasD[let]["cant"] = letras_backup[let]["cant"]
 					sin_errores=False
+					dato = "".join([let, " "])
+					conf_erronea_c.append(dato)
 				
 				try:
 					if int(values[(let,"p")])>0 and int(values[(let,"p")])<=50:
 						letrasD[let]["puntos"] = int(values[(let,"p")])
 					else:
 						sin_errores=False
+						dato = "".join([let, " "])
+						conf_erronea_p.append(dato)
 				except:
 					letrasD[let]["puntos"] = letras_backup[let]["puntos"]
 					sin_errores=False
+					dato = "".join([let, " "])
+					conf_erronea_p.append(dato)
 				
-			if sin_errores==False:
-				sg.popup("Algunos de los valores no se modificaron porque no se ingresaron valores correctos")
+			if sin_errores:
+				sg.popup("La configuración se guradó correctamente", font=("Helvetica", 12))
+			else:
+				err_c = "".join(conf_erronea_c)
+				err_p = "".join(conf_erronea_p)
+				aviso = "La configuración de las siguientes letras NO se modificó correctamente \nporque no se ingresaron valores correctos: \n \nCantidad de letras: {cantidadd} \n \nPuntos: {puntoss} \n".format(cantidadd=err_c, puntoss=err_p)
+				sg.popup(aviso , font=("Helvetica",12))
+			  
 			  #-------------------------------------------------------------------------------
 			  #Actualizo la lista letras y el diccionario puntos
 			  #letras = inicializar_letras(letrasD)
