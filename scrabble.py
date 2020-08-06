@@ -77,7 +77,7 @@ def armar_palabra(listaCoordenadas,matriz):
 	pal=(''.join(unionLetras)).lower()
 	return pal
 	
-def rellenar_atril(window,atrilJ,letras):
+def rellenar_atril(window,atrilJ,letras,datosEleccion):
 	"""Esta función rellena los espacios vacios del atril después de haber colocado una palabra en el tablero y corroborar que es válida.Retorna el atril modificado"""
 	for indice in range(len(atrilJ)):
 		if atrilJ[indice] == 0:
@@ -85,7 +85,10 @@ def rellenar_atril(window,atrilJ,letras):
 			atrilJ[indice] = letra
 			window.FindElement("Letra" + str(indice)).Update(letra)
 			letras.remove(letra)
-	return atrilJ
+	
+	datosEleccion = {}
+	
+	return atrilJ,datosEleccion
 	
 def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
 	"""Esta función devuelve las letras al atril si la palabra no es válida o, si es primer jugada y no coloco la palabra en el centro. Limpia el tablero y renueva el string de los casilleros especiales la palabra pasó por uno de ellos.Retorna la lista de coordenadas vacía """
@@ -119,6 +122,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		window.FindElement("Letra" + str(pos)).Update(disabled = False)
 	
 	listaCoordenadas = []
+	datosEleccion = {}
 		
 	#for indice in range(len(atrilJ)):
 		#if atrilJ[indice]== 0:
@@ -129,7 +133,7 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 	#unionLetras = []
 	#listaCoordenadas = []
 	#print(listaCoordenadas)
-	return listaCoordenadas
+	return listaCoordenadas,datosEleccion
 
 def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
 	"""Esta función inicializa el tablero del nivel medio (M)"""
@@ -328,10 +332,8 @@ def main(args,tipoj):
 				[sg.Text("", size=(26,5), background_color="#EFE5C4", key="info")],
 				[sg.Text("Información del jugador:")],
 				[sg.Text("", size=(26,5), background_color="#DCFBCB", key="infoJ")],
-				[sg.Text(" ", size=(1, 1))],
 				[sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" )),sg.Text("", size=(1,1)),sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
-				[sg.Text(" ", size=(1, 1))],
-				[sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo"), sg.Button("Ayuda", size=(10,1))],
+				[sg.Button("Ayuda", size=(10,1)),sg.Text("", size=(1,1)),sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
 				]
 		
 	columna_1 = [
@@ -341,9 +343,7 @@ def main(args,tipoj):
 	            [sg.Text("", size=(3,1)),sg.Column(columna_tablero),sg.Text("", size=(3,1))],
 	            [sg.Text("", size=(3,1)),sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre",background_color="#FFFFFF")],
 	            [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6"),sg.Text(" ", size=(1, 1)), sg.Button("Cambio\nletras", size=(6, 2), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio")],
-	            [sg.Text("", size=(1,1))],
 	            [sg.Text("", size=(8,1)),sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="insertar"),sg.Text(" ", size=(1, 1)), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="pasar")],
-	            [sg.Text("", size=(1,1))]
 	            ]
 				   
 	layout = [
@@ -577,7 +577,7 @@ def main(args,tipoj):
 					#print('volvi de analizar la palabra',palabra)
 					#print('palabra analizada es: ', esValida)
 					if esValida:
-						rellenar_atril(window,atrilJ,letras)
+						atrilJ,datosEleccion = rellenar_atril(window,atrilJ,letras,datosEleccion)
 						desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
 						jugada.set_desocupadas(desocupadas)
 
@@ -639,8 +639,8 @@ def main(args,tipoj):
 						#print('turno despues de que volvi de jugada pc ', turno_computadora)
 						#jugadorJ.set_jugar()
 					else:
-						listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-						datosEleccion = {}
+						listaCoordenadas,datosEleccion = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+						#datosEleccion = {}
 						#print('lista coord ', listaCoordenadas)
 						#print('datos eleccion ', datosEleccion)
 						#print(atrilJ)
@@ -664,8 +664,8 @@ def main(args,tipoj):
 					sg.Popup('La palabra debe pasar por el botón del centro!')
 					#print('estoy en el else de no esta en el centro')
 					#print('datos eleccion ', datosEleccion)
-					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					datosEleccion = {}
+					listaCoordenadas,datosEleccion = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+					#datosEleccion = {}
 					#print('lista coord ', listaCoordenadas)
 					#print('datos eleccion ', datosEleccion)
 					#print("atrilJ",atrilJ)
@@ -683,7 +683,7 @@ def main(args,tipoj):
 				if esValida:
 					
 					try:
-						rellenar_atril(window,atrilJ,letras)
+						atrilJ,datosEleccion = rellenar_atril(window,atrilJ,letras,datosEleccion)
 					except:
 						sg.Popup("No hay más letras en la bolsa.Finalizó la partida")
 						window.close()
@@ -753,8 +753,8 @@ def main(args,tipoj):
 					#window["turno"].update(jugadorJ.get_nombre())
 					#jugadorJ.set_jugar()
 				else:
-					listaCoordenadas = devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
-					datosEleccion = {}
+					listaCoordenadas,datosEleccion= devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+					#datosEleccion = {}
 					#print('lista coord ', listaCoordenadas)
 					#print('datos eleccion ', datosEleccion)
 					print(atrilJ)

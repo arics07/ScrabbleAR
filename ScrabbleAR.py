@@ -12,6 +12,7 @@ from jugadas import jugadas
 import Configuracion as conf
 
 def inicializar_letras(letrasD):
+	"""Esta función agrupa todas las letras en una lista"""
 	letras = []
 	for lett in letrasD:
 		for cant in range(letrasD[lett]["cant"]):
@@ -20,6 +21,7 @@ def inicializar_letras(letrasD):
 	return letras
 
 def inicializar_puntos(letrasD):
+	"""Esta función crea un objeto con el puntaje correspondiente a cada letra"""
 	puntos = {}
 	for lett in letrasD:
 		puntos[lett]=letrasD[lett]["puntos"]
