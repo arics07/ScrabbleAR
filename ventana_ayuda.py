@@ -18,7 +18,7 @@ def ayuda_al_jugador():
 			[sg.Text("Pasar el turno:", font=("Helvetica",15), background_color="#F0F553")],
 			[sg.Text("El jugador puede elegir pasar su turno tantas veces como quiera durante la partida, clickeando el botón 'Pasar'.", font=("Helvetica",11)), sg.Button('Pasar', size=(9, 1))],
 			[sg.Text("")],
-			[sg.Button("Salir de Ayuda", button_color=("#FFFFFF","#000000"), font=("Helvetica", 11), size=(12,2))]
+			[sg.Button("Salir de Ayuda", button_color=("#FFFFFF","#000000"), font=("Helvetica", 11), size=(12,2), key="salir")]
 		   ]
 	   
 	windowAyuda = sg.Window("Ayuda", layout)
@@ -30,7 +30,7 @@ def ayuda_al_jugador():
 		if event is None:
 			break
 			
-		if event =="Salir":
+		if event =="salir":
 			windowAyuda.close()
 
-
+ayuda_al_jugador()
