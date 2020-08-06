@@ -8,38 +8,33 @@ lista_atril = []
 #lista_atril es una lista con las letras
 def permutaciones(lista_atril):
 	"""Esta función crea todas las permutaciones con las fichas que la computadora
-	tiene en su atril"""
+	tiene en su atril."""
 	listas_de_fichas = []
 	for n in range(2,len(lista_atril)+1):
 		a= it.permutations(lista_atril, n)
 		listas_de_fichas.extend(a)
 	listas_de_fichas = list(set(listas_de_fichas))
-#	print("control permutaciones ", len(listas_de_fichas))
 	return listas_de_fichas	
 	    
 def lista_a_diccionario(listas_de_fichas,validez):
 	""" Esta función devuelve un diccionario cuya clave es el tamaño 
-	de la palabra (cantidad de fichas, no de letras) y el valor es una lista con las fichas correspondientes a la palabra (en orden)"""
+	de la palabra (cantidad de fichas, no de letras) y el valor es una lista con las fichas correspondientes a la palabra."""
 	dic_palabras = {}
 	#comb es una lista con las fichas
 	for comb in listas_de_fichas:
 		if len(comb)>1 : 
 			word = "".join(comb)
 			validez = ppattern.analizar_palabra_pat(word, validez)
-#			print("control analiza todas ", word,validez)
 			if validez == True:
 				tamanio = len(comb)
 				if tamanio in dic_palabras:
 					dic_palabras[tamanio].append(comb)
 				else:
 					dic_palabras[tamanio] = [comb]
-	#control
-	print("diccionario ", dic_palabras)
 	return dic_palabras	
 	
 def palabra_compu_FM(longitud, dic_palabras, atrilC):	
-	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F y M. Devuelve una
-	tupla que contiene la palabra elegida en la pos=0 y la lista con las fichas correspondientes en la pos=1"""
+	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F y M. Devuelve una lista con las fichas correspondientes a la palabra de mayor longitus posible."""
 	palabra_encontrada = ("",[])
 	if longitud in dic_palabras:
 		palabra_encontrada = dic_palabras[longitud][0]
@@ -52,10 +47,8 @@ def palabra_compu_FM(longitud, dic_palabras, atrilC):
 	return palabra_encontrada
 
 def mejor_puntaje(lis_palabras, puntos):
-	"""Esta función elige la palabra que más puntaje aporta. La computadora la usa para jugar en el nivel D"""
-	print("listaaaa ",lis_palabras)
+	"""Esta función elige la palabra que más puntaje aporta. La computadora la usa para jugar en el nivel D."""
 	max_puntaje = -1
-	#i es una tupla
 	for i in lis_palabras:
 		puntaje_i = 0
 		for ficha in i:
@@ -64,10 +57,9 @@ def mejor_puntaje(lis_palabras, puntos):
 			max_puntaje = puntaje_i
 			max_pal = i
 	return max_pal
-						
-		
+								
 def palabra_compu_D(longitud, dic_palabras, atrilC, puntos):	
-	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D. De todas las palabras que puede jugar elige la que aporta mayor puntaje"""
+	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D. De todas las palabras que puede jugar elige la que aporta mayor puntaje."""
 	palabra_encontrada = ("",[])
 	lis_palabras = []
 	for tam in dic_palabras:
@@ -77,20 +69,16 @@ def palabra_compu_D(longitud, dic_palabras, atrilC, puntos):
 	palabra_encontrada = mejor_puntaje(lis_palabras, puntos)
 	return palabra_encontrada
 
-
 def cargar_tuplas_desocupadas(desocupadas):
 	"""Esta funcion inicializa la lista 'desocupadas', que almacena las tuplas correspondientes a las keys de los casilleros del tablero que están desocupados."""
 	for i in range(15):
 		for j in range(15):
 			desocupadas.append((i,j))
-	#print(desocupadas)
 
 def eliminar_coord_en_pc(listaCoordenadas,desocupadas):
-	"""Esta función elimina de la lista 'desocupadas' las tuplas correspondientes a lask keys de los casilleros que se van ocupando en el tablero."""
-	print('listacoord ', listaCoordenadas)
+	"""Esta función elimina de la lista 'desocupadas' las tuplas correspondientes a las keys de los casilleros que se van ocupando en el tablero."""
 	for coord in listaCoordenadas:
 		desocupadas.remove(coord)
-	print('desocupadas ',desocupadas)
 	return desocupadas	
 	
 def rellenar_atrilC(window,atrilC,letras):
@@ -99,12 +87,9 @@ def rellenar_atrilC(window,atrilC,letras):
 		if atrilC[indice] == 0:
 			letra=random.choice(letras)
 			atrilC[indice] = letra
-			#window.FindElement("LetraC" + str(indice)).Update(letra)
 			letras.remove(letra)
-	print("relleno atrilC",atrilC)
 	return 
 	
-
 def busca_pos(desocupadas):
 	"""Esta función devuelve una tupla (x,y), correspondiente a la key de un casillero vacío en el tablero"""
 	if (7,7) in desocupadas:
@@ -147,7 +132,6 @@ def analizo_casillero(x,y,desocupadas):
 
 def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,*args):
 	"""Esta función calcula el puntaje aportado por una letra de la pabra jugada, dependiendo del casillero en que fue ubicada en el tablero. """
-#	print("args",args)
 	if coord in casillas_azules: 
 		p=p*3
 	if nivel == "F" and coord in args[0]: 
@@ -158,13 +142,10 @@ def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casi
 		triplica = True
 	if coord in casillas_naranja:
 		duplica = True
-	#control
-	print("coord, dupl, tripl ", p,duplica,triplica)
 	return p,duplica,triplica
 		
-
 def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
-	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige si va a jugar horizonal o verticalmente (la mejor opción), cuenta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar. Para el nivel D además elige la palabra de mayor puntaje. En caso de no poder palabra en un casillero por falta de espacio, busca otro (intenta 20 veces)"""
+	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige si va a jugar horizonal o verticalmente (analiza ambas opciones), cuenta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar. Para el nivel D además elige la palabra de mayor puntaje. En caso de no poder palabra en un casillero por falta de espacio, busca otro (intenta 20 veces)"""
 	atrilC=jugadorC.get_atril()
 	matriz=jugada.get_matriz()
 	desocupadas = jugada.get_desocupadas()
@@ -176,7 +157,6 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		
 		#si el diccionario está vacío, no puede formar ninguna palabra --> termina la partida
 		if len(dicc) == 0:
-			#------------------------------------------------------------------------------------
 			window.close()
 			#----------SE TERMINÓ LA PARTIDA porque no puede formar ninguna palabra--------------
 			pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
@@ -186,8 +166,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		tam_pal_mas_corta = list(dicc.keys())[0]
 	
 		#busca una posicion en el tablero al azar
-		x,y = busca_pos(desocupadas)
-		#print('x= ', x, 'y=', y)  
+		x,y = busca_pos(desocupadas) 
 
 		#guardo los valores x e y de la key del casillero inicial
 		coord_x, coord_y = x, y  
@@ -197,12 +176,9 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		
 		#si no tiene espacio, entra en el if y empieza a buscar otro lugar (intenta 20 veces)
 		if espacios_libres < tam_pal_mas_corta:
-			#print("estoy en espacion libre menor a tam pal mas corta")
-			intentos = 20
-			
+			intentos = 20			
 			#creo una copia de desocupadas para evitar que en los 20 intentos vuelva a elegir el mismo casillero
 			des = desocupadas.copy()
-			print("soy des ",des)
 			des.remove((coord_x,coord_y))
 			while espacios_libres <tam_pal_mas_corta and intentos>0 and len(des)!=0:
 				x,y = busca_pos(des)
@@ -223,8 +199,6 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		elif jugada.get_nivel() == "D":
 			palabra_encontrada = palabra_compu_D(espacios_libres, dicc, atrilC, puntos)
 		#palabra_encontrada tiene la lista con las fichas	
-#		palabra_encontrada = pack_palabra_encontrada[1]
-		#print(palabra_encontrada) #control
 		ptos=jugadorC.get_puntaje()
 		
 		#reseteo puntaje, triplica y duplica
@@ -251,10 +225,8 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 				p,duplica,triplica=calcular_puntos_letras(puntos.get(letra),(coord_x,coord_y),jugada.get_nivel(),duplica,triplica,casillas_azules,casillas_rojas,casillas_naranja,casillas_descuento)
 					
 			puntaje=puntaje+p					
-			#print((coord_x,coord_y))
 			desocupadas.remove((coord_x, coord_y))
 			jugada.set_desocupadas(desocupadas)			
-			#print(" desocupadas en jugada pc ", desocupadas)
 			
 			if direc == "horizontal":
 				coord_x = coord_x + 1
@@ -273,8 +245,6 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 			window["info"].Update("La computadora jugó la palabra {} y sumó {} puntos.".format("".join(palabra_encontrada), puntaje))
 			
 		jugadorC.set_puntaje(ptos)
-#		else:
-#			window["info"].Update("La computadora pasó su turno")
 					
 	#se actualizan los datos y se termina el turno de la computadora
 	turno_computadora = False	
@@ -286,7 +256,6 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		#SE TERMINÓ LA PARTIDA porque no se puede rellenar el atril
 		pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
 	else:
-		#print("atrilC",atrilC)
 		window["tot_letras"].Update(len(letras))
 		jugadorC.set_atril(atrilC)
 		jugadorC.set_dejarJugar()
