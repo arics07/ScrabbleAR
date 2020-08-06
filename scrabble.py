@@ -852,7 +852,7 @@ def main(args,tipoj):
 			except:
 				sg.Popup("No se guardó correctamente la partida")
 		
-		if event == "ayuda":
+		if event == "Ayuda":
 			ventana_ayuda.ayuda_al_jugador()
 				
 		if tiempoCorriendo: 
