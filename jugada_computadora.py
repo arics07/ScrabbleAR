@@ -210,7 +210,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		for letra in palabra_encontrada:
 			window[(coord_x, coord_y)].Update(letra)
 			window[(coord_x,coord_y)].Update(disabled = True)
-			window.FindElement((coord_x,coord_y)).Update(button_color=("white","black"))
+			window.FindElement((coord_x,coord_y)).Update(button_color=("white","#AA6391"))
 			matriz[coord_x][coord_y] = letra
 				
 			pos=atrilC.index(letra)

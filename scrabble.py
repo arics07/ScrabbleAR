@@ -24,8 +24,7 @@ def muestro_matriz(matriz,window):
 	for x in range(15):
 		for y in range(15):
 			if not matriz[x][y] == 0:
-				window.FindElement((x,y)).Update(matriz[x][y],disabled = True)
-				window.FindElement((x,y)).Update(button_color=("white","black"))
+				window.FindElement((x,y)).Update(matriz[x][y],disabled = True,button_color=("white","#AA6391"))
 
 def muestro_l(window,atril): 
 	"""Esta función visualiza la letra sobre el boton del atril del jugador."""
@@ -44,7 +43,7 @@ def accion_atril (window,atrilJ,pos,textBoton,datosEleccion):
 	"""Esta función devuelve la letra seleccionada del atril y pone en 0 la posición que ocupaba dicha letra en el mismo."""
 	datosEleccion[pos] = atrilJ[pos]
 	letraElegida = atrilJ[pos]  
-	window.FindElement(textBoton).Update("")
+	window.FindElement(textBoton).Update("",button_color=("white","#7C766E"))
 	atrilJ[pos] = 0
 	return letraElegida
 	
@@ -59,8 +58,7 @@ def accion_tablero(window,event,listaCoordenadas,letraElegida,matriz):
 	
 	window[posicionCasilleroTablero].update(letraElegida)
 	matriz[x][y] = letraElegida
-	window.FindElement((x,y)).Update(disabled = True)
-	window.FindElement((x,y)).Update(button_color=("white","black"))
+	window.FindElement((x,y)).Update(disabled = True,button_color=("white","#AA6391"))
 	return listaCoordenadas
 	
 	
@@ -82,7 +80,7 @@ def rellenar_atril(window,atrilJ,letras,datosEleccion):
 		if atrilJ[indice] == 0:
 			letra=random.choice(letras)
 			atrilJ[indice] = letra
-			window.FindElement("Letra" + str(indice)).Update(letra)
+			window.FindElement("Letra" + str(indice)).Update(letra,button_color=("white","#AA6391"))
 			letras.remove(letra)
 	
 	datosEleccion = {}
@@ -96,29 +94,27 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		y=lcoord[1]
 		
 		letra = matriz[x][y]
-		window.FindElement(lcoord).Update("")
-		window.FindElement((x,y)).Update(button_color=("white","tan"))
+		window.FindElement(lcoord).Update("",button_color=("white","lightGrey"))
 		
 		if (x,y) == (7,7):
 			window.FindElement(lcoord).Update(button_color=("black", "gray"))
 		if (x,y) in casillas_naranja:
-			window.FindElement(lcoord).Update("DP", button_color=("black", "#F4963E"))
+			window.FindElement(lcoord).Update("DP", button_color=("black", "#DD8505"))
 		if (x,y) in casillas_azules:
-			window.FindElement(lcoord).Update("TL", button_color=("black", "#1A4C86"))
+			window.FindElement(lcoord).Update("TL", button_color=("black", "#73A2E5"))
 		if (x,y) in casillas_rojas:
-			window.FindElement(lcoord).Update("TP", button_color=("black", "#C91A4F"))
+			window.FindElement(lcoord).Update("TP", button_color=("black", "#7BBA8D"))
 		if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
-			window.FindElement(lcoord).Update("x", button_color=("black", "#F00F0F"))
+			window.FindElement(lcoord).Update("x", button_color=("black", "#F75757"))
 		if jugada.get_nivel() == "F" and (x,y) in casillas_celeste:
-			window.FindElement(lcoord).Update("DL", button_color=("black", "#4893E9"))
+			window.FindElement(lcoord).Update("DL", button_color=("black", "#79CCE2"))
 			
 		matriz[x][y] = 0
 		window.FindElement((x,y)).Update(disabled = False)
 		
 	for pos,val in datosEleccion.items() :
 		atrilJ[pos] = val
-		window.FindElement("Letra" + str(pos)).Update(val)
-		window.FindElement("Letra" + str(pos)).Update(disabled = False)
+		window.FindElement("Letra" + str(pos)).Update(val,disabled = False,button_color=("white","#AA6391"))
 	
 	listaCoordenadas = []
 	datosEleccion = {}
@@ -129,50 +125,47 @@ def tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja):
 	"""Esta función inicializa el tablero del nivel medio (M)"""
 	window[(7, 7)].update(button_color=("black", "gray"))
 	for cas in casillas_azules:
-		window[cas].update("TL", button_color=("black", "#1A4C86"))
+		window[cas].update("TL", button_color=("black", "#73A2E5"))
 	for cas in casillas_rojas:
-		window[cas].update("TP", button_color=("black", "#C91A4F"))
+		window[cas].update("TP", button_color=("black", "#7BBA8D"))
 	for cas in casillas_naranja:
-		window[cas].update("DP", button_color=("black", "#F4963E"))
+		window[cas].update("DP", button_color=("black", "#DD8505"))
 
         
 def tablero_facil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_celeste):
 	"""Esta función inicializa el tablero del nivel fácil (F)"""
 	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
 	for cas in casillas_celeste:
-		window[cas].update("DL", button_color=("black", "#4893E9"))
+		window[cas].update("DL", button_color=("black", "#79CCE2"))
         
 def tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento):
 	"""Esta función inicializa el tablero del nivel difícil (D)"""
 	tablero_medio(window, casillas_azules, casillas_rojas, casillas_naranja)
 	for cas in casillas_descuento:
-		window[cas].update("x", button_color=("black", "#F00F0F"))
+		window[cas].update("x", button_color=("black", "#F75757"))
 	
 def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,listaCoordenadas,casillas_naranja,casillas_azules,casillas_rojas,casillas_descuento,casillas_celeste,jugada):
 	"""Esta función devuelve la letra al atril si cambia de direccion (horizontal/vertical) mientras arma la palabra"""
 	posKeys = len(datosEleccion)
 	pos = list(datosEleccion.keys())[posKeys-1]
-	window.FindElement(event).Update("")
-	
-	window.FindElement(event).Update(button_color=("black","tan"))
+	window.FindElement(event).Update("",button_color=("black","lightGrey"))
 	
 	if (x,y) == (7,7):
 		window.FindElement(lcoord).Update(button_color=("black", "gray"))
 	if event in casillas_naranja:
-		window.FindElement(event).Update("DP", button_color=("black", "#F4963E"))
+		window.FindElement(event).Update("DP", button_color=("black", "#DD8505"))
 	if event in casillas_azules:
-		window.FindElement(event).Update("TL", button_color=("black", "#1A4C86"))
+		window.FindElement(event).Update("TL", button_color=("black", "#73A2E5"))
 	if event in casillas_rojas:
-		window.FindElement(event).Update("TP", button_color=("black", "#C91A4F"))
+		window.FindElement(event).Update("TP", button_color=("black", "#7BBA8D"))
 	if jugada.get_nivel() == "D" and event in casillas_descuento:
-		window.FindElement(event).Update("x", button_color=("black", "#F00F0F"))
+		window.FindElement(event).Update("x", button_color=("black", "#F75757"))
 	if jugada.get_nivel() == "F" and event in casillas_celeste:
-		window.FindElement(event).Update("DL", button_color=("black", "#4893E9"))
+		window.FindElement(event).Update("DL", button_color=("black", "#79CCE2"))
 	
 	listaCoordenadas.remove(event)
 	atrilJ[pos]= letraElegida
-	window.FindElement("Letra" + str(pos)).Update(letraElegida)
-	window.FindElement("Letra" + str(pos)).Update(disabled = False)
+	window.FindElement("Letra" + str(pos)).Update(letraElegida,disabled = False,button_color=("white","#AA6391"))
 	datosEleccion.pop(pos)
 	return datosEleccion
 
@@ -195,7 +188,7 @@ def main(args,tipoj):
 	puntos=jugada.get_puntos()
 	letras = jugada.get_letras()
 	
-	sg.theme("GreenTan")
+	sg.theme("LightGrey2")
 
 	max_col = max_rows = 15
 	
@@ -214,17 +207,17 @@ def main(args,tipoj):
 
 	letrasEnTablero = [] 
 	
-	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False,enable_events=True, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "black" ), 
-		button_color=("white", "tan")) for i in range(max_col)] for j in range(max_rows)]
+	columna_tablero = [[sg.Button("", size=(2, 1),disabled = False,enable_events=True, key=(i, j), pad=(0, 0), disabled_button_color = ( "white" , "#AA6391"), 
+		button_color=("white", "lightGrey")) for i in range(max_col)] for j in range(max_rows)]
 	
 	columna_5 = [
 	            [sg.Text("Puntos Compu")],
-	            [sg.Text(size=(10, 1), key="puntosPc", background_color="white")]
+	            [sg.Text(size=(10, 1), key="puntosPc", background_color="#F2D6AF")]
 	            ]
 	
 	columna_4 = [
 	            [sg.Text("Puntos Jugador", size=(12,1))],
-	            [sg.Text(size=(10, 1), key="puntosJug", background_color="white")]
+	            [sg.Text(size=(10, 1), key="puntosJug", background_color="#D8B6D0")]
 	            ]
 	
 	columna_3 = [
@@ -236,26 +229,26 @@ def main(args,tipoj):
 	            [sg.Text("", size=(1,1)),sg.Column(columna_3)],
 	            [sg.Column(columna_4),sg.Column(columna_5)],
 	            [sg.Text("", size=(1,1))],
-	            [sg.Text("TURNO"),sg.Text(size=(18, 1), key="turno",background_color="#FFFFFF")],
-	            [sg.Text("Nivel:   "),sg.Text(size=(3,1), key="nivel",background_color="#FFFFFF")],
-				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras",background_color="#FFFFFF")],
+	            [sg.Text("TURNO"),sg.Text(size=(18, 1), key="turno",background_color="#C4C4C4")],
+	            [sg.Text("Nivel:   "),sg.Text(size=(3,1), key="nivel",background_color="#C4C4C4")],
+				[sg.Text("Letras restantes:"), sg.Text(len(letras), size=(7,1), key="tot_letras",background_color="#C4C4C4")],
 				[sg.Text("", size=(1,1))],
 				[sg.Text("Información de la computadora:")],
-				[sg.Text("", size=(26,5), background_color="#EFE5C4", key="info")],
+				[sg.Text("", size=(26,5), background_color="#F2D6AF", key="info")],
 				[sg.Text("Información del jugador:")],
-				[sg.Text("", size=(26,5), background_color="#DCFBCB", key="infoJ")],
-				[sg.Button("Posponer", size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "tan" )),sg.Text("", size=(1,1)),sg.Button("Ver TopTen",disabled=False,disabled_button_color =( "white" , "tan" ), size=(10,1))],
-				[sg.Button("Ayuda", size=(10,1)),sg.Text("", size=(1,1)),sg.Button("Finalizar", button_color=("white", "red"), size=(10,1),disabled=False,disabled_button_color =("white", "red"), key="finalizo")],
+				[sg.Text("", size=(26,5), background_color="#D8B6D0", key="infoJ")],
+				[sg.Button("Posponer", button_color=("white","#7C766E"),size=(10,1), disabled=False, key="posponer",disabled_button_color =( "white" , "#7C766E" )),sg.Text("", size=(1,1)),sg.Button("Ver TopTen",button_color=("white","#7C766E"),disabled_button_color =( "white" , "#7C766E" ),disabled=False,size=(10,1))],
+				[sg.Button("Ayuda", button_color=("white","#7C766E"),size=(10,1)),sg.Text("", size=(1,1)),sg.Button("Finalizar", button_color=("white","#E87474"), size=(10,1),disabled=False,disabled_button_color =("white", "#E87474"), key="finalizo")],
 				]
 		
 	columna_1 = [
                 [sg.Text("", size=(3,1)),sg.Text("Computadora")],
-                [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC2"), sg.Button(
-                 "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="LetraC6")],
+                [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC2"), sg.Button(
+                 "", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="LetraC6")],
 	            [sg.Text("", size=(3,1)),sg.Column(columna_tablero),sg.Text("", size=(3,1))],
-	            [sg.Text("", size=(3,1)),sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre",background_color="#FFFFFF")],
-	            [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra2"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "tan" ), key="Letra6"),sg.Text(" ", size=(1, 1)), sg.Button("Cambio\nletras", size=(6, 2), disabled=False,disabled_button_color =( "white" , "tan" ), key="cambio")],
-	            [sg.Text("", size=(8,1)),sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="insertar"),sg.Text(" ", size=(1, 1)), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "tan" ), key="pasar")],
+	            [sg.Text("", size=(3,1)),sg.Text("Jugador: ", size=(6,1)),sg.Text(size=(15, 1), key="nombre",background_color="#D8B6D0")],
+	            [sg.Text("", size=(3,1)),sg.Text(" ", size=(3, 1)), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra0"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra1"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra2"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra3"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra4"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra5"), sg.Button("", size=(2, 1),disabled = False,disabled_button_color = ( "white" , "#AA6391" ),enable_events=True,button_color=("white","#AA6391"), key="Letra6"),sg.Text(" ", size=(1, 1)), sg.Button("Cambio\nletras", size=(6, 2), disabled=False,disabled_button_color =( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="cambio")],
+	            [sg.Text("", size=(8,1)),sg.Button('Insertar Palabra', size=(12, 1),disabled=False,disabled_button_color =( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="insertar"),sg.Text(" ", size=(1, 1)), sg.Button('Pasar', size=(9, 1),disabled=False,disabled_button_color =( "white" , "#7C766E" ),button_color=("white","#7C766E"), key="pasar")],
 	            ]
 				   
 	layout = [
@@ -632,7 +625,7 @@ def main(args,tipoj):
 				topten={}
 			layout2=[[sg.Text('ORDEN'),sg.Text('JUGADOR'),sg.Text('PUNTAJE'),sg.Text('FECHA')],
 			[sg.Listbox(values=verTopTen(topten),key='topten',size=(50,10))],
-			[sg.Button("Cerrar",size=(10,2))]]
+			[sg.Button("Cerrar",size=(10,2),button_color=("white","#7C766E"))]]
 			window2 = sg.Window('TOP TEN').Layout(layout2)
 			window2.finalize()
 			while True: 
@@ -674,8 +667,6 @@ def main(args,tipoj):
 	  
 		if event == "cambio":
 			if jugadorJ.verificoatrilcompleto(jugadorJ.get_atril()):
-				letras={"A","B","C","v","q","d"}
-				print(len(letras))
 				if len(letras)<7:
 					sg.Popup("la bolsa de letras tiene menos de 7 letras")
 				else:

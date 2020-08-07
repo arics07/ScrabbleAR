@@ -38,7 +38,6 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	        # [sg.Graph(canvas_size=(300, 10), graph_bottom_left=(0,0), graph_top_right=(300, 10), key='graph3')]
 	        # ]
 	columna1=[
-	         [sg.Text(jugador,justification="center",size=(30,1))],
 	         [sg.Text("")],
 	         [sg.Text("FICHAS SIN JUGAR:",justification="center",size=(30,1))],
 	         [sg.Text(atrilJugador,justification="center",size=(30,1))],
@@ -50,7 +49,6 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesJugador,background_color="#FFFFFF")], 
 			 ]
 	columna2=[
-	         [sg.Text(compu,justification="center",size=(30,1))],
 	         [sg.Text("")],
 	         [sg.Text("FICHAS SIN JUGAR:",justification="center",size=(30,1))],
 	         [sg.Text(atrilCompu,justification="center",size=(30,1))],
@@ -62,8 +60,9 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesCompu,background_color="#FFFFFF")],
 			 ]
 	columna3=[
-	         [sg.Text("GANADOR/GANADORA", justification="center",text_color="white", size=(75,1),font=(30))],
-	         [sg.Text(nombreGanador,justification="center",text_color="white", size=(75,1),key="nomJugador",font=(30))]
+	         #[sg.Text("GANADOR/GANADORA", justification="center",text_color="white", size=(75,1),font=(30))],
+	         [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image("img/ganar.png")],
+	         [sg.Text(nombreGanador,justification="center",text_color="black", size=(75,1),key="nomJugador",font=(30))]
 	         ]
 	columna4=[
 	         [sg.Graph(canvas_size=(10, 250), graph_bottom_left=(0,0), graph_top_right=(10, 250), key='graph')]
@@ -71,11 +70,13 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	layout=[
 	       [sg.Column(columna3)],
 	       [sg.Text("")],
-	       [sg.Text("RESULTADOS",size=(75,1), justification="center",font=(20))],
+	       #[sg.Text("RESULTADOS",size=(75,1), justification="center",font=(20))],
+	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image("img/resultados.png")],
 	       [sg.Text("")],
-	       [sg.Column(columna1),sg.Text(""),sg.Text(""),sg.Column(columna4),sg.Column(columna2),sg.Text("")],
+	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text(jugador,justification="center",size=(30,1),background_color ="#AA6391", text_color="white"),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)), sg.Text(compu,justification="center",size=(30,1),background_color ="#AA6391", text_color="white")],
+	       [sg.Text(" ", size=(1, 1)),sg.Column(columna1),sg.Text(""),sg.Text(""),sg.Column(columna4),sg.Column(columna2),sg.Text("")],
 	       [sg.Text("")],
-	       [sg.Button("Volver al menú", key="volver"), sg.Button("Salir", key="salir")]
+	       [sg.Button("Volver al menú",button_color=("white","#7C766E"), key="volver"), sg.Button("Salir",button_color=("white","#7C766E"), key="salir")]
 	       ]
 	window = sg.Window("::::::::: FIN DEL JUEGO :::::::::", layout)
 	window.Finalize()

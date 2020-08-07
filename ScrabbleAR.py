@@ -47,25 +47,29 @@ def seteo_tiempo(duracion,nivel):
 
 def main():
 	
-	sg.theme("GreenTan")
+	sg.theme("LightGrey2")
 	
 	desocupadas = []
 
 	nom=""
 	nivel=""
 	tiempoPensandoPC=0
-	layout=[
-	  [sg.Text("ScrabbleAR", font=("Helvetica",25))],
-	  [sg.Text("Jugador")],
-	  [sg.InputText(key="nom",size=(29,3)),sg.Button("Reanudar",size=(20,1))],
+	
+	columna_1=[[sg.Text('Jugador')],
+	  [sg.InputText(key='nom',size=(29,3))],
+	  [sg.Button("Reanudar",size=(20,1), image_filename="img/fondo_boton_6.png",image_size=(118,30),image_subsample=2, button_color=("white","lightGrey"))],
+	  [sg.Text("",size=(1,1))],
 	  [sg.Text("Elegir nivel:")],
-	  [sg.Text("",size=(1,1)), sg.Button("Fácil",size=(20,1))],
-	  [sg.Text("",size=(1,1)), sg.Button("Medio",size=(20,1))],
-	  [sg.Text("",size=(1,1)), sg.Button("Difícil",size=(20,1))],
+	  [sg.Text("",size=(1,1)), sg.Button("Fácil",size=(20,1),image_filename="img/fondo_boton_3.png",image_size=(118,30),image_subsample=2, button_color=("white","lightGrey"))],
+	  [sg.Text("",size=(1,1)), sg.Button("Medio",size=(20,1),image_filename="img/fondo_boton_4.png",image_size=(118,30),image_subsample=2, button_color=("white","lightGrey"))],
+	  [sg.Text("",size=(1,1)), sg.Button("Difícil",size=(20,1),image_filename="img/fondo_boton_1.png",image_size=(118,30),image_subsample=2, button_color=("white","lightGrey"))],
 	  [sg.Text("",size=(1,1)), sg.Text("Nivel elegido: "), sg.Text(nivel, key="niv", font="bold")], 
-	  [sg.Text("",size=(1,1)), sg.Button("Configurar", size=(10,1), disabled=True)],
+	  [sg.Text("",size=(1,1)), sg.Button("Configurar", size=(10,1), disabled=True,image_filename="img/fondo_boton_6.png",image_size=(118,30),image_subsample=2,disabled_button_color = ( "white" , "lightGrey"), button_color=("white","lightGrey"))],
 	  [sg.Text("")],
-	  [sg.Text("",size=(1,1)), sg.Button("Comenzar",size=(20,2),disabled=True)]
+	  [sg.Text("",size=(1,1)), sg.Button("Comenzar",size=(20,2),disabled=True,image_filename="img/fondo_boton_5.png",image_size=(118,30),image_subsample=2,disabled_button_color = ( "white" , "lightGrey"), button_color=("white","lightGrey"))]]
+	
+	layout=[[sg.Image('img/scrabble_2.png')],
+	  [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Column(columna_1)]
 	  ]
 	window = sg.Window('Ingreso Juego').Layout(layout)
 
