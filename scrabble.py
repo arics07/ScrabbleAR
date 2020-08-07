@@ -299,7 +299,6 @@ def main(args,tipoj):
 	else:
 		tablero_dificil(window, casillas_azules, casillas_rojas, casillas_naranja, casillas_descuento)
 		
-#	colores_tablero(window, casillas_azules,casillas_rojas, casillas_naranja, casillas_celeste)
   
 	if tipoj == "C":
 		for i in range (15):
@@ -452,12 +451,8 @@ def main(args,tipoj):
 					esHorizontal = False
 					esVertical = False
 					palabra = armar_palabra(listaCoordenadas,matriz)
-					#print('palabra ',palabra)
-					#print('voy a analizar la palabra')
 					esValida = ppattern.analizar_palabra_pat(palabra, esValida)
 					palabra = palabra.upper()
-					#print('volvi de analizar la palabra',palabra)
-					#print('palabra analizada es: ', esValida)
 					if esValida:
 						atrilJ,datosEleccion = rellenar_atril(window,atrilJ,letras,datosEleccion)
 						desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
@@ -518,12 +513,8 @@ def main(args,tipoj):
 				esHorizontal = False
 				esVertical = False
 				palabra = armar_palabra(listaCoordenadas,matriz)
-				#print('palabra ',palabra)
-				#print('voy a analizar la palabra')
 				esValida = ppattern.analizar_palabra_pat(palabra, esValida)
 				palabra = palabra.upper()
-				#print('volvi de analizar la palabra',palabra)
-				#print('palabra analizada es: ', esValida)
 				if esValida:
 					
 					try:
@@ -576,7 +567,6 @@ def main(args,tipoj):
 					window["turno"].update('COMPUTADORA')
 					jugadorJ.get_nombre()
 					jugadorJ.set_dejarJugar()
-					#print(jugadorJ.get_turno())
 					jugadorC.set_jugar()
 					turno_computadora = jugadorC.get_turno()
 					tiempoPensandoPC = True
@@ -590,7 +580,6 @@ def main(args,tipoj):
 			window["infoJ"].Update("Pasaste el turno.")
 			jugadorC.set_jugar()
 			turno_computadora = jugadorC.get_turno()
-			#print('turno pc ', turno_computadora)
 			window["turno"].update(jugadorC.get_nombre())
 			tiempoPensandoPC = True
 											

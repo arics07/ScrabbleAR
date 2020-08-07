@@ -77,9 +77,6 @@ def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letr
 	  
 	while config:
 		event, values = window.Read()
-		#pos = list(duracionJugada[nivel].keys())
-		
-		#print ("combooo1  ", values["combo"], "  combooo2  ", values["combo2"],"  pooos ", pos[0])
 	
 		if values["combo"] == "Horas":
 			window.FindElement("slider").Update(range = duracionJugada[nivel]["horas"]["rango"])
@@ -171,22 +168,14 @@ def programa_principal(nivel,letrasD,duracionJugada,duracionEleccionPalabra,letr
 					conf_erronea_p.append(dato)
 				
 			if sin_errores:
-				sg.popup("La configuración se guradó correctamente", font=("Helvetica", 12))
+				sg.popup("La configuración se guardó correctamente", font=("Helvetica", 12))
 			else:
 				err_c = "".join(conf_erronea_c)
 				err_p = "".join(conf_erronea_p)
 				aviso = "La configuración de las siguientes letras NO se modificó correctamente \nporque no se ingresaron valores correctos: \n \nCantidad de letras: {cantidadd} \n \nPuntos: {puntoss} \n".format(cantidadd=err_c, puntoss=err_p)
 				sg.popup(aviso , font=("Helvetica",12))
 			  
-			  #-------------------------------------------------------------------------------
-			  #Actualizo la lista letras y el diccionario puntos
-			  #letras = inicializar_letras(letrasD)
-			  #puntos = inicializar_puntos(letrasD)
-			  #for i in puntos:
-			  #	  puntos[i]=letrasD[i]["puntos"]
-			  #print(puntos)
-			  #--------------------------------------------------------------------------------------------------
-			print(duracionEleccionPalabra,duracionJugada)
+		
 			config=False
 			window.close()
 			return nivel,letrasD,duracionJugada,duracionEleccionPalabra

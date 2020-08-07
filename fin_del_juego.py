@@ -3,6 +3,8 @@ import math
 import ScrabbleAR as menu
 
 def programa_principal(jugadorJ,jugadorC,puntosLetras):
+	"""Esta función muestra una ventana que permite visualizar el resultado del juego una vez finaizado."""
+	
 	puntosLetrasCompu=0
 	puntosLetrasJugador=0
 	nombreGanador=""
@@ -30,13 +32,9 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	else:
 		nombreGanador = jugador
 	
+	imgResultados = "img/resultados.png" 
+	imgGandaor = "img/ganar.png"
 	
-	#columna5=[
-	        # [sg.Graph(canvas_size=(300, 10), graph_bottom_left=(0,0), graph_top_right=(300, 10), key='graph2')]
-	         #]
-	#columna6=[
-	        # [sg.Graph(canvas_size=(300, 10), graph_bottom_left=(0,0), graph_top_right=(300, 10), key='graph3')]
-	        # ]
 	columna1=[
 	         [sg.Text("")],
 	         [sg.Text("FICHAS SIN JUGAR:",justification="center",size=(30,1))],
@@ -60,8 +58,7 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesCompu,background_color="#FFFFFF")],
 			 ]
 	columna3=[
-	         #[sg.Text("GANADOR/GANADORA", justification="center",text_color="white", size=(75,1),font=(30))],
-	         [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image("img/ganar.png")],
+	         [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image(imgGandaor)],
 	         [sg.Text(nombreGanador,justification="center",text_color="black", size=(75,1),key="nomJugador",font=(30))]
 	         ]
 	columna4=[
@@ -70,8 +67,7 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	layout=[
 	       [sg.Column(columna3)],
 	       [sg.Text("")],
-	       #[sg.Text("RESULTADOS",size=(75,1), justification="center",font=(20))],
-	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image("img/resultados.png")],
+	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image(imgResultados)],
 	       [sg.Text("")],
 	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text(jugador,justification="center",size=(30,1),background_color ="#AA6391", text_color="white"),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)), sg.Text(compu,justification="center",size=(30,1),background_color ="#AA6391", text_color="white")],
 	       [sg.Text(" ", size=(1, 1)),sg.Column(columna1),sg.Text(""),sg.Text(""),sg.Column(columna4),sg.Column(columna2),sg.Text("")],
@@ -82,13 +78,9 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	window.Finalize()
 	
 	graph = window['graph']
-	#graph2 = window['graph2']
-	#graph3 = window['graph3']
 	
 	
 	graph.DrawLine((5,0),(5,300), color='black')
-	#graph2.DrawLine((0,5),(300,5), color='black')
-	#graph3.DrawLine((0,5),(300,5), color='black')
 
 	
 	while True:
