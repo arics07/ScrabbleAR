@@ -19,7 +19,9 @@ def analizar_palabra_pat(palabra, esValida):
 	tipo de palabra es (sustantivo, verbo o adjetivo). Devuelve True si la palabra
 	es válida y False si no lo es."""
 	pal = palabra.lower()
-	if not pal in verbs:
+	if len(pal)<2:
+		return False
+	elif not pal in verbs:
 		if pal in lexicon:
 			if pal in spelling:
 				return clasificar(pal)
