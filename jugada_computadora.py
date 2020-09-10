@@ -35,7 +35,7 @@ def lista_a_diccionario(listas_de_fichas,validez):
 	
 def palabra_compu_FM(longitud, dic_palabras, atrilC):	
 	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel F y M. Devuelve una lista con las fichas correspondientes a la palabra de mayor longitus posible."""
-	palabra_encontrada = ("",[])
+	palabra_encontrada = []
 	if longitud in dic_palabras:
 		palabra_encontrada = dic_palabras[longitud][0]
 	else:
@@ -60,7 +60,7 @@ def mejor_puntaje(lis_palabras, puntos):
 								
 def palabra_compu_D(longitud, dic_palabras, atrilC, puntos):	
 	"""Esta función elige la palabra que la computadora va a poner en el tablero en el nivel D. De todas las palabras que puede jugar elige la que aporta mayor puntaje."""
-	palabra_encontrada = ("",[])
+	palabra_encontrada = []
 	lis_palabras = []
 	for tam in dic_palabras:
 		if tam<=longitud:
