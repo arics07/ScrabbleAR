@@ -21,16 +21,16 @@ def lista_a_diccionario(listas_de_fichas,validez):
 	de la palabra (cantidad de fichas, no de letras) y el valor es una lista con las fichas correspondientes a la palabra."""
 	dic_palabras = {}
 	#comb es una lista con las fichas
-	for comb in listas_de_fichas:
-		if len(comb)>1 : 
-			word = "".join(comb)
+	for perm in listas_de_fichas:
+		if len(perm)>1 : 
+			word = "".join(perm)
 			validez = ppattern.analizar_palabra_pat(word, validez)
 			if validez == True:
-				tamanio = len(comb)
+				tamanio = len(perm)
 				if tamanio in dic_palabras:
-					dic_palabras[tamanio].append(comb)
+					dic_palabras[tamanio].append(perm)
 				else:
-					dic_palabras[tamanio] = [comb]
+					dic_palabras[tamanio] = [perm]
 	return dic_palabras	
 	
 def palabra_compu_FM(longitud, dic_palabras, atrilC):	
@@ -115,7 +115,7 @@ def cuenta_espacios_libres(x,y,direccion,desocupadas):
 	return espacios_libres
 	
 def analizo_casillero(x,y,desocupadas):
-	"""Esta función devuelve la dirección más conventiente (horizontal o vertical) para jugar desde el casillero (x,y)"""
+	"""Esta función devuelve la dirección más conventiente (horizontal o vertical) para jugar desde el casillero (x,y). Si las dos son igualmente buenas, elige dirección al azar."""
 	direccion = {0: "horizontal", 1:"vertical"}
 	dir_azar = random.randint(0,1)
 	dir1 = direccion[dir_azar]
@@ -145,7 +145,7 @@ def calcular_puntos_letras(p, coord, nivel,duplica,triplica,casillas_azules,casi
 	return p,duplica,triplica
 		
 def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada):
-	"""Esta función es la que se lleva a cabo cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige si va a jugar horizonal o verticalmente (analiza ambas opciones), cuenta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar. Para el nivel D además elige la palabra de mayor puntaje. En caso de no poder palabra en un casillero por falta de espacio, busca otro (intenta 20 veces)"""
+	"""Esta función es la que se ejecuta cuando es el turno de la computadora. Primero elige posición en el tablero al azar (excepto si es el primer turno), luego elige si va a jugar horizonal o verticalmente (analiza ambas opciones), cuenta los espacios vacíos, y elige una palabra de tamaño adecuado para jugar. Para el nivel D además elige la palabra de mayor puntaje. En caso de no poder palabra en un casillero por falta de espacio, busca otro (intenta 20 veces)"""
 	atrilC=jugadorC.get_atril()
 	matriz=jugada.get_matriz()
 	desocupadas = jugada.get_desocupadas()
