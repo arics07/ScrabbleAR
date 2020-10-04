@@ -1,11 +1,11 @@
 import PySimpleGUI as sg
-import validar_palabra_lexicon as ppattern
-import jugada_computadora as jugadaPC
+import lib.validar_palabra_lexicon as ppattern
+import binn.jugada_computadora
 import random
 import pickle
-import fin_del_juego as pantalla_final
+import binn.fin_del_juego 
 from datetime import date
-import ventana_ayuda
+import binn.ventana_ayuda
  
 def verTopTen(topt):
 	"""Esta función retorna la informacion de topTen para visualizar cuando se clickea el botón."""
@@ -97,17 +97,17 @@ def devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,ca
 		window.FindElement(lcoord).Update("",button_color=("white","lightGrey"))
 		
 		if (x,y) == (7,7):
-			window.FindElement(lcoord).Update(button_color=("black", "gray"))
+			window.FindElement(lcoord).Update(button_color=("black", "gray"),disabled = False)
 		if (x,y) in casillas_naranja:
-			window.FindElement(lcoord).Update("DP", button_color=("black", "#DD8505"))
+			window.FindElement(lcoord).Update("DP", button_color=("black", "#DD8505"),disabled = False)
 		if (x,y) in casillas_azules:
-			window.FindElement(lcoord).Update("TL", button_color=("black", "#73A2E5"))
+			window.FindElement(lcoord).Update("TL", button_color=("black", "#73A2E5"),disabled = False)
 		if (x,y) in casillas_rojas:
-			window.FindElement(lcoord).Update("TP", button_color=("black", "#7BBA8D"))
+			window.FindElement(lcoord).Update("TP", button_color=("black", "#7BBA8D"),disabled = False)
 		if jugada.get_nivel() == "D" and (x,y) in casillas_descuento:
-			window.FindElement(lcoord).Update("x", button_color=("black", "#F75757"))
+			window.FindElement(lcoord).Update("x", button_color=("black", "#F75757"),disabled = False)
 		if jugada.get_nivel() == "F" and (x,y) in casillas_celeste:
-			window.FindElement(lcoord).Update("DL", button_color=("black", "#79CCE2"))
+			window.FindElement(lcoord).Update("DL", button_color=("black", "#79CCE2"),disabled = False)
 			
 		matriz[x][y] = 0
 		window.FindElement((x,y)).Update(disabled = False)
@@ -148,20 +148,20 @@ def no_es_horizontal_o_vertical(window,event,atrilJ,datosEleccion,letraElegida,l
 	"""Esta función devuelve la letra al atril si cambia de direccion (horizontal/vertical) mientras arma la palabra"""
 	posKeys = len(datosEleccion)
 	pos = list(datosEleccion.keys())[posKeys-1]
-	window.FindElement(event).Update("",button_color=("black","lightGrey"))
+	window.FindElement(event).Update("",button_color=("black","lightGrey"),disabled = False )
 	
-	if (x,y) == (7,7):
-		window.FindElement(lcoord).Update(button_color=("black", "gray"))
+	if (event) == (7,7):
+		window.FindElement(lcoord).Update(button_color=("black", "gray"),disabled = False)
 	if event in casillas_naranja:
-		window.FindElement(event).Update("DP", button_color=("black", "#DD8505"))
+		window.FindElement(event).Update("DP", button_color=("black", "#DD8505"),disabled = False)
 	if event in casillas_azules:
-		window.FindElement(event).Update("TL", button_color=("black", "#73A2E5"))
+		window.FindElement(event).Update("TL", button_color=("black", "#73A2E5"),disabled = False)
 	if event in casillas_rojas:
-		window.FindElement(event).Update("TP", button_color=("black", "#7BBA8D"))
+		window.FindElement(event).Update("TP", button_color=("black", "#7BBA8D"),disabled = False)
 	if jugada.get_nivel() == "D" and event in casillas_descuento:
-		window.FindElement(event).Update("x", button_color=("black", "#F75757"))
+		window.FindElement(event).Update("x", button_color=("black", "#F75757"),disabled = False)
 	if jugada.get_nivel() == "F" and event in casillas_celeste:
-		window.FindElement(event).Update("DL", button_color=("black", "#79CCE2"))
+		window.FindElement(event).Update("DL", button_color=("black", "#79CCE2"),disabled = False)
 	
 	listaCoordenadas.remove(event)
 	atrilJ[pos]= letraElegida
@@ -174,7 +174,7 @@ def compu_pensando(duracion_compu_pensando,contadorPC,tiempoPensandoPC,turno_com
 	if contadorPC == (duracion_compu_pensando *100):
 		tiempoPensandoPC = False
 		contadorPC = 0
-		turno_computadora = jugadaPC.programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
+		turno_computadora = binn.jugada_computadora.programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 		esPrimerJugada=False
 		window["puntosPc"].update(jugadorC.get_puntaje())
 		window["turno"].update((jugadorJ.get_nombre()).upper())
@@ -455,7 +455,7 @@ def main(args,tipoj):
 					palabra = palabra.upper()
 					if esValida:
 						atrilJ,datosEleccion = rellenar_atril(window,atrilJ,letras,datosEleccion)
-						desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
+						desocupadas = binn.jugada_computadora.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
 						jugada.set_desocupadas(desocupadas)
 
 						ptos = jugadorJ.get_puntaje()
@@ -522,9 +522,9 @@ def main(args,tipoj):
 					except:
 						sg.Popup("No hay más letras en la bolsa.Finalizó la partida")
 						window.close()
-						pantalla_final.programa_principal(jugadorJ,jugadorC,jugada.get_puntos())
+						binn.fin_del_juego.programa_principal(jugadorJ,jugadorC,jugada.get_puntos())
 						
-					desocupadas = jugadaPC.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
+					desocupadas = binn.jugada_computadora.eliminar_coord_en_pc(listaCoordenadas,desocupadas)
 					jugada.set_desocupadas(desocupadas)
 					
 					ptos = jugadorJ.get_puntaje()	
@@ -574,8 +574,17 @@ def main(args,tipoj):
 					listaCoordenadas,datosEleccion= devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)
 					
 					window["infoJ"].Update("La palabra {} no es válida, intente de nuevo.".format(palabra))
-					
-		if event == 'pasar':
+						
+		if event == 'pasar':		
+			if listaCoordenadas != []:
+				listaCoordenadas,datosEleccion= devolver_letras_atril(window,listaCoordenadas,matriz,atrilJ,datosEleccion,casillas_naranja,casillas_azules,casillas_rojas,casillas_celeste,casillas_descuento,jugada)				
+			
+			if datosEleccion != {}:
+				for pos,letra in datosEleccion.items():
+					atrilJ[pos]= letra
+					window.FindElement("Letra" + str(pos)).Update(letra, button_color=("white","#AA6391"))
+				datosEleccion = {}
+			
 			jugadorJ.set_dejarJugar()
 			window["infoJ"].Update("Pasaste el turno.")
 			jugadorC.set_jugar()
@@ -586,6 +595,11 @@ def main(args,tipoj):
 		if event == "finalizo" or contador == duracion_jugada:
 			window.close()
 			tiempoCorriendo = False
+			
+			if datosEleccion != {}:
+				for pos,letra in datosEleccion.items():
+					atrilJ[pos]= letra
+				datosEleccion = {}
 			
 			topten=jugada.get_topten()
 			
@@ -604,7 +618,7 @@ def main(args,tipoj):
 				pickle.dump(topten, f, pickle.HIGHEST_PROTOCOL)
 				f.close()
 				
-			pantalla_final.programa_principal(jugadorJ,jugadorC,jugada.get_puntos())
+			binn.fin_del_juego.programa_principal(jugadorJ,jugadorC,jugada.get_puntos())
 	    
 		if event == "Ver TopTen":
 			topten=jugada.get_topten()
@@ -640,7 +654,7 @@ def main(args,tipoj):
 				sg.Popup("No se guardó correctamente la partida")
 		
 		if event == "Ayuda":
-			ventana_ayuda.ayuda_al_jugador()
+			binn.ventana_ayuda.ayuda_al_jugador()
 				
 		if tiempoCorriendo: 
 			window["tiempo"].update("{:02d}:{:02d}:{:02d}".format((contador // 1000) // 360,(contador // 100) // 60, (contador // 100) % 60))

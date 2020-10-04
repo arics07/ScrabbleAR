@@ -1,14 +1,13 @@
 import PySimpleGUI as sg
-import scrabble
 import datetime
 import pickle
 import copy
 from random import randint
-import jugada_computadora as jugadaPC
-from jugador import jugador
-from jugadas import jugadas
-
-import Configuracion as conf
+import binn.jugada_computadora
+from lib.jugadas import jugadas
+from lib.jugador import jugador
+import binn.scrabble
+import binn.Configuracion as conf
 
 def inicializar_letras(letrasD):
 	"""Esta función agrupa todas las letras en una lista"""
@@ -112,7 +111,7 @@ def main():
 					sg.Popup("No puede reanudar ..es otro jugador")
 				else:			
 					window.close()  	
-					scrabble.main(jugada,"R")
+					binn.scrabble.main(jugada,"R")
 					break
 			
 		if event == "Fácil":
@@ -147,7 +146,7 @@ def main():
 				letras = inicializar_letras(letrasD)
 				puntos = inicializar_puntos(letrasD)
 		  
-				despcupadas = jugadaPC.cargar_tuplas_desocupadas(desocupadas)
+				despcupadas = binn.jugada_computadora.cargar_tuplas_desocupadas(desocupadas)
 
 				decide_primer_turno = {0:"jugador", 1:"computadora"}
 				decide = randint(0,1)	
@@ -169,7 +168,7 @@ def main():
 					sg.Popup("No hay datos de de TopTen")
 					topten={}  
 				jugada.set_topten(topten)
-				scrabble.main(jugada,"C")
+				binn.scrabble.main(jugada,"C")
 				break
 		  
 		if event == "Configurar":

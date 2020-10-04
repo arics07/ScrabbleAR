@@ -1,7 +1,7 @@
-import validar_palabra_lexicon as ppattern
+import lib.validar_palabra_lexicon as ppattern
 import random
 import itertools as it
-import fin_del_juego as pantalla_final 
+import binn.fin_del_juego 
 
 lista_atril = []
 
@@ -159,7 +159,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		if len(dicc) == 0:
 			window.close()
 			#----------SE TERMINÓ LA PARTIDA porque no puede formar ninguna palabra--------------
-			pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
+			fin_del_juego.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
 			#------------------------------------------------------------------------------------
 		
 		#veo cuál es el tamaño de la palabra más corta que puede formar para sabar el mímino de espacios que necesita
@@ -190,7 +190,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 			if intentos == 0 or len(des)==0:
 				window.close()
 				#SE TERMINÓ LA PARTIDA porque no encontró lugar en el tablero
-				pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
+				fin_del_juego.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
 		
 		#si enocntró lugar, busca una palabra en su diccionario
 		#palabra_encontrada es una [lista de fichas]
@@ -254,7 +254,7 @@ def programa_principal(turno_computadora,validez,window,puntos,jugadorC,letras,c
 		sg.Popup("No hay más letras en la bolsa.Finalizó la partida")
 		window.close()
 		#SE TERMINÓ LA PARTIDA porque no se puede rellenar el atril
-		pantalla_final.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
+		fin_del_juego.programa_principal(jugada.get_jugadorJ(), jugada.get_jugadorC(),jugada.get_puntos())
 	else:
 		window["tot_letras"].Update(len(letras))
 		jugadorC.set_atril(atrilC)

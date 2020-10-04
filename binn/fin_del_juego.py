@@ -58,8 +58,8 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	         [sg.Text("PUNTOS FINALES:",justification="center",size=(30,1)), sg.Text(puntosFinalesCompu,background_color="#FFFFFF")],
 			 ]
 	columna3=[
-	         [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image(imgGandaor)],
-	         [sg.Text(nombreGanador,justification="center",text_color="black", size=(75,1),key="nomJugador",font=(30))]
+	         [sg.Text("                                     "),sg.Image(imgGandaor)],
+	         [sg.Text(nombreGanador,justification="center",text_color="black",key="nomJugador",size=(60,1),font=(30))]
 	         ]
 	columna4=[
 	         [sg.Graph(canvas_size=(10, 250), graph_bottom_left=(0,0), graph_top_right=(10, 250), key='graph')]
@@ -67,10 +67,10 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	layout=[
 	       [sg.Column(columna3)],
 	       [sg.Text("")],
-	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Image(imgResultados)],
+	       [sg.Text("                          "),sg.Image(imgResultados)],
 	       [sg.Text("")],
 	       [sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text(jugador,justification="center",size=(30,1),background_color ="#AA6391", text_color="white"),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)),sg.Text("",size=(1,1)), sg.Text(compu,justification="center",size=(30,1),background_color ="#AA6391", text_color="white")],
-	       [sg.Text(" ", size=(1, 1)),sg.Column(columna1),sg.Text(""),sg.Text(""),sg.Column(columna4),sg.Column(columna2),sg.Text("")],
+	       [sg.Column(columna1),sg.Text(""),sg.Text(""),sg.Column(columna4),sg.Column(columna2)],
 	       [sg.Text("")],
 	       [sg.Button("Volver al menú",button_color=("white","#7C766E"), key="volver"), sg.Button("Salir",button_color=("white","#7C766E"), key="salir")]
 	       ]
@@ -86,7 +86,7 @@ def programa_principal(jugadorJ,jugadorC,puntosLetras):
 	while True:
 		event, values = window.read()
 	
-		if event == "salir":
+		if event == "salir" or event == "WIN_CLOSED":
 			break
 		
 		if event == "volver":
